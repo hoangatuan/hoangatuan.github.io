@@ -1,0 +1,20 @@
+---
+import Header from '../components/widgets/Header.astro';
+
+const links = [
+  { text: 'Home', href: '/' },
+  { text: 'About', href: '/about' },
+  { text: 'Contact', href: '/contact' }
+];
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <Header links={links} isFullWidth={true}/>
+    </head>
+
+    <body>
+        <h1>Test</h1>
+    </body>
+</html>
