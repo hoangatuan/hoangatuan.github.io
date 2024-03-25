@@ -1,7 +1,9 @@
 ---
 import Logo from "../../components/Logo.astro";
 import ToggleMenu from "../../components/common/ToggleMenu.astro";
+import ToggleTheme from "../../components/common/ToggleTheme.astro";
 import { trimSlash } from "../../utils/permalinks";
+import icons from "virtual:astro-icons";
 
 interface Link {
   text?: string;
@@ -21,11 +23,15 @@ const { links = [], isFullWidth = false, position = "center" } = Astro.props;
 const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
 ---
 
-<header>
+<header
+  class:list={[
+     "top-0 z-40 flex-none mx-auto w-full border-b border-gray-50/0 transition-[opacity] ease-in-out",
+  ]}
+>
   <div class="absolute inset-0"></div>
   <div
     class:list={[
-      "relative text-default py-3 px-3 md:px-6 mx-auto w-full md:flex md:justify-between",
+      "relative text-default py-3 px-3 md:px-6 mx-auto w-full md:flex md:justify-between bg-yellow-500",
       {
         "max-w-7xl": !isFullWidth,
       },
@@ -69,5 +75,18 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
         }
       </ul>
     </nav>
+
+    <div
+      class:list={[
+        { "ml-auto rtl:ml-0 rtl:mr-auto": position === "left" },
+        "hidden md:self-center md:flex items-center md:mb-0 fixed w-full md:w-auto md:static justify-end left-0 rtl:left-auto rtl:right-0 bottom-0 p-3 md:p-0",
+      ]}
+    >
+      <div class="items-center flex justify-between w-full md:w-auto">
+        <div class="flex">
+          <ToggleTheme iconClass="w-6 h-6 md:w-5 md:h-5 md:inline-block" />
+        </div>
+      </div>
+    </div>
   </div>
 </header>
