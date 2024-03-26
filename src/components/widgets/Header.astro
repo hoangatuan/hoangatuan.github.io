@@ -3,7 +3,6 @@ import Logo from "../../components/Logo.astro";
 import ToggleMenu from "../../components/common/ToggleMenu.astro";
 import ToggleTheme from "../../components/common/ToggleTheme.astro";
 import { trimSlash } from "../../utils/permalinks";
-import icons from "virtual:astro-icons";
 
 interface Link {
   text?: string;
@@ -31,7 +30,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
   <div class="absolute inset-0"></div>
   <div
     class:list={[
-      "relative text-default py-3 px-3 md:px-6 mx-auto w-full md:flex md:justify-between bg-yellow-500",
+      "relative text-default py-3 px-3 md:px-6 mx-auto w-full md:flex md:justify-between",
       {
         "max-w-7xl": !isFullWidth,
       },
