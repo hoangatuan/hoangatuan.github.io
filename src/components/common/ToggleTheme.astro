@@ -1,6 +1,6 @@
 ---
 
-// import { Icon } from 'astro-icon/components';
+import { Icon } from 'astro-icon/components';
 import { UI } from '../../utils/config';
 
 export interface Props {
@@ -22,7 +22,7 @@ const {
 {
     !(UI.theme && UI.theme.endsWith(':only')) && (
       <button type="button" class={className} aria-label={label} data-aw-toggle-color-scheme>
-        <p>Toggle</p>
+        <Icon name={iconName} class={iconClass} />
       </button>
     )
   }
