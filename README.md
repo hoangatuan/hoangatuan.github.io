@@ -17,4 +17,3 @@
 
 - Change theme
 - Search bar
-- Footer doesnt show footnote
