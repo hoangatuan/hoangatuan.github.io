@@ -1,0 +1,30 @@
+---
+import PageLayout from "../layouts/PageLayout.astro"
+import { Image } from "astro:assets";
+import DSC08678 from "../assets/DSC08678.jpg"
+
+const introduction = `
+Originally destined for the world of Android SE, fate had other plans and led me to the exciting realm of iOS programming (just kidding, but life does have its surprises).
+Today, I proudly wear the hat of an iOS Software Engineer.
+
+In this blog, I aim to delve into the fascinating world of technology, with a focus on iOS and Swift. From coding tips and tricks to exploring the latest trends, I'll cover it all.
+
+But that's not all – I also want to inject some personal perspective into the mix. After all, the tech industry is more than just code and algorithms; it's a vibrant ecosystem filled with stories, experiences, and insights.
+
+So, welcome to my corner of the internet. I hope to not only share knowledge but also spark conversations. Your thoughts and feedback are invaluable to me, so don't hesitate to drop a comment or reach out.
+
+Here's to new discoveries and meaningful exchanges. Let's embark on this journey together 🚀
+`;
+---
+
+<PageLayout>
+    <div class="flex space-x-12 items-center">
+        <Image class="rounded-lg w-80 h-80" src={DSC08678} alt="Me enjoy fishing."/>
+        <div class="w-3/4 ">
+            <p class="whitespace-pre-wrap text-2xl">Yo, I'm Tuan </p>
+            <p class="whitespace-pre-wrap text-2xl">
+                {introduction}
+            </p>
+        </div>
+    </div>
+</PageLayout>
