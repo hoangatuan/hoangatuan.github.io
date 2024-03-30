@@ -4,6 +4,7 @@ import { Icon } from 'astro-icon/components';
 import { Image } from "astro:assets";
 import PostTags from './Tags.astro';
 import { getFormattedDate } from '../../utils/utils';
+import { getPermalink } from '../../utils/permalinks';
 
 import DSC08678 from "../../assets/DSC08678.jpg"
 
@@ -12,10 +13,13 @@ export interface Props {
 }
 
 const { post } = Astro.props;
+
+const link = getPermalink(post.permalink, 'post');
 ---
 
 <article>
-    <div class="flex space-x-8">
+    <div class="flex w-3/4 mx-auto space-x-8 items-center">
+        <Image class="rounded-lg w-40 h-40" src={DSC08678} alt="article feature image"/>
         <div>
             <header>
                 <span class="text-sm">
@@ -23,17 +27,18 @@ const { post } = Astro.props;
                     <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
                 </span>
 
-                <h2 class="text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-slate-300 hover:text-primary dark:hover:text-blue-700 transition ease-in duration-200">
-                    {post.title}
+                <h2 class="text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-slate-300 line-clamp-2">
+                    <a class="hover:text-primary dark:hover:text-blue-700 transition ease-in duration-200" href={link}>
+                        {post.title}
+                    </a>
                 </h2>
             </header>
 
-            {post.excerpt && <p class="flex-grow text-muted dark:text-slate-400 text-lg">{post.excerpt}</p>}
+            {post.excerpt && <p class="flex-grow text-muted dark:text-slate-400 text-base line-clamp-3">{post.excerpt}</p>}
 
             <footer class="mt-5">
                 <PostTags tags={post.tags} />
             </footer>
         </div>
-        <Image class="rounded-lg w-80 h-80" src={DSC08678} alt="Me enjoy fishing."/>
     </div>
 </article>
