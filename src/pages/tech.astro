@@ -1,7 +1,18 @@
 ---
-import PageLayout from "../layouts/PageLayout.astro"
+import PageLayout from "../layouts/PageLayout.astro";
+import BlogList from "../components/blog/List.astro";
+import { fetchPosts } from "../utils/blog.ts";
+
+// Define an async function to fetch posts and await its result
+const getPosts = async () => {
+  const posts = await fetchPosts();
+  return posts;
+};
+
+// Fetch posts asynchronously and store them in a variable
+const posts = await getPosts();
 ---
 
 <PageLayout>
-    <p>Page not found</p>
+  <BlogList posts={posts} />
 </PageLayout>
