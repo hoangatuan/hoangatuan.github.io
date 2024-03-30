@@ -5,6 +5,7 @@ import { Image } from "astro:assets";
 import PostTags from './Tags.astro';
 import { getFormattedDate } from '../../utils/utils';
 import { getPermalink } from '../../utils/permalinks';
+import { findImage } from '../../utils/images.ts';
 
 import DSC08678 from "../../assets/DSC08678.jpg"
 
@@ -14,6 +15,7 @@ export interface Props {
 
 const { post } = Astro.props;
 
+const image = (await findImage(post.image)) as ImageMetadata | undefined;
 const link = getPermalink(post.permalink, 'post');
 ---
 
