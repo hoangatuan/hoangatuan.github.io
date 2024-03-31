@@ -8,7 +8,7 @@
     + Create Header ✅
     + Create Footer ✅
     + Set up search bar
-    + Set up article pages
+    + Set up article pages ✅
     + Set up About page ✅
 - Week 2: 31 March - 6 April
     + Article detail page

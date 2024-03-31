@@ -119,3 +119,13 @@ const getNormalizedPost = async (
     readingTime: remarkPluginFrontmatter?.readingTime,
   };
 };
+
+/** */
+export const getStaticPathsBlogPost = async () => {
+  return (await fetchPosts()).flatMap((post) => ({
+    params: {
+      post: post.permalink,
+    },
+    props: { post },
+  }));
+};

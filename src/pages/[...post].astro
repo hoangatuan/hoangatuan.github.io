@@ -1,0 +1,18 @@
+---
+
+import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
+import PageLayout from "../layouts/PageLayout.astro"
+import { getStaticPathsBlogPost } from '../utils/blog';
+
+
+export const getStaticPaths = await getStaticPathsBlogPost();
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { page } = Astro.props as Props;
+
+const { path } = Astro.params;
+---
+
+<PageLayout>
+    <p>WTF</p>
+</PageLayout>

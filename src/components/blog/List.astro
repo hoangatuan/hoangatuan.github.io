@@ -3,17 +3,18 @@ import Item from './ListItem.astro';
 import type { Post } from '../../types';
 
 export interface Props {
+  prefix: string;
   posts: Array<Post>;
 }
 
-const { posts } = Astro.props;
+const { prefix, posts } = Astro.props;
 ---
 
 <ul>
   {
     posts.map((post) => (
       <li class="mb-4 md:mb-6">
-        <Item post={post} />
+        <Item prefix = {prefix} post={post} />
       </li>
     ))
   }
