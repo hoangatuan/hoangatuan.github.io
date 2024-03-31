@@ -10,6 +10,12 @@ module.exports = {
         accent: 'var(--aw-color-accent)',
         default: 'var(--aw-color-text-default)',
         muted: 'var(--aw-color-text-muted)',
+
+        C2a9d8f: '#2a9d8f',
+        C264653: '#264653',
+        Ce9c46a: '#e9c46a',
+        Cf4a261: '#f4a261',
+        Ce76f51: '#e76f51',
       },
       fontFamily: {
         sans: ['var(--aw-font-sans)', ...defaultTheme.fontFamily.sans],
