@@ -1,7 +1,8 @@
 ---
-import Logo from "../../components/Logo.astro";
-import ToggleMenu from "../../components/common/ToggleMenu.astro";
-import ToggleTheme from "../../components/common/ToggleTheme.astro";
+import Logo from "../Logo.astro";
+import ToggleMenu from "../common/ToggleMenu.astro";
+import ToggleTheme from "../common/ToggleTheme.astro";
+import TagsMenu from "../common/TagsMenu.astro";
 import { trimSlash } from "../../utils/permalinks";
 
 interface Link {
@@ -77,7 +78,8 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
       ]}
     >
       <div class="items-center flex justify-between w-full md:w-auto">
-        <div class="flex">
+        <div class="flex space-x-2">
+          <TagsMenu/>
           <ToggleTheme iconClass="w-6 h-6 md:w-5 md:h-5 md:inline-block" />
         </div>
       </div>
