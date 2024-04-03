@@ -1,6 +1,8 @@
 import type { Post } from "../types";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
+import type { PaginateFunction } from "astro";
+
 import {
   cleanSlug,
   trimSlash,
@@ -127,5 +129,49 @@ export const getStaticPathsBlogPost = async () => {
       post: post.permalink,
     },
     props: { post },
+  }));
+};
+
+export const getStaticPathsBlogTag = async ({
+  paginate,
+}: {
+  paginate: PaginateFunction;
+}) => {
+  const posts = await fetchPosts();
+  const tags = new Set<string>();
+  posts.map((post) => {
+    Array.isArray(post.tags) &&
+      post.tags.map((tag) => tags.add(tag.toLowerCase()));
+  });
+
+  return Array.from(tags).flatMap((tag) =>
+    paginate(
+      posts.filter(
+        (post) =>
+          Array.isArray(post.tags) &&
+          post.tags.find((elem) => elem.toLowerCase() === tag)
+      ),
+      {
+        params: { tag: tag, blog: TAG_BASE || undefined },
+        // pageSize: blogPostsPerPage,
+        props: { tag },
+      }
+    )
+  );
+};
+
+export const getStaticPathsBlogTag1 = async () => {
+  const posts = await fetchPosts();
+  const tags = new Set<string>();
+  posts.map((post) => {
+    Array.isArray(post.tags) &&
+      post.tags.map((tag) => tags.add(tag.toLowerCase()));
+  });
+
+  return Array.from(tags).flatMap((tag) => ({
+    params: {
+      tag: tag,
+    },
+    props: { tag, posts: posts.filter((post) => post.tags?.includes(tag)) },
   }));
 };

@@ -1,7 +1,22 @@
 ---
 import PageLayout from "../../layouts/PageLayout.astro";
+import type { InferGetStaticPropsType, GetStaticPaths } from "astro";
+import { getStaticPathsBlogTag1 } from "../../utils/blog";
+import BlogList from "../../components/blog/List.astro";
+
+export const prerender = true;
+
+export const getStaticPaths = (async () => {
+  return await getStaticPathsBlogTag1();
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { tag, posts } = Astro.props as Props;
 ---
 
 <PageLayout>
-    <p>WTF</p>
+  <section class="px-4 md:px-6 py-12 sm:py-16 lg:py-20 mx-auto max-w-4xl">
+    <BlogList prefix="" posts={posts} />
+  </section>
 </PageLayout>
