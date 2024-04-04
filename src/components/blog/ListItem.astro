@@ -38,14 +38,14 @@ const link = getPermalink(post.permalink, 'post');
                 </span>
 
                 <h2 class="post-title-component text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-slate-300 line-clamp-2">
-                    <a class="hover:text-C2a9d8f dark:hover:text-blue-700 transition ease-in duration-200" href={`${prefix}${link}`}>
+                    <a class="hover:text-C2a9d8f dark:hover:text-blue-700 transition ease-in duration-200" href={`/${prefix}${link}`}>
                         {post.title}
                     </a>
                 </h2>
             </header>
             
             {post.excerpt && <p class="post-excerpt-component flex-grow text-muted dark:text-slate-400 text-base line-clamp-3">
-                <a class="post-excerpt-component" href={`${prefix}${link}`}>
+                <a class="post-excerpt-component" href={`/${prefix}${link}`}>
                     {post.excerpt}
                 </a>
             </p>}
