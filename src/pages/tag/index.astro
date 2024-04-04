@@ -2,6 +2,7 @@
 import { getPermalink } from "../../utils/permalinks";
 
 import PageLayout from "../../layouts/PageLayout.astro";
+import TagsHeader from "../../components/common/TagsHeader.astro";
 import { fetchPosts } from "../../utils/blog.ts";
 
 // Define an async function to fetch posts and await its result
@@ -23,9 +24,7 @@ const tags: Array<string> = posts.reduce((acc: Array<string>, post) => {
 ---
 
 <PageLayout>
-  <header>
-    <h1 class="text-5xl font-bold px-3 md:px-6 pb-12 pt-12">Tags</h1>
-  </header>
+  <TagsHeader name="Tags" />
 
   <ul class="flex flex-wrap justify-center space-x-8 px-12">
     {
