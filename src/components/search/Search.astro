@@ -1,0 +1,37 @@
+---
+import '@docsearch/css'
+---
+
+<div class="w-1" id="docsearch"></div>
+
+<script>
+  import docsearch from '@docsearch/js'
+
+  docsearch({
+    container: '#docsearch',
+    appId: 'R2IYF7ETH7',
+    apiKey: '599cec31baffa4868cae4e79f180729b',
+    indexName: 'docsearch',
+    searchParameters: {
+        facetFilters: ['language:en', 'version:1.0.0'],
+    },
+    placeholder: 'Search for posts...',
+  })
+</script>
+
+<style>
+  div {
+    display: contents;
+  }
+
+  div[data-open-modal] {
+    width: 100%;
+  }
+
+  @media (min-width: 50rem) {
+    :global(.DocSearch-Button) {
+      width: 100%;
+      max-width: 22rem;
+    }
+  }
+</style>

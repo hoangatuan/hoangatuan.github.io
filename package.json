@@ -11,11 +11,14 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.5.9",
+    "@astrojs/starlight-docsearch": "^0.1.0",
     "@astrojs/tailwind": "^5.1.0",
+    "@docsearch/js": "^3.6.0",
     "algoliasearch": "^4.23.2",
     "astro": "^4.5.6",
     "astro-icon": "^1.1.0",
     "dotenv": "^16.4.5",
+    "instantsearch.css": "^8.1.0",
     "limax": "4.1.0",
     "lodash.merge": "^4.6.2",
     "remove-markdown": "^0.5.0",
@@ -29,6 +32,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/lodash.merge": "^4.6.9",
     "@types/node": "^20.11.30",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "motion": "^10.16.4"
   }
 }
