@@ -37,3 +37,14 @@ client
     console.error('An error occurred:', err);
     process.exit(1); // Exit the process with an error code
   });
+
+
+// 3. Search: Remember to change the key to search key
+// client
+// .initIndex("posts")
+// .search("get")
+// .then(res => console.log(res))
+// .catch(err => {
+//   console.error('An error occurred:', err);
+//   process.exit(1); // Exit the process with an error code
+// });
