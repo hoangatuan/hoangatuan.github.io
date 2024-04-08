@@ -2,10 +2,15 @@ import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
 import starlight from '@astrojs/starlight';
 import icon from "astro-icon";
+import mdx from "@astrojs/mdx";
+import astroExpressiveCode from "astro-expressive-code";
+import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './src/utils/frontmatter.mjs';
 
 // https://astro.build/config
 export default defineConfig({
   integrations: [
+    astroExpressiveCode(),
+    mdx(),
     starlight({
       title: 'Site with DocSearch',
       // plugins: [
@@ -24,18 +29,12 @@ export default defineConfig({
     icon({
       include: {
         tabler: ['*'],
-        'flat-color-icons': [
-          'template',
-          'gallery',
-          'approval',
-          'document',
-          'advertising',
-          'currency-exchange',
-          'voice-presentation',
-          'business-contact',
-          'database',
-        ],
-      },
+        'flat-color-icons': ['template', 'gallery', 'approval', 'document', 'advertising', 'currency-exchange', 'voice-presentation', 'business-contact', 'database']
+      }
     }),
-  ]
+  ],
+  markdown: {
+    remarkPlugins: [readingTimeRemarkPlugin],
+    rehypePlugins: [responsiveTablesRehypePlugin],
+  },
 });

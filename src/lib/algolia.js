@@ -40,6 +40,7 @@ client
 
 
 // 3. Search: Remember to change the key to search key
+
 // client
 // .initIndex("posts")
 // .search("get")
