@@ -5,6 +5,7 @@ import icon from "astro-icon";
 import mdx from "@astrojs/mdx";
 import astroExpressiveCode from "astro-expressive-code";
 import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './src/utils/frontmatter.mjs';
+import sectionize from '@hbsnow/rehype-sectionize';
 
 // https://astro.build/config
 export default defineConfig({
@@ -35,6 +36,6 @@ export default defineConfig({
   ],
   markdown: {
     remarkPlugins: [readingTimeRemarkPlugin],
-    rehypePlugins: [responsiveTablesRehypePlugin],
+    rehypePlugins: [responsiveTablesRehypePlugin, sectionize],
   },
 });

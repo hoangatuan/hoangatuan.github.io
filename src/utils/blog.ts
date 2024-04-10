@@ -2,6 +2,7 @@ import type { Post } from "../types";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import type { PaginateFunction } from "astro";
+import type { MarkdownHeading } from "astro";
 
 import {
   cleanSlug,
@@ -74,7 +75,7 @@ const getNormalizedPost = async (
   post: CollectionEntry<"post">
 ): Promise<Post> => {
   const { id, slug: rawSlug = "", data } = post;
-  const { Content, remarkPluginFrontmatter } = await post.render();
+  const { Content, headings, remarkPluginFrontmatter } = await post.render();
 
   const {
     publishDate: rawPublishDate = new Date(),
@@ -119,6 +120,8 @@ const getNormalizedPost = async (
     // or 'content' in case you consume from API
 
     readingTime: remarkPluginFrontmatter?.readingTime,
+    frontmatter: remarkPluginFrontmatter,
+    headings: headings
   };
 };
 
@@ -174,4 +177,17 @@ export const getStaticPathsBlogTag1 = async () => {
     },
     props: { tag, posts: posts.filter((post) => post.tags?.includes(tag)) },
   }));
+};
+
+
+export const buildToc = (headings: MarkdownHeading[]) => {
+  const toc = headings
+    .filter((heading) => heading.depth > 1 && heading.depth < 4)
+    .map((heading) => ({
+      depth: heading.depth,
+      slug: heading.slug,
+      text: heading.text,
+    }));
+
+  return toc;
 };

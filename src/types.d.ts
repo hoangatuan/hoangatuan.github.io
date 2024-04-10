@@ -1,5 +1,7 @@
+import type { MarkdownHeading } from 'astro';
 import type { AstroComponentFactory } from 'astro/runtime/server/index.js';
 import type { HTMLAttributes, ImageMetadata } from 'astro/types';
+import type exp from 'constants';
 
 export interface Post {
   /** A unique ID number that identifies a post. */
@@ -42,6 +44,9 @@ export interface Post {
 
   /**  */
   readingTime?: number;
+
+  frontmatter: Record<string, any>;
+  headings: MarkdownHeading[];
 }
 
 export interface MetaData {
@@ -280,3 +285,7 @@ export interface Content extends Headline, Widget {
 }
 
 export interface Contact extends Headline, Form, Widget {}
+
+export interface DetailMarkdownHeading extends MarkdownHeading {
+  subheadings: DetailMarkdownHeading[];
+}
