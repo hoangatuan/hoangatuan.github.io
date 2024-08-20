@@ -1,0 +1,16 @@
+---
+import PageLayout from "../../layouts/PageLayout.astro"
+import BookList from "../../components/books/BookList.astro"
+import { fetchBooks } from "../../utils/book";
+
+const getBooks = async () => {
+  const books = await fetchBooks();
+  return books;
+};
+
+const books = await getBooks();
+---
+
+<PageLayout>
+    <BookList prefix="books" books={books} />
+</PageLayout>

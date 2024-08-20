@@ -1,9 +1,9 @@
 ---
-import type { Post } from '../../types/post.types';
+import type { Book } from '../../types/books.types';
 import { Icon } from 'astro-icon/components';
 import { Image } from "astro:assets";
-import PostTags from '../common/Tags.astro';
 import { getFormattedDate } from '../../utils/utils';
+import PostTags from '../common/Tags.astro';
 import { getPermalink } from '../../utils/permalinks';
 import { findImage } from '../../utils/images.ts';
 
@@ -11,21 +11,14 @@ import DSC08678 from "../../assets/DSC08678.jpg"
 
 export interface Props {
   prefix: string;
-  post: Post;
+  book: Book;
 }
 
-const { prefix, post } = Astro.props;
+const { prefix, book } = Astro.props;
+const image = (await findImage(book.image)) as ImageMetadata | undefined;
+const link = getPermalink(book.permalink, 'book');
 
-const image = (await findImage(post.image)) as ImageMetadata | undefined;
-const link = getPermalink(post.permalink, 'post');
 ---
-
-<!-- <style>
-    .post-excerpt-component:hover ~ .post-title-component,
-    .post-excerpt-component:hover ~ .post-title-component {
-        color: red; /* Change the text color of Text Component 1 when hovering over Text Component 2 or Text Component 3 */
-    }
-</style> -->
 
 <article>
     <div class="container-component flex w-3/4 mx-auto space-x-8 items-center">
@@ -34,24 +27,24 @@ const link = getPermalink(post.permalink, 'post');
             <header>
                 <span class="text-sm">
                     <Icon name="tabler:clock" class="w-3.5 h-3.5 inline-block -mt-0.5 dark:text-gray-400" />
-                    <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
+                    <time datetime={String(book.publishDate)} class="inline-block">{getFormattedDate(book.publishDate)}</time>
                 </span>
 
                 <h2 class="post-title-component text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-slate-300 line-clamp-2">
                     <a class="hover:text-C2a9d8f dark:hover:text-blue-700 transition ease-in duration-200" href={`/${prefix}${link}`}>
-                        {post.title}
+                        {book.title}
                     </a>
                 </h2>
             </header>
             
-            {post.excerpt && <p class="post-excerpt-component flex-grow text-muted dark:text-slate-400 text-base line-clamp-3">
+            {book.excerpt && <p class="post-excerpt-component flex-grow text-muted dark:text-slate-400 text-base line-clamp-3">
                 <a class="post-excerpt-component" href={`/${prefix}${link}`}>
-                    {post.excerpt}
+                    {book.excerpt}
                 </a>
             </p>}
 
             <footer class="mt-5">
-                <PostTags tags={post.tags} />
+                <PostTags tags={book.categories} />
             </footer>
         </div>
     </div>

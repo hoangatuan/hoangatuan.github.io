@@ -1,4 +1,4 @@
-import type { Post } from "../types";
+import type { Post } from "../types/post.types";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import type { PaginateFunction } from "astro";

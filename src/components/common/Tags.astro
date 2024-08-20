@@ -2,10 +2,9 @@
 import { getPermalink } from '../../utils/permalinks';
 
 import {  APP_BLOG } from '../../utils/config';
-import type { Post } from '../../types';
 
 export interface Props {
-  tags: Post['tags'];
+  tags?: Array<string>;
   class?: string;  
   title?: string | undefined;
   isCategory?: boolean;
