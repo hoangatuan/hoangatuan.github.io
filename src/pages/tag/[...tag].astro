@@ -19,6 +19,6 @@ const { tag, posts } = Astro.props as Props;
 <PageLayout>
   <TagsHeader name=`#${tag}`` />
   <section class="px-4 md:px-6 mx-auto max-w-4xl">
-    <BlogList prefix="tech" posts={posts} />
+    <BlogList prefix="articles" posts={posts} />
   </section>
 </PageLayout>
