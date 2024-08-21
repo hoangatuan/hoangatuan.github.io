@@ -6,11 +6,7 @@ import type { MarkdownHeading } from "astro";
 
 import {
   cleanSlug,
-  trimSlash,
-  BLOG_BASE,
-  POST_PERMALINK_PATTERN,
-  CATEGORY_BASE,
-  TAG_BASE,
+  trimSlash
 } from "./permalinks";
 
 let _books: Array<Book>;
@@ -31,7 +27,7 @@ const generatePermalink = async ({
   const minute = String(publishDate.getMinutes()).padStart(2, "0");
   const second = String(publishDate.getSeconds()).padStart(2, "0");
 
-  const permalink = POST_PERMALINK_PATTERN.replace("%slug%", slug)
+  const permalink = slug
     .replace("%id%", id)
     .replace("%year%", year)
     .replace("%month%", month)
@@ -40,11 +36,13 @@ const generatePermalink = async ({
     .replace("%minute%", minute)
     .replace("%second%", second);
 
-  return permalink
+    const result = permalink
     .split("/")
     .map((el) => trimSlash(el))
     .filter((el) => !!el)
     .join("/");
+
+    return result;
 };
 
 export const fetchBooks = async (): Promise<Array<Book>> => {
@@ -90,7 +88,7 @@ const getNormalizedBook = async (
       id: id,
       slug: slug,
       title: title,
-      permalink: "",
+      permalink: await generatePermalink({ id, slug, publishDate }),
       subtitle: subtitle,
       author: author,
       publishDate: publishDate,
@@ -106,4 +104,12 @@ const getNormalizedBook = async (
     };
   };
 
-  
+/** */
+export const getStaticPathsBook = async () => {
+  return (await fetchBooks()).flatMap((book) => ({
+    params: {
+      books: book.permalink,
+    },
+    props: { book },
+  }));
+};

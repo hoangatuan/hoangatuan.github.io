@@ -35,6 +35,14 @@ export interface AppBlogConfig {
       follow: boolean;
     };
   };
+  books: {
+    isEnabled: boolean;
+    permalink: string;
+    robots: {
+      index: boolean;
+      follow: boolean;
+    };
+  };
   list: {
     isEnabled: boolean;
     pathname: string;
@@ -143,6 +151,14 @@ const getAppBlog = () => {
     post: {
       isEnabled: true,
       permalink: '/blog/%slug%',
+      robots: {
+        index: true,
+        follow: true,
+      },
+    },
+    books: {
+      isEnabled: true,
+      permalink: '/books/%slug%',
       robots: {
         index: true,
         follow: true,

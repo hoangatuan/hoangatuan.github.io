@@ -43,11 +43,13 @@ const generatePermalink = async ({
     .replace("%minute%", minute)
     .replace("%second%", second);
 
-  return permalink
+  const result = permalink
     .split("/")
     .map((el) => trimSlash(el))
     .filter((el) => !!el)
     .join("/");
+
+    return result;
 };
 
 export const fetchPosts = async (): Promise<Array<Post>> => {
