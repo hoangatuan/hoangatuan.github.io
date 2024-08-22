@@ -108,7 +108,7 @@ const getNormalizedBook = async (
 export const getStaticPathsBook = async () => {
   return (await fetchBooks()).flatMap((book) => ({
     params: {
-      books: book.permalink,
+      book: book.permalink,
     },
     props: { book },
   }));
