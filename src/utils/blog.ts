@@ -60,6 +60,12 @@ export const fetchPosts = async (): Promise<Array<Post>> => {
   return _posts;
 };
 
+export const fetchRelatedPosts = async (post: Post) => {
+  const relatedPostIDs = post.relatedPostIDs || [];
+  const posts = await fetchPosts();
+  return posts.filter((post) => relatedPostIDs.includes(post.id)).slice(0, 2);
+};
+
 const load = async function (): Promise<Array<Post>> {
   const posts = await getCollection("post");
   const normalizedPosts = posts.map(
@@ -89,6 +95,7 @@ const getNormalizedPost = async (
     category: rawCategory,
     author,
     draft = false,
+    relatedPostIDs = [],
     metadata = {},
   } = data;
 
@@ -115,6 +122,7 @@ const getNormalizedPost = async (
     author: author,
 
     draft: draft,
+    relatedPostIDs: relatedPostIDs,
 
     metadata,
 
@@ -180,6 +188,8 @@ export const getStaticPathsBlogTag1 = async () => {
     props: { tag, posts: posts.filter((post) => post.tags?.includes(tag)) },
   }));
 };
+
+
 
 
 export const buildToc = (headings: MarkdownHeading[]) => {

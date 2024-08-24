@@ -10,12 +10,14 @@ export interface Props {
 const { prefix, posts } = Astro.props;
 ---
 
-<ul>
-  {
-    posts.map((post) => (
-      <li class="mb-4 md:mb-6">
-        <Item prefix = {prefix} post={post} />
-      </li>
-    ))
-  }
-</ul>
+<div class="container mx-auto px-4 lg:px-8">
+  <ul class="grid gap-8 lg:grid-cols-3" style="row-gap: 0.1rem; column-gap: 2rem;">
+    {
+      posts.map((post) => (
+        <li class="mb-8">
+          <Item prefix={prefix} post={post} />
+        </li>
+      ))
+    }
+  </ul>
+</div>

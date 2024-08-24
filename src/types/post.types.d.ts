@@ -38,6 +38,8 @@ export interface Post {
   /**  */
   draft?: boolean;
 
+  relatedPostIDs: Array<string>;
+
   /**  */
   Content?: AstroComponentFactory;
   content?: string;

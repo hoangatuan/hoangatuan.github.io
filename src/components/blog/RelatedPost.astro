@@ -1,0 +1,29 @@
+---
+import type { Post } from "../../types/post.types";
+import Item from "./ListItem.astro";
+import { fetchRelatedPosts } from "../../utils/blog";
+
+export interface Props {
+  prefix: string;
+  post: Post;
+}
+
+const { prefix, post } = Astro.props;
+
+const posts = await fetchRelatedPosts(post);
+---
+
+<div class="container mx-auto px-4 lg:px-8">
+  <ul
+    class="grid gap-8 lg:grid-cols-2"
+    style="row-gap: 0.1rem; column-gap: 2rem;"
+  >
+    {
+      posts.map((post) => (
+        <li class="mb-8">
+          <Item prefix={prefix} post={post} />
+        </li>
+      ))
+    }
+  </ul>
+</div>

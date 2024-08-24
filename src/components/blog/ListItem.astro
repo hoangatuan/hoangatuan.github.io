@@ -1,13 +1,8 @@
 ---
 import type { Post } from '../../types/post.types';
-import { Icon } from 'astro-icon/components';
-import { Image } from "astro:assets";
 import PostTags from '../common/Tags.astro';
 import { getFormattedDate } from '../../utils/utils';
 import { getPermalink } from '../../utils/permalinks';
-import { findImage } from '../../utils/images.ts';
-
-import DSC08678 from "../../assets/DSC08678.jpg"
 
 export interface Props {
   prefix: string;
@@ -15,44 +10,38 @@ export interface Props {
 }
 
 const { prefix, post } = Astro.props;
-
-const image = (await findImage(post.image)) as ImageMetadata | undefined;
 const link = getPermalink(post.permalink, 'post');
 ---
 
-<!-- <style>
+<style>
     .post-excerpt-component:hover ~ .post-title-component,
     .post-excerpt-component:hover ~ .post-title-component {
         color: red; /* Change the text color of Text Component 1 when hovering over Text Component 2 or Text Component 3 */
     }
-</style> -->
+</style>
 
-<article>
-    <div class="container-component flex w-3/4 mx-auto space-x-8 items-center">
-        <Image class="post-image-component rounded-lg w-40 h-40" src={DSC08678} alt="article feature image"/>
-        <div>
-            <header>
-                <span class="text-sm">
-                    <Icon name="tabler:clock" class="w-3.5 h-3.5 inline-block -mt-0.5 dark:text-gray-400" />
-                    <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
-                </span>
-
-                <h2 class="post-title-component text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-slate-300 line-clamp-2">
-                    <a class="hover:text-C2a9d8f dark:hover:text-blue-700 transition ease-in duration-200" href={`/${prefix}${link}`}>
-                        {post.title}
-                    </a>
-                </h2>
-            </header>
-            
-            {post.excerpt && <p class="post-excerpt-component flex-grow text-muted dark:text-slate-400 text-base line-clamp-3">
-                <a class="post-excerpt-component" href={`/${prefix}${link}`}>
-                    {post.excerpt}
-                </a>
-            </p>}
-
-            <footer class="mt-5">
-                <PostTags tags={post.tags} />
-            </footer>
-        </div>
+<article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+    <div class="flex justify-between items-center mb-5 text-gray-500">
+        <PostTags tags={post.tags} />
+        <time datetime={String(post.publishDate)} class="text-sm">{getFormattedDate(post.publishDate)}</time>
     </div>
+    
+    <h2 class="post-title-component text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-slate-300 line-clamp-3">
+        <a class="hover:text-C2a9d8f dark:hover:text-blue-700 transition ease-in duration-200" href={`/${prefix}${link}`}>
+            {post.title}
+        </a>
+    </h2>
+
+    <p class="mb-5 font-light text-gray-500 dark:text-gray-400">{post.excerpt}</p>
+    
+    <div class="flex justify-between items-center">
+        <div class="flex items-center space-x-4">
+            <span class="font-medium dark:text-white"> </span>
+        </div>
+        <a href="#" class="inline-flex items-center font-medium text-primary-600 dark:text-primary-500 hover:underline text-C2a9d8f">
+            Read more
+            <svg class="ml-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+        </a>
+    </div>
+
 </article>
