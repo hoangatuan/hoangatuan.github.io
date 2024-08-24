@@ -4,25 +4,19 @@ import { Image } from "astro:assets";
 import DSC08678 from "../assets/DSC08678.jpg"
 
 const introduction = `
-Originally destined for the world of Android SE, fate had other plans and led me to the exciting realm of iOS programming (just kidding, but life does have its surprises).
-Today, I proudly wear the hat of an iOS Software Engineer.
 
-In this blog, I aim to delve into the fascinating world of technology, with a focus on iOS and Swift. From coding tips and tricks to exploring the latest trends, I'll cover it all.
-
-But that's not all – I also want to inject some personal perspective into the mix. After all, the tech industry is more than just code and algorithms; it's a vibrant ecosystem filled with stories, experiences, and insights.
-
-So, welcome to my corner of the internet. I hope to not only share knowledge but also spark conversations. Your thoughts and feedback are invaluable to me, so don't hesitate to drop a comment or reach out.
-
-Here's to new discoveries and meaningful exchanges. Let's embark on this journey together 🚀
+Hey there, I'm Tuan – Welcome to my corner of the internet! 🥳
+I'm a Senior Software Engineer at OKX in Singapore.
+I'm all about sharing knowledge because I believe that's how we learn and level up together. Here, you'll find me dropping gems on software development, with a special focus on iOS.
+I'm also a big fan of books—they're the secret sauce to leveling up your skills. So, I'll be sharing my take on some awesome reads and giving you the lowdown on what I've learned.
+I hope you vibe with the content and find it useful. Got questions or thoughts? Hit me up in the comments or shoot me a message anytime!
 `;
 ---
-
 <PageLayout>
-    <div class="flex space-x-12 items-center">
-        <Image class="rounded-lg w-80 h-80" src={DSC08678} alt="Me enjoy fishing."/>
-        <div class="w-3/4 ">
-            <p class="whitespace-pre-wrap text-2xl">Yo, I'm Tuan </p>
-            <p class="whitespace-pre-wrap text-2xl">
+    <div class="flex flex-col items-center space-y-8"> <!-- Center content and add spacing between image and text -->
+        <Image class="rounded-full w-80 h-80 object-cover" src={DSC08678} alt="Me (pretend) enjoying fishing."/> <!-- Rounded image to a circle -->
+        <div class="w-3/4"> <!-- Center the text block -->
+            <p class="whitespace-pre-wrap text-m">
                 {introduction}
             </p>
         </div>

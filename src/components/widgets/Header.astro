@@ -63,8 +63,11 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
             <li>
               <a
                 class:list={[
-                  "hover:text-link dark:hover:text-white px-4 py-3 flex items-centers",
-                  { "aw-link-active": href === currentPath },
+                  "hover:text-C2a9d8f dark:hover:text-white px-4 py-3 flex items-centers",
+                  { 
+                    "aw-link-active text-C2a9d8f": href === currentPath, // change text color for active link
+                    "text-default": href !== currentPath 
+                  },
                 ]}
                 href={href}
               >
