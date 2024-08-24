@@ -105,10 +105,14 @@ const { Content } = post;
         <PostComments class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between"></PostComments>
       </div>
 
-      <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8 pt-16">
-        <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Related Posts</h2>
-      </div> 
-      <RelatedPost prefix='articles' post={post} /> 
+      {post.relatedPostIDs.length > 0 && (
+            <>
+        <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8 pt-16">
+          <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Related Posts</h2>
+        </div>
+        <RelatedPost prefix="articles" post={post} />
+      </>
+      )}
 
     </article>
   </section>
