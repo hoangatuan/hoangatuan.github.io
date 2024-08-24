@@ -66,6 +66,11 @@ export const fetchRelatedPosts = async (post: Post) => {
   return posts.filter((post) => relatedPostIDs.includes(post.id)).slice(0, 2);
 };
 
+export const fetchLatestPosts = async (limit: number = 3) => {
+  const posts = await fetchPosts();
+  return posts.sort ((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf()).slice(0, limit);
+};
+
 const load = async function (): Promise<Array<Post>> {
   const posts = await getCollection("post");
   const normalizedPosts = posts.map(

@@ -53,6 +53,11 @@ export const fetchBooks = async (): Promise<Array<Book>> => {
   return _books;
 };
 
+export const fetchLatestBooks = async (limit: number = 3) => {
+  const posts = await fetchBooks();
+  return posts.sort ((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf()).slice(0, limit);
+};
+
 const load = async (): Promise<Array<Book>> => {
   const books = await getCollection("books");
   const normalizedBooks = books.map((book) => getNormalizedBook(book));
