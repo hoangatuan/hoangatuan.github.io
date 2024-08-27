@@ -1,0 +1,115 @@
+---
+publishDate: 2021-10-21T00:00:00Z
+author: John Smith
+title: How to make a super app?
+excerpt: Learn how to build a super app and mini app, and how they work together. Discover the benefits of super apps and how to put a mini app inside a super app.
+image: https://images.unsplash.com/photo-1516996087931-5ae405802f9f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80
+category: Software Design
+relatedPostIDs:
+  - get-started-website-with-astro-tailwind-css-2.md
+  - get-started-website-with-astro-tailwind-css-3.md
+tags:
+  - software design
+metadata:
+  canonical: https://astrowind.vercel.app/get-started-website-with-astro-tailwind-css
+---
+
+These days, super apps are becoming more and more popular.
+From the user’s perspective, super app is an app that has everything. Users benefit from the Super app because they can do everything in one app (book a car, flight, hotel, shop, etc.).
+
+<img src="/src/assets/content/post/how-to-make-a-super-app/1_55GvVr6gGtEhNOzpJmj7pA.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+But from the developers’s side, I have many questions about the super app.
+After a period of directly participating in the development of a super app, I have a better understanding of how super apps and mini apps work. So I wrote this article to give you an overview of how mini apps and super apps work together.
+
+In this post, I’m going to focus on answering 2 questions:
+- How can we put an app inside another app?
+- 1 normal app’s size is about 50–150MB. So why do many famous super app like Shopee, Grab, etc., which have many mini apps inside, only have the size of about 300MB?
+
+<img src="/src/assets/content/post/how-to-make-a-super-app/1_76JokibVA5uDa3NyCCGsmw.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+## Table of contents
+
+- What is super app, mini app?
+- Benefit of super app
+- How to put a mini app inside a super app?
+- Implementation (Demo in iOS/Swift)
+- Conclusion
+- Reference
+
+## What is super app, mini app?
+
+Two terms, “super app” & “mini app”, go together.
+A super app is an app that provides many different services, and these services could be made by different teams or companies.
+Each of the services that the super app provides can be considered as a mini app.
+
+<img src="/src/assets/content/post/how-to-make-a-super-app/1_1sFTZmNwkwhDDJf_15O0BQ.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+## Benefits of super app
+
+For Users:
+- 1 app provides many services for users => Users can experience many services and utilities in 1 single app without changing app or download a new app.
+Example: Zalo is a super app that provides many service, such as: pay bills, book cars/flight, shopping, etc.
+- Save phone space because users don’t need to download other apps.
+
+<img src="/src/assets/content/post/how-to-make-a-super-app/1_ZAmYRjpPlJ5jX8tIUnKqTA.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+For Company:
+- Share the number of users between super apps and mini apps
+- Super app becomes lively, has more features to compete with other apps.
+
+<img src="/src/assets/content/post/how-to-make-a-super-app/1_4M-dngp2-vApUymbm83qpg.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+## How to put a mini app inside a super app?
+
+Before reading the answers, consider the following questions.
+
+**Question 1**: How a super app open a mini app?
+
+**Answer**:
+
+The source code of the super app must contains the source code of the mini app in the form of a framework. The MiniApp Team (MAT) will build the service which will be integrated into super app in the framework form, then send that framework to the super app team. The Super app team (SAT) will embed this framework into their source code.
+
+This framework must meet some needs:
+- MiniApp Framework must provide a public function that return a ViewController(iOS). This view is an input view of the mini app.
+- MAT only builds the service which will be integrated into the super app under framework form, but doesn’t build all their application’s source code under framework form.
+
+**Question 2**: One super app has many mini apps. What if each mini app provides a different function from the others, how will the super app handle it? We can not use switch-case here because there are many mini apps.
+
+<img src="/src/assets/content/post/how-to-make-a-super-app/1_PGbzfOiwBICKQisffgsIKw.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+**Answer:**
+
+- SAT creates an interface and builds it in the form of a framework, then sends it to all the mini app teams. This interface is a standard for all mini apps to conform to.
+
+<img src="/src/assets/content/post/how-to-make-a-super-app/1_SBCQovzhP7AuVcq2yR_rzQ.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+This is the basic idea of how to integrate a mini app into a super app. Now let’s implement it.
+
+**Implementation:**
+
+**Step 1**: SAT builds a standard interface that mini apps conform to, in the form of a framework.
+
+<img src="/src/assets/content/post/how-to-make-a-super-app/1_L2Valfaln0Q7AkOgmDSNwA.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+**Step 2**: MAT implements that interface, then builds their service’s source code into the framework, and sends it to SAT to integrate.
+
+<img src="/src/assets/content/post/how-to-make-a-super-app/1_eYbsSKqilZf44G7QGy9qpg.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+**Step 3**: Super App get the mini app’s input view by using thepublic function that mini app provides, then show that view.
+
+<img src="/src/assets/content/post/how-to-make-a-super-app/1_GcPunznxTJxc5egtNTmlzw.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+**Result**
+
+- https://vimeo.com/633499312
+
+**Conclusion**
+- This article builds a simple demo project in order to give an overview of how the super app and the mini app connect to each other.
+- In fact, to build a super app, there are still many other difficult problems such as: authentication between super app and mini app, payment between super app and mini app, etc. Those are also good problems that need to be solved.
+
+**Reference**
+- If you don’t know how to create a framework, you can read my previous post: How to create a framework
+
+**Source code**
+- You can find my source code demo on my github. You can download it here.
