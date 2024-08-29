@@ -1,0 +1,142 @@
+---
+publishDate: 2023-10-09T00:00:00Z
+author: Tuan Hoang
+title: Engineering mindset I’ve learned in a big tech company
+excerpt: How great engineers work in a big tech company. Learn about the mindset of engineers at GxS Bank.
+image: https://images.unsplash.com/photo-1516996087931-5ae405802f9f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80
+category: Softskill
+tags:
+  - softskill
+metadata:
+  canonical: https://astrowind.vercel.app/get-started-website-with-astro-tailwind-css
+---
+
+<img src="/src/assets/content/post/engineering-mind-set-ive-learned-in-big-tech-company/1_nfV21FVDcPL2pZDO6nQfpA.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+**Saying Goodbye to the Best Journey I Ever Had**
+
+Wow, time is flying fast. My one-year journey with GxS has come to an end. It was an incredible adventure and I really love working here. Because of personal reasons, I have to say goodbye to GxS and the best colleagues I’ve ever had. But Singapore is small, maybe we can work together again someday haha 😉
+
+I’m very proud to be a part of GxS where I contribute to building one of the first digital banking in Singapore. During this time, I’ve learned a lot, especially the mindset when working — which was very different from what I’ve experienced before in my career when I still working in Vietnam.
+
+Believe that these mindsets are crucial to help us — as an engineer to go further, and I wish I could have learned these mindsets sooner, so I wrote this article to share about it.
+
+But first, let’s introduce a bit about GxS.
+
+## What is GxS?
+
+Founded by Grab and Singtel, GXS Bank is one of the first two digital banks to serve retail customers.
+
+So, what makes GxS different from other banks?
+
+GxS’s vision is to redefine the user’s banking application experience. We aim to build intelligent money management behavior for users, helping users use banking services easily, … With that vision in mind, we-GxS’s engineers always try our best to bring the best experience to users.
+
+And since GxS was founded by Grab, we can inherit their lessons, their technologies, and their users, … which allow us to move even faster.
+
+You can check out more about GxS at https://www.gxs.com.sg/
+
+Alright, let’s dive right into the main part.
+
+## Unit testing and UI testing are essential
+
+| *If you want your project better and go further in the long-term, write tests. Don’t fully rely on QAs.*
+
+I went through several projects before joining GxS, and none of them required writing tests. We fully rely on QAs to help us with testing. Because of that, besides building new features, all the things we did at that time were fix bugs, fix bugs and fix bugs. The reasons are:
+
+- Every time a piece of logic is updated to fix this bug, it creates a new bug elsewhere
+- The bug is fixed and then after a while it is reopened because some engineers updated the logic incorrectly
+- ...
+
+Things are even worse than expected. The project is too large over time and it is almost infeasible to refactor part of the business logic.
+
+At GxS in particular and tech companies in general, testing is one of the important parts. After 2 years of starting the project, the project has more than 3000 unit tests & UI tests with ~90% coverage. In addition, the team also discussed a lot to ensure each unit test brought additional protection to the codebase.
+(I’ve seen another codebase of a big company in Singapore that also has ~90% coverage, but many tests are just for fun and don’t bring any benefit to the project 🙂)
+
+Focusing on writing tests helps reduce a lot of work for QA and prevents hidden bugs, saving a lot of time and money for the company + providing a better experience for users.
+
+If you work for an outsourcing company, maybe the client is the one who decides if the unit tests are necessary or not.
+Based on my 3 years working for an outsourcing company, most of the time clients don’t have much knowledge about tech, so they hire us to build the whole project and the client only cares about releasing features. We try to make them happy by dropping unit tests and working overtime (a lot) to release features on time.
+
+But eventually, after 2 years, the project became too big. Each change to the current logic now becomes costly because we need to re-test again and again, and we need to work overtime more and more.
+And you know what, now clients will blame you because you letting this happen 🙂
+
+So my thought is should we discuss with clients beforehand, let them know the importance of writing tests,… Actually, I haven’t been in a position to discuss this with clients before, so I’m not sure if there are any difficulties with this. If you have any experience with this, please share your thoughts about this in the comments 🫶🏻
+
+## Be responsible, proactive, and be open
+
+| *If you want to go further in your work, ***be responsible, proactive***, and ***open to advice from others****
+
+When I joined GxS, I was very impressed by the working attitude of the engineers here. Each individual can work completely independently, proactively, and responsibly. How do they show it?
+
+### Responsible
+
+- For the task that they have selected and committed, they will always come up with a scalable and real solution, not just a temporary solution.
+- Always make sure the task is delivered on time
+- Always ready to support, even if it was at 11 p.m
+- ... 
+
+Overall, they really care about the projects and will do anything to help the project
+
+### Proactive
+
+- Besides feature tasks, the team has a dashboard containing tickets that need to be done to improve project quality / improve engineer experience / improve performance (I think this dashboard alone is quite good 👍🏻). The engineers in the team always proactively pick tasks on this board when they have free time.
+- During the project, always proactively learn about the app’s business, and contribute ideas to the backend, PM, and designer to change requirements accordingly instead of following the requirement blindly.
+- ...
+
+### Be open
+
+Well, to be honest, I sometimes encountered cases where engineers did not want to receive feedback from younger engineers.
+At GxS, everyone is very open to all suggestions/advices. We listened respectfully and discussed with each other. A leader of mine at GxS often said: “No one knows everything”
+
+| “In every man there is something wherein I may learn of him, and in that I am his pupil.” — Ralph Waldo Emerson”
+
+## Working as a real team
+
+| If you want your team to become more effective, start working as a team, not coding “heroes”
+
+In the projects I have experienced, each project depends heavily on 2 or 3 core engineers of the team, while the other engineers in the team only do tasks that are not so important. These core engineers do all the most difficult features, review all MRs + hold the right to merge the merge requests and are primarily responsible for all features of the project. Worse yet, when junior/middle engineers don’t do well, these core engineers will silently destroy everything and rebuild from scratch without discussing with junior/middle engineers to point out what they are doing wrong.
+
+So what’s so bad about this?
+
+- This robs junior/middle engineers of the opportunity to learn.
+- Core engineers hold too many tasks, they gradually become an irreplaceable part of the project, and eventually, they become the bottleneck of the project.
+- The core engineers blamed the juniors for poor work so they had to do a lot of extra work. The juniors become self-deprecation,…
+
+The team lacks cohesion and trust in each other.
+
+| You can read the real story about a company that fired their top talent at [here](https://www.freecodecamp.org/news/we-fired-our-top-talent-best-decision-we-ever-made-4c0a99728fde/)
+
+I have been in this situation before, both in “coding heroes” and “junior developer”. I didn’t even think about it too much back then. Looking back, I regret the time I worked with coding heroes cuz I didn’t learn too much (even though he is really good at coding), and I feel regret for being a coding hero that I didn’t mentor well for junior engineers.
+
+So, what can you do?
+
+- If you are a senior, please respect and trust your colleagues. Senior is not only about good at coding, it’s also about mentoring juniors/middles.
+By doing so, you will have more time, have more value for the company, and you will learn a lot from them as well.
+- If you are junior, be confident to talk with your seniors, ask how you can improve your source code, and ask them to let you take responsibility for core features, …
+
+At GxS, engineers always trust and respect each other.
+For example:
+
+- A junior engineer with less than 1 year of experience is still assigned to take care of a main feature, review the middle/senior engineer’s MR, take on-call responsibilities, etc…
+- Everyone reviews MR of each other and everyone has the right to merge their MR.
+- We truly care about each other. We are always ready to spend extra time to guide others about tech/features/… if they need it.
+
+## Sharing culture
+
+| Sharing is learning
+
+Whenever we see something that is worth mentioning with the team, we will bring it up. It can be some issues, something not good in the project, or new things that can be applied to enhance the project, ... Not to blame who made the issue but to discuss, find solutions, and learn lessons together.
+
+Some examples of what we did:
+
+- In code review, if your implementation is not good, reviewers will tell you why it’s not good, some reference you can take a look
+- While fixing bugs, if we make mistakes and those mistakes are worth letting the team know, we raise it up.
+- In GxS, we are divided into multiple squads. Each squad will take care of 1 main feature, but it doesn’t mean the engineers of this squad shouldn’t know anything about other squads. We have team meetings once every two weeks so that each squad can share about what they’re doing, and new things they’ve learned along the way, …
+- ...
+
+<img src="src/assets/content/post/engineering-mind-set-ive-learned-in-big-tech-company/1_LLJG7GfJM2KtVAJLAkER_g.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+## Wrap up
+
+Above are the mindsets I’ve learned and I wish I could learn them earlier. But it’s never too late to learn. Hope you find it useful and apply it to yourself and your team.
+Enjoy!
