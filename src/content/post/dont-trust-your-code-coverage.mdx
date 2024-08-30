@@ -1,0 +1,97 @@
+---
+publishDate: 2023-12-18T00:00:00Z
+author: Tuan Hoang
+title: Dont trust your code coverage
+excerpt: How to automate the leak-checking process in iOS development
+image: https://images.unsplash.com/photo-1505778276668-26b3ff7af103?q=80&w=2661&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+category: software
+tags:
+  - ios
+  - swift
+---
+
+[When I was working at GxS](https://medium.com/gitconnected/dont-trust-your-code-coverage-96698b83219d#:~:text=When%20I%20was,of%20the%20codebase%3F), one thing that we truly cared about was the code quality. To ensure the code quality, we added a rule that code coverage needs to be at least 85%.
+
+So far so good, we got over 3000 unit tests after 2 years, and everyone was happy when looking at the code coverage. But is the code coverage metric enough to ensure the quality of the codebase?
+
+## The problem
+
+Later when I had a chance to take a closer look at the unit tests of the project, I realized that we have some problems with how we’re writing tests. Some problems related to code coverage are:
+
+1. Some unit tests don’t bring any benefits to protecting the codebase. They’re just there to raise the code coverage.
+
+```swift
+
+// Example Code
+func calculateSomething(input: Input) -> Int {
+  // Complex logic
+  return result
+}
+
+// Test
+// This test doesn't add any protection to the codebase
+// but still increase the code coverage
+func testCalculateSomething() {
+    let result = viewModel.calculateSomething(input)
+    XCTAssertNotNil(result)
+}
+
+```
+
+2. Even if the test does not cover all the logic inside the function, the code coverage still shows 100%:
+
+```swift
+
+//Example Code
+class ViewModel {
+    var cache: Int
+    func calculateSomething(input: Input) -> Int {
+      // Complex logic
+      cache = result
+      return result
+    }
+}
+
+// Test
+// This test misses the checking for the `cache` value
+// but still shows the 100% code coverage
+func testCalculateSomething() {
+    let result = viewModel.calculateSomething(input)
+    XCTAssertNotNil(result)
+}
+
+```
+
+3. During code review, we often ignore reviewing the unit tests. (Sorry boss 😛)
+
+I conducted a sharing session to raise all the problems & proposed solutions with the team.
+However, for the code coverage problems above, the only solution I could think of back then was that everyone needed to put extra effort into writing effective unit tests.
+
+Human makes mistakes, yes. We need to find an automated solution to help us handle these problems.
+
+Recently I’ve discovered a testing technique that I never heard of before — [Mutation testing technique](https://medium.com/gitconnected/dont-trust-your-code-coverage-96698b83219d#:~:text=I%20conducted%20a,apply%20mutation%20testing%20%F0%9F%A4%A9), which can help engineers develop quality tests.
+
+In this article, I will introduce this testing technique. And even better, a Swift open source that we can easily integrate into our project to apply mutation testing 🤩
+
+---
+
+## Mutation testing
+
+### What is mutation testing?
+
+> Mutation testing (or mutation analysis) is used to design new software tests and evaluate the quality of existing software tests by identify weakly tested pieces of code (code that is not coveered by test) and identiy weak tests (tests that don’t bring any benefit)
+
+### How does it work?
+
+1. Make changes to your source code based on well-defined ***mutation operators*** (More on this later). Each change will be called a **mutant**.
+2. Run the whole test suite for each mutant. ***This process is called killing mutants***.
+If the tests failed, it means the tests detected the mutant and can be considered good tests (the mutant has been killed).
+Otherwise, if the tests still succeed, it means the mutant is still alive, and your tests are not good enough to detect the change.
+3. After evaluating all the mutants, calculate the ***mutation score***:
+***mutation score = (number of killed mutants/number of mutants) * 100***
+The mutation score represents the quality of the test suite. The higher it is, the better your test suite is.
+
+### Mutation Operators
+
+Making changes to the source code doesn’t mean making random changes. Instead, all the changes are based on mutation operators.
+

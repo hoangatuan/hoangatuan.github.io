@@ -1,0 +1,168 @@
+---
+publishDate: 2023-12-18T00:00:00Z
+author: Tuan Hoang
+title: A modern approach to Swift method swizzling
+excerpt: How to automate the leak-checking process in iOS development
+image: https://images.unsplash.com/photo-1505778276668-26b3ff7af103?q=80&w=2661&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+category: software
+tags:
+  - ios
+  - swift
+---
+
+Method swizzling is a cool feature that allows us to change the implementation of an existing selector at runtime.
+
+If you never heard of it, please check out [my previous article](https://magz.techover.io/2021/07/25/method-swizzling-in-swift/). In that article, I’ve explained pretty detail what method swizzling is, how we can use method swizzling, and what we should consider before using it.
+
+Recently while I was developing my project which needed to use Method swizzling, I realized that from Swift 5.1 we have a better native API to achieve method swizzling.
+
+Let’s find out!
+
+---
+
+## Table of contents
+
+1. What is method swizzling?
+2. Real-world example
+3. New native API to achieve method swizzling
+4. Conclusion
+
+## What is method swizzling?
+
+For those who don’t want to read my previous article, here is a brief explanation of method swizzling.
+
+> Method swizzling is the process of changing the implementation of an existing selector at runtime.
+
+## Real-world example
+
+One of the real-world examples that apply Method swizzling is the famous [Pulse](https://github.com/kean/Pulse) framework.
+
+The magic behind Pulse is that Pulse will use a custom URLSession delegate to capture network requests and perform logging.
+
+Here is how Pulse injects its custom URLSession delegate to your URLSession:
+
+```swift
+
+private extension URLSession {
+    // This is the custom init method to replace the original URLSession.init
+    @objc class func pulse_init(configuration: URLSessionConfiguration, delegate: URLSessionDelegate?, delegateQueue: OperationQueue?) -> URLSession {
+        ...
+        // Create custom delegate and inject to the URLSession, so that later Pulse can perform custom logic in this delegate to capture network logs.
+        let delegate = URLSessionProxyDelegate(delegate: delegate)
+        return self.pulse_init(configuration: configuration, delegate: delegate, delegateQueue: delegateQueue)
+    }
+}
+
+public extension URLSessionProxyDelegate {
+    // When the app start & berfore init URLsession, call this function to perform method swizzling 
+    static func enableAutomaticRegistration() {
+        ...
+        if let lhs = class_getClassMethod(URLSession.self, #selector(URLSession.init(configuration:delegate:delegateQueue:))),
+           let rhs = class_getClassMethod(URLSession.self, #selector(URLSession.pulse_init(configuration:delegate:delegateQueue:))) {
+            method_exchangeImplementations(lhs, rhs)
+        }
+    }
+}
+
+```
+
+## New native API to achieve method swizzling
+
+As of Swift 5.1, Swift provides the *@_dynamicReplacement* modifier to handle method swizzling.
+
+Using the new syntax is simple, just need to follow these steps:
+
+Mark the original function that needs to be replaced with the *dynamic* modifier.
+Use the *@_dynamicReplacement* modifier upon a replacement function. This modifier takes the original function’s name as a parameter.
+The replacement function type must be the same as the original function type.
+
+```swift
+
+class SampleClass {
+    // 1. Mark the original function with the dynamic modifier
+    dynamic func original() {
+        print("I am the original")
+    }
+}
+
+extension SampleClass {
+   // 2. Use @_dynamicReplacement modifier, and the parameter for this modifier is the name of original function.
+   @_dynamicReplacement(for: original)
+   func replacement() {
+        // original() // You can still call the original function here.
+        print("I'm just a replacement")
+    }
+}
+
+```
+
+Sample code:
+
+```swift
+
+let sample = SampleClass()
+sample.original()
+
+// Output
+// "I'm just a replacement"
+
+```
+
+The cool thing is we don’t need to call any function to perform swizzle. With this modifier, the swizzle **will happen when the program starts**.
+
+Above is a simple example of how to use *@_dynamicReplacement* modifier. Let’s try some more complicated example
+
+```swift
+
+class SampleClass {
+    dynamic func original() {
+        print("I am the original")
+    }
+    
+    dynamic func original_withParameters(for param1: String, param2: String) {
+        print("I am the original - param1: \(param1) - param2: \(param2)")
+    }
+    
+    dynamic func original_withParameters_andReturnType(param: String) -> Int {
+        print("I am the original - param: \(param) - returnType: Int")
+        return 1
+    }
+}
+
+extension SampleClass {
+    @_dynamicReplacement(for: original)
+    func replacement() {
+        print("I'm just a replacement")
+    }
+    
+    @_dynamicReplacement(for: original_withParameters(for:param2:))
+    func replacement_withParameters(param1: String, param2: String) {
+        print("I am the replacement - param1: \(param1) - param2: \(param2)")
+    }
+    
+    @_dynamicReplacement(for: original_withParameters_andReturnType(param:))
+    func replacement_withParameters_andReturnType(param: String) -> Int {
+        print("I am the replacement - param: \(param) - returnType: Int")
+        return 2
+    }
+}
+
+// Sample code
+let sample = SampleClass()
+sample.original()
+sample.original_withParameters(for: "Param1", param2: "Param2")
+
+// Output
+print("I'm just a replacement")
+print("I am the replacement - param1: \(param1) - param2: \(param2)")
+
+```
+
+## Conclusion
+
+This new modifier is much nicer compared to the way we need to use objective-c code to swizzle.
+
+Few things to keep in mind:
+
+- The *@_dynamicReplacement* modifier has the underscore syntax, which means it’s not official release. More information [here](https://github.com/apple/swift/blob/main/docs/ReferenceGuides/UnderscoredAttributes.md).
+- *@_dynamicReplacement* modifier will automatically perform swizzle when the program starts. If you want to perform the swizzle at an arbitrary point in time, you will need to use the old way.
