@@ -1,0 +1,349 @@
+---
+publishDate: 2023-11-1T00:00:00Z
+author: Tuan Hoang
+title: 'Modular Navigation in SwiftUI: A Comprehensive Guide'
+excerpt: Covering how to handle navigation in a SwiftUI project with Modular Architect and Clean Architect.
+image: https://images.unsplash.com/photo-1505778276668-26b3ff7af103?q=80&w=2661&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+category: software
+tags:
+  - ios
+  - swiftui
+---
+
+I started building a SwiftUI project recently. The target I want to achieve is to build a project that can be used as a reference for building large production apps.
+
+With that goal, I decided to apply Modular Architect and Clean Architect to the project.
+
+While implementing the project, I faced some problems with the navigation. I also didn’t find any online solutions that could meet all my scenarios. In this article, I will write about navigation problems I met in the project and how I solved them.
+
+---
+
+## Table of content
+
+1. Router module
+2. Open feature module’s view from the Application module
+3. Navigation inside feature module
+4. Navigation between 2 views in different modules
+5. Present a sheet
+6. Passing data between views
+
+Before going to the main part, let’s take an overview look at the simple version of module dependencies in the project:
+
+In this article, we will mainly focus on 4 modules: **Application**, **Movies**, **Search**, and **Router**.
+
+## 1. Router module
+
+Before iOS16, using NavigationView was not easy to customize (even if you want to popToRoot), that’s why we have a lot of different open sources for SwiftUI navigation.
+
+With the release of NavigationStack, it’s easier to handle navigation logic, so I decided to use NavigationStack in the project.
+
+To get started, created a Router class to wrap navigation logic and provide simpler APIs to interact with:
+
+```swift
+
+public final class Router: ObservableObject {
+    @Published public var navPath = NavigationPath()
+    public init() {}
+
+    public func navigate(to destination: any Hashable) {
+        navPath.append(destination)
+    }
+
+    public func navigateBack() {
+        navPath.removeLast()
+    }
+
+    public func navigateToRoot() {
+        navPath.removeLast(navPath.count)
+    }
+}
+
+```
+
+Since all feature modules need to use the *Router*, so I created a separate package for it. (You can see in the diagram that I’ve created a Router module and other modules depend on it.)
+
+Using *Router* is dead simple:
+
+```swift
+
+// Application Module
+import Router
+
+struct AppCoordinator: View {
+    @ObservedObject var router = Router()
+    var body: some View {
+        NavigationStack(path: $router.navPath) {
+            ...
+        }
+        .environmentObject(router)
+    }
+}
+
+```
+
+## 2. Open Feature’s view from the Application module
+
+Let's say we want to open *MovieView* in the **Movies** module from the **Application** module. A simple approach is:
+
+```swift
+
+// Application Module
+import Movies
+
+var body: some View {
+    MovieView(
+        viewModel: MovieViewModel(
+           useCase: MovieUseCase(repository: MovieRepository())
+        )
+    )
+}
+
+```
+
+That will work. However, the drawback is that I will need to mark *MovieViewModel*, *MovieUseCase*, and *MovieRepository* as public so that they can be accessed outside the Movies module.
+
+When developing a framework, I always try to hide the framework’s implementation details as much as possible. So the above approach can’t make me happy.
+
+To solve that problem, I decided to go with the MVVM-C approach by creating Coordinators.
+
+```swift
+
+// Application Module 
+import Movie
+struct AppCoordinator: View {
+    var body: some View {
+        MovieCoordinator()
+    }
+}
+
+// Movie module
+/// MovieCoordinator is the only public component we need.
+public struct MovieCoordinator {
+    public init() {}
+    var body: some View {
+        MovieView(
+            viewModel: MovieViewModel(
+               useCase: MovieUseCase(repository: MovieRepository())
+            )
+        )
+    }
+}
+
+```
+
+Another benefit of the Coordinator approach is that I can *easily inject dependencies* to the **Movies** module from the **Application** module:
+
+```swift
+
+// Movies module
+
+public struct MovieCoordinator: some View {
+    private let dependencies: Dependencies
+    public init(dependencies: Dependencies) {
+        self.dependencies = dependencies
+    }
+
+    var body: some View {
+        MovieView(
+            repository: MovieRepository(apiClient: dependencies.apiClient)
+        )
+    }   
+
+    // Dependencies of `MovieModule` that need to be injected from App module.
+    struct Dependencies {
+        let apiClient: ApiClient
+    }
+}
+
+```
+
+## 3. Handle navigation inside a module
+
+Enum-based should be the best approach when using **NavigationStack**. I defined an enum containing all destinations inside the module, and handle the navigation logic in the Coordinator.
+
+Example of **Movies** module:
+
+```swift
+
+enum PrivateDestination: Hashable {
+    case genreDetail
+    case movieDetail(movie: Movie)
+} 
+
+public struct MovieCoordinator: some View {
+     ...
+     var body: some View {
+        MovieView(...)
+        .navigationDestination(for: Destination.self) { destination in
+            switch destination {
+            case .genreDetail:
+                Text("Genre detail")
+            case let .movieDetail(movie):
+                MovieDetailView(viewModel: .init(movie: movie, movieRepository: MovieDetailRepository(apiClientService: dependencies.apiClient)))
+            }
+        }
+    }
+}
+
+```
+
+Note that the reason I named the enum ***PrivateDestination*** is that the enum can only be used for navigation between screens **in the same module**.
+
+## 4. Navigation between 2 different modules
+
+With Modular Architect, how can we navigate between 2 screens in different modules?
+For example, how to open SearchView (in the Search module) from MovieView (in the Movie module)?
+
+The rule of thumb of Modular Architecture is **that modules at the same level can’t depend on each other**. That means the **Movies** module can’t open the **Search** module directly. Since the **Application** module knows about feature modules, I handled the navigation logic here:
+
+```swift
+
+// Movie module
+// First, create the enum `PublicDestination` containing destinations outside the current module.
+public enum MoviePublicDestination: Hashable {
+    case search
+}
+
+```
+
+Then we can handle the navigation logic between 2 feature modules in the **Application** module:
+
+```swift
+
+// Application module
+import Movie
+import Search
+import Router
+
+struct AppCoordinator: View {
+    @ObservedObject var router = Router()
+
+    var body: some View {
+        NavigationStack(path: $router.navPath) {
+            MovieCoordinator(...)
+                .navigationDestination(for: MoviePublicDestination.self) { destination in
+                    switch destination {
+                    case .search:
+                        SearchCoordinator(...)
+                    }
+                }
+        }
+        .environmentObject(router)
+    }
+}
+
+
+```
+
+5. Present a sheet
+
+To present a sheet, I still used *.sheet(item:content:)* API. I expected that it should be easy and similar to how I handle navigation:
+
+```swift
+
+public final class Router: ObservableObject {
+    @Published public var presentedSheet: any Identifiable?
+
+    public func presentSheet(destination: any Identifiable) {
+        presentedSheet = AnyIdentifiable(destination: destination)
+    }
+    ...
+}
+
+```
+
+But I faced this issue with that approach:
+
+To overcome this problem, I need to unbox [existential types](https://swiftrocks.com/whats-any-understanding-type-erasure-in-swift) first. And my solution was to create **AnyIdentifiable**:
+
+```swift
+
+// Router module
+public class AnyIdentifiable: Identifiable {
+    public let destination: any Identifiable
+    public init(destination: any Identifiable) {
+        self.destination = destination
+    }
+}
+
+public final class Router: ObservableObject {
+    ...
+    @Published public var presentedSheet: AnyIdentifiable?
+    public func presentSheet(destination: any Identifiable) {
+        presentedSheet = AnyIdentifiable(destination: destination)
+    }
+}
+
+```
+
+Now I could handle the sheet easily:
+
+```swift
+
+struct MovieCoordinator: View {
+    @EnvironmentObject private var router: Router
+    var body: some View {
+        ...
+        .sheet(item: $router.presentedSheet) { sheetDestination in
+            if let destination = sheetDestination.destination as? MovieSheetDesination {
+                switch destination {
+                    case .bottomSheetError:
+                        BottomSheetError()
+                }
+            }
+        }
+    }
+}
+
+```
+
+## 6. Passing data between views
+
+How can we pass data from view2 back to view1? I thought it should be easy, just need to use closure or Binding as associated type:
+
+```swift
+
+enum Destination: Hashable {
+    case view2(callback: (String) -> Void)
+    case view3(callback: Binding<String>)
+}
+
+```
+
+And once again, not so fast 😣
+
+With **NavigationStack**, the destination enum needs to conform Hashable protocol. Closure and Binding don’t conform to Hashable, so I need to made the enum conform to Hashable manually:
+
+```swift
+
+enum Destination: Hashable {
+    case view2(callback: (String) -> Void)
+    case view3(callback: Binding<String>)
+
+    static func == (lhs: Destination, rhs: Destination) -> Bool {
+        if case .view2 = lhs, case .view2 = rhs { return true }
+        if case .view3 = lhs, case .view3 = rhs { return true }
+        return false
+    }
+
+    func hash(into hasher: inout Hasher) {
+        switch self {
+        case .view2:
+            hasher.combine(1)
+        case .view3:
+            hasher.combine(2)
+        }
+    }
+}
+
+```
+
+And that was good to go 🚀
+
+## Conclusion
+
+Above are navigation problems I met and how I solved them in the project. If you know of any better solutions, don’t hesitate to leave a comment, I love to hear that.
+
+You can find the source code [here](https://github.com/hoangatuan/iMovie).
+
+It would be awesome if you are interested in the project, contribution are always welcome.

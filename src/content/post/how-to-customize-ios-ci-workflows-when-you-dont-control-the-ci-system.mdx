@@ -1,0 +1,92 @@
+---
+publishDate: 2024-8-9T00:00:00Z
+author: Tuan Hoang
+title: How to Customize iOS CI Workflows When You Don’t Control the CI System
+excerpt: In this article, I will show you how to customize iOS CI workflows when you don’t control the CI system.
+image: https://images.unsplash.com/flagged/photo-1562503542-2a1e6f03b16b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+category: software
+tags:
+  - ios
+  - cicd
+---
+
+## Background
+
+Our mobile team scaled fast in these 2 years; we now have over 250 engineers, divided into feature teams. We create hundreds of commits daily, creating a lot of builds for PM/QA to verify bug fixes or new features, …
+
+Yet, our CI resources are limited. That’s why the mobile infrastructure team is the only team that can control the CI workflow. Unfortunately, they don’t have the resources to customize the CI workflow for each project anytime soon.
+
+It’s annoying that we can’t perform our scripts on the CI workflow, so I came up with some ideas to tailor the development workflow ourselves.
+
+## Customise Xcode build phases
+
+It’s easy to run some scripts in the pipeline if you can control the CI configuration file:
+
+```bash
+
+// CI config files
+
+stages:
+  - build
+
+build_project:
+  stage: build  
+  script:
+    - your_custom_script.sh
+
+```
+
+Since we don’t have permission to customize the CI configuration file, we need to find another way to run the script on CI.
+
+[Xcode build phases](https://developer.apple.com/documentation/xcode/customizing-the-build-phases-of-a-target) can help us with that.
+
+Currently, whenever we create/update a Pull request, a unit test job will run (Yes, it is set up by the infra team). With Xcode build phases, we can inject custom scripts during build time, and CI runner will help us to run it 😛
+
+For example, I want to perform the unused code check on CI. Here is how I set up the build phases:
+
+<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_IFy9ESECEu2c_2Xhqi3YpA.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+> Note that we can use ENV variables or any custom logic to avoid running those scripts in local development.
+
+Also in my script, I added logic to send the result to our work channel:
+
+<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_p__irNWZ7606rIrZH2r7Eg.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+With this logic, when an engineer creates/updates a PR, the runner will run the unit test, then run my custom script and notify us automatically 🥳
+
+## Create the scheduled pipeline ourselves
+
+The Xcode build phases trick works fine, but how about running a job once per week instead of per merge requests without permission to create a scheduled pipeline in the project?
+
+“How about setting up the runner ourselves?” — That’s what I thought.
+
+I think it’s feasible, so I set up a local runner on my Macbook.
+
+<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_MMtVZNNWuHmb5WCTZnzICw.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_AcJX2mtmMYQEEobZoU7tMA.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+Good, it works. This approach can solve some of the simple use cases. However, it has some downsides:
+
+- My laptop will do a lot of heavy work: Pull the heavy project, run the tests, do custom script, … which will impact my daily work.
+- Can’t utilize pre-defined jobs provided by the infra team: Gather test coverage of specified modules, performance analysis, …
+
+<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_YW3GkI7sSS9KZOIFFZtu6w.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+To overcome these downsides, my simple idea is:
+
+- Develop a Python script to trigger the pre-defined jobs by cURL (with the help of the [Python-Jenkins](https://python-jenkins.readthedocs.io/en/latest/) package).
+- Proceed the job’s log to get the information that we want
+- Send the final result to the work channel using [webhook](https://www.techtarget.com/searchapparchitecture/tip/Webhooks-explained-simply-and-how-they-differ-from-an-API).
+
+<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_Or3NHMqh2nh_8MwQep_I2w.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+With this approach, not only we can both utilize pre-defined jobs but we can also leverage the infra team’s runner to do all the heavy work for us 😛
+
+The result is perfect:
+
+<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_z8zcE-CZB-V2vJ0BQlN2ag.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+
+## Conclusion
+
+I hope this post gives you some interesting ideas about how to overcome any issues when customizing your CI
