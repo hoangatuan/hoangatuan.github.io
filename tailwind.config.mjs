@@ -18,8 +18,7 @@ module.exports = {
         Ce76f51: '#e76f51',
       },
       fontFamily: {
-        sans: ['var(--aw-font-sans)', ...defaultTheme.fontFamily.sans],
-        serif: ['var(--aw-font-serif)', ...defaultTheme.fontFamily.serif],
+        serif: ['Times New Roman', 'serif'],
         heading: ['var(--aw-font-heading)', ...defaultTheme.fontFamily.sans],
       },
     },

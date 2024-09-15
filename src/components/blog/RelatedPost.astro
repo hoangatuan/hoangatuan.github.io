@@ -20,7 +20,7 @@ const posts = await fetchRelatedPosts(post);
   >
     {
       posts.map((post) => (
-        <li class="mb-8">
+        <li class="mb-8 flex">
           <Item prefix={prefix} post={post} />
         </li>
       ))

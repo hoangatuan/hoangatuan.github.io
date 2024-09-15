@@ -12,7 +12,7 @@ const books = await fetchLatestBooks();
     >
       {
         books.map((book) => (
-          <li class="mb-8">
+          <li class="mb-8 flex">
             <BookItem prefix='books' book={book} />
           </li>
         ))

@@ -13,11 +13,11 @@ const { prefix, books } = Astro.props;
 <div class="container mx-auto px-4 lg:px-8 pt-16">
   <ul
     class="grid gap-8 lg:grid-cols-3"
-    style="row-gap: 0.1rem; column-gap: 2rem;"
+    style="row-gap: 0.1rem; column-gap: 2rem; grid-auto-rows: 1fr;"
   >
     {
       books.map((book) => (
-        <li class="mb-8">
+        <li class="mb-8 flex">
           <BookItem prefix={prefix} book={book} />
         </li>
       ))
