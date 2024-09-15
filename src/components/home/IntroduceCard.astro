@@ -1,4 +1,14 @@
 ---
+import { Icon } from 'astro-icon/components';
+
+const footerData = {
+  socialLinks: [
+    { name: 'GitHub', icon: 'tabler:brand-github', href: 'https://github.com/hoangatuan' },
+    { name: 'Linkedin', icon: 'tabler:brand-linkedin', href: 'https://www.linkedin.com/in/tuan-hoang-b02025183/' },
+    { name: 'Medium', icon: 'tabler:brand-medium', href: 'https://medium.com/@hoangatuan' }
+  ]
+};
+
 ---
 
 <section class="w-full max-w-full flex flex-col items-center justify-center text-center pt-8" aria-label="About Me">
@@ -7,5 +17,25 @@
         <p class="text-lg">
             This is my space on the internet where I write about Swift/iOS development, software books review and my experience as a software engineer.
         </p>
+
+        <div class="flex w-full justify-center">
+            {
+              footerData.socialLinks?.length ? (
+                <ul class="flex mb-4 md:order-1 -ml-2 md:ml-4 md:mb-0 rtl:ml-0 rtl:-mr-2 rtl:md:ml-0 rtl:md:mr-4">
+                  {footerData.socialLinks.map(({ href, name, icon }) => (
+                    <li>
+                      <a
+                        class="text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
+                        href={href}
+                      >
+                        {icon && <Icon name={icon} class="w-5 h-5" />}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                ''
+              )
+            }
     </div>
 </section>
