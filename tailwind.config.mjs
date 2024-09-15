@@ -20,6 +20,8 @@ module.exports = {
       fontFamily: {
         serif: ['Times New Roman', 'serif'],
         heading: ['var(--aw-font-heading)', ...defaultTheme.fontFamily.sans],
+        'noto-serif': ['var(--noto-serif-font)', 'serif'],
+        'open-sans': ['var(--open-sans-font)', 'sans-serif'],
       },
     },
   },
