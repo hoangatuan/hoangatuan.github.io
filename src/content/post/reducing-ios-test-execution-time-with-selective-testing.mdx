@@ -13,6 +13,11 @@ relatedPostIDs:
   - 5-effective-strategies-for-managing-image-resources-in-ios.mdx
 ---
 
+import image1 from '/src/assets/content/post/reducing-ios-test-execution-time-with-selective-testing/1_xMfvWgnOwMQFGbl5Net_PQ.png';
+import image2 from '/src/assets/content/post/reducing-ios-test-execution-time-with-selective-testing/1_hawMmYR_laMyvHjnSG3j9A.png';
+import image3 from '/src/assets/content/post/reducing-ios-test-execution-time-with-selective-testing/1_Ji7863mF50Dnh5Y0OwhOew.png';
+import image4 from '/src/assets/content/post/reducing-ios-test-execution-time-with-selective-testing/1_oug0KzXNYlR8L47AGFmKbg.png';
+
 ## Background
 
 Back in my previous company, we cared a lot about automation testing. We always pushed to write more tests and write them effectively.
@@ -43,7 +48,7 @@ So what is an affected module?
 
 For example, we have this dependencies graph
 
-// image
+<img src={image1.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 - If FeatureA source code changed -> Only FeatureA is marked as changed -> Only need to run test for FeatureATests.
 - If FeatureB source code changed -> Only FeatureB is marked as changed -> Only need to run test for FeatureBTests.
@@ -63,7 +68,7 @@ My simple idea is:
 
 Here is the overview diagram of the flow:
 
-// image
+<img src={image2.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 ### 1. Generate module dependencies
 
@@ -72,6 +77,8 @@ First, we need to generate a dependencies graph of all modules in our project.
 I achieved that by using the command [dump-package](https://fig.io/manual/swift/package/dump-package) and processing the Package.resolved file to gather all the information on both local modules and remote dependencies.
 
 Here is an example of how the dependencies graph looks like:
+
+<img src={image3.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 ### 2. Generate module hash
 
@@ -134,7 +141,7 @@ If the test runs successfully, we store the new cache in the local cache/remote 
 
 ## Result
 
-// image
+<img src={image4.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 In my example project, I have 4 independent feature modules. I only changed the Movie module, and then re-run the test using the selective-testing tool.
 

@@ -13,6 +13,14 @@ relatedPostIDs:
   - reducing-ios-test-execution-time-with-selective-testing.mdx
 ---
 
+import image1 from '/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_IFy9ESECEu2c_2Xhqi3YpA.png';
+import image2 from '/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_p__irNWZ7606rIrZH2r7Eg.png';
+import image3 from '/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_MMtVZNNWuHmb5WCTZnzICw.png';
+import image4 from '/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_AcJX2mtmMYQEEobZoU7tMA.png';
+import image5 from '/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_YW3GkI7sSS9KZOIFFZtu6w.png';
+import image6 from '/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_Or3NHMqh2nh_8MwQep_I2w.png';
+import image7 from '/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_z8zcE-CZB-V2vJ0BQlN2ag.png';
+
 ## Background
 
 Our mobile team scaled fast in these 2 years; we now have over 250 engineers, divided into feature teams. We create hundreds of commits daily, creating a lot of builds for PM/QA to verify bug fixes or new features, …
@@ -47,13 +55,13 @@ Currently, whenever we create/update a Pull request, a unit test job will run (Y
 
 For example, I want to perform the unused code check on CI. Here is how I set up the build phases:
 
-<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_IFy9ESECEu2c_2Xhqi3YpA.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image1.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 > Note that we can use ENV variables or any custom logic to avoid running those scripts in local development.
 
 Also in my script, I added logic to send the result to our work channel:
 
-<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_p__irNWZ7606rIrZH2r7Eg.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image2.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 With this logic, when an engineer creates/updates a PR, the runner will run the unit test, then run my custom script and notify us automatically 🥳
 
@@ -65,16 +73,16 @@ The Xcode build phases trick works fine, but how about running a job once per we
 
 I think it’s feasible, so I set up a local runner on my Macbook.
 
-<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_MMtVZNNWuHmb5WCTZnzICw.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image3.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
-<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_AcJX2mtmMYQEEobZoU7tMA.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image4.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 Good, it works. This approach can solve some of the simple use cases. However, it has some downsides:
 
 - My laptop will do a lot of heavy work: Pull the heavy project, run the tests, do custom script, … which will impact my daily work.
 - Can’t utilize pre-defined jobs provided by the infra team: Gather test coverage of specified modules, performance analysis, …
 
-<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_YW3GkI7sSS9KZOIFFZtu6w.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image5.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 To overcome these downsides, my simple idea is:
 
@@ -82,13 +90,13 @@ To overcome these downsides, my simple idea is:
 - Proceed the job’s log to get the information that we want
 - Send the final result to the work channel using [webhook](https://www.techtarget.com/searchapparchitecture/tip/Webhooks-explained-simply-and-how-they-differ-from-an-API).
 
-<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_Or3NHMqh2nh_8MwQep_I2w.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image6.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 With this approach, not only we can both utilize pre-defined jobs but we can also leverage the infra team’s runner to do all the heavy work for us 😛
 
 The result is perfect:
 
-<img src="/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_z8zcE-CZB-V2vJ0BQlN2ag.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image7.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 ## Conclusion
 

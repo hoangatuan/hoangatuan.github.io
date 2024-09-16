@@ -13,6 +13,9 @@ relatedPostIDs:
   - how-to-make-a-super-app.mdx
 ---
 
+import image1 from '/src/assets/content/post/dont-trust-your-code-coverage/1_A24_1aj_4c8yKL9hHMm-Ag.png';
+import image2 from '/src/assets/content/post/dont-trust-your-code-coverage/1_6cM59J2LSHSY-vc4mDAqnA.png';
+
 [When I was working at GxS](https://medium.com/gitconnected/dont-trust-your-code-coverage-96698b83219d#:~:text=When%20I%20was,of%20the%20codebase%3F), one thing that we truly cared about was the code quality. To ensure the code quality, we added a rule that code coverage needs to be at least 85%.
 
 So far so good, we got over 3000 unit tests after 2 years, and everyone was happy when looking at the code coverage. But is the code coverage metric enough to ensure the quality of the codebase?
@@ -94,7 +97,7 @@ Otherwise, if the tests still succeed, it means the mutant is still alive, and y
 ***mutation score = (number of killed mutants/number of mutants) * 100***
 The mutation score represents the quality of the test suite. The higher it is, the better your test suite is.
 
-<img src="/src/assets/content/post/dont-trust-your-code-coverage/1_A24_1aj_4c8yKL9hHMm-Ag.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image1.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 ### Mutation Operators
 
@@ -173,7 +176,7 @@ Besides, Muter applies some advanced techniques like [Mutation schemata](https:/
 2. **Comprehensive Documentation**: Muter has a good document and a well-structured codebase.
 3. **Versatile Installation**: Muter supports diverse installation: via CI/CD, runs directly in Xcode projects, …
 
-<img src="/src/assets/content/post/dont-trust-your-code-coverage/1_6cM59J2LSHSY-vc4mDAqnA.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image2.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 4. **Safe Mutation**: Muter applies all the mutants in a copy of your source code, ensuring zero impact on your primary codebase.
 

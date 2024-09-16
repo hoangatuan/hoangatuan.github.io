@@ -21,6 +21,12 @@ Let’s get started!
 
 ___
 
+import image1 from '/src/assets/content/post/5-effective-strategies-for-managing-image-resources-in-ios/1_khDAMoOSCSENubypED2ONg.png';
+import image2 from '/src/assets/content/post/5-effective-strategies-for-managing-image-resources-in-ios/1_EPDJ6cM1XNqQFjo8SNY7sw.png';
+import image3 from '/src/assets/content/post/5-effective-strategies-for-managing-image-resources-in-ios/1_48QVBQlnEKRlZwR3Lunw8w.png';
+import image4 from '/src/assets/content/post/5-effective-strategies-for-managing-image-resources-in-ios/1_hoRe0EgU2wEBRyzo712JfA.png';
+import image5 from '/src/assets/content/post/5-effective-strategies-for-managing-image-resources-in-ios/1_EkSYbcojJQCHAoIgwpJ4UQ.png';
+
 ## Table of Contents
 
 1. PDF or PNG?
@@ -44,12 +50,11 @@ Before Xcode 15, when archived, Xcode will translate your PDF image to 3 PNG ima
 
 The following image is the “Assets.car” file after I archived my example project. You will see that each PDF image will be generated into 3 PDF images:
 
-// image
+<img src={image1.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 Now, let’s compare the “Asset.car” file size between using PNG images vs using PDF images:
 
-// image
-// image
+<img src={image2.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 The “Assets.car” size in the project that uses PNG images is much smaller than using PDF images
 
@@ -66,7 +71,7 @@ The 2nd tip to reduce the app size is to [compress your images](https://www.clou
 
 Let’s take a look at the following images. After compressing it a few times, the image size decreased by 83%, but you can hardly notice any quality difference (especially on the iPhone screen). Considering what the images are being used for can help you decide on an optimal compression setting for your app.
 
-// image
+<img src={image3.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 ### Suggestions:
 
@@ -152,7 +157,7 @@ final class CustomImageView: UIImageView {
 
 Here is what it looks like if we use inappropriate image size. The engineer can notice it right away. They can then apply the downsampling technique to adjust the image 👏
 
-// image
+<img src={image4.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 ### Suggestions:
 
@@ -178,7 +183,7 @@ There are some open-source Python projects on GitHub to detect duplicate images,
 Similar to duplicated images, unused images increase the app size unnecessarily, so we should remove them.
 [FengNiao](https://github.com/onevcat/FengNiao) is an open-source tool to help you detect and remove unused images:
 
-// image
+<img src={image5.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 ### Suggestion:
 

@@ -13,6 +13,12 @@ relatedPostIDs:
   - modular-navigation-in-swiftui-a-comprehensive-guide.mdx
 ---
 
+import image1 from '/src/assets/content/post/swift-for-loop-performance/1_N_oV53_Vv64sdEqxE0JFaQ.png';
+import image2 from '/src/assets/content/post/swift-for-loop-performance/1_63zTM8_3XNcv9ShGuDJYiQ.png';
+import image3 from '/src/assets/content/post/swift-for-loop-performance/1_44QEVKboJyv7KqsAIREYng.png';
+import image4 from '/src/assets/content/post/swift-for-loop-performance/1_VnBwPahu_lQE8WgaRDc8Nw.png';
+import image5 from '/src/assets/content/post/swift-for-loop-performance/1_2XUsIb-ZL-kFo9E_X7ykGg.png';
+
 Which function has better performance? *while*, *for loop*, or high-order function *reduce*?
 
 I used this code to measure:
@@ -64,7 +70,7 @@ The result makes me curious. I wonder why *for-loop* and *reduce* are so much sl
 
 Let’s use our old friend *Profiler Instruments* to dig deeper.
 
-<img src="/src/assets/content/post/swift-for-loop-performance/1_N_oV53_Vv64sdEqxE0JFaQ.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image1.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 We can see what *for-loop* does under the hood:
 
@@ -107,14 +113,14 @@ Now, let’s come to the fun (or headache) part. 🥸
 
 Instead of using Instruments, you can also use [godbolt](https://godbolt.org/) tool to understand how the code is compiled:
 
-<img src="/src/assets/content/post/swift-for-loop-performance/1_63zTM8_3XNcv9ShGuDJYiQ.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image2.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 Yeah, I know it’s a bit hard to read all of these 🥲
 
 But for now, just only focus on line 38 and line 44. These are function names that the compiler has mangled.
 To trace back the originally readable text, we can use swift-demangle tool.
 
-<img src="/src/assets/content/post/swift-for-loop-performance/1_44QEVKboJyv7KqsAIREYng.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image3.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 Now we know that when Swift compiles for-in will be translated to:
 
@@ -146,7 +152,7 @@ reduce Duration = 0.0075
 
 To know the reason, we can use godbolt tool to compare the compiled version.
 
-<img src="/src/assets/content/post/swift-for-loop-performance/1_VnBwPahu_lQE8WgaRDc8Nw.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image4.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 With compiler optimization enabled, Swift doesn't need to perform a bunch of dynamic dispatch. All Swift needs to do is manage a counter variable, increase it by 1, perform the sum action, and repeat until it reaches the limit. 🚀
 
@@ -154,7 +160,7 @@ With compiler optimization enabled, Swift doesn't need to perform a bunch of dyn
 
 If you don’t know how to read SIL (same as me), you can ask your good friend ChatGPT for help 😛
 
-<img src="/src/assets/content/post/swift-for-loop-performance/1_2XUsIb-ZL-kFo9E_X7ykGg.png" alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image5.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 ## What we’ve learned?
 

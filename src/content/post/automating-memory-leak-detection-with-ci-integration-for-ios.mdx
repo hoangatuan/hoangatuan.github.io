@@ -13,6 +13,13 @@ relatedPostIDs:
   - how-to-make-a-super-app.mdx
 ---
 
+import image1 from '/src/assets/content/post/automating-memory-leak-detection-with-ci-integration-for-ios/1_xTLjmDsNPgWJguy6UAD2UA.png';
+import image2 from '/src/assets/content/post/automating-memory-leak-detection-with-ci-integration-for-ios/1_Aqm_lH1DpYYPVxETsx3z5w.png';
+import image3 from '/src/assets/content/post/automating-memory-leak-detection-with-ci-integration-for-ios/1_I3Lh7AzoZH83WUM9wbJAbA.png';
+import image4 from '/src/assets/content/post/automating-memory-leak-detection-with-ci-integration-for-ios/1_zWcBIuy2hYZNh2wkuWLjxQ.png';
+import image5 from '/src/assets/content/post/automating-memory-leak-detection-with-ci-integration-for-ios/1_1cw2uVG1MEBT95eFif_ihg.png';
+import image6 from '/src/assets/content/post/automating-memory-leak-detection-with-ci-integration-for-ios/1_lwh1jwjRbcB1knT8bFI-3g.png';
+
 This article will not mention how to use the Memory Graph Debugger to identify and fix leaks. I know we already had enough articles for that.
 
 Before going to the main part, let's take a look at this piece of code and answer this question: “Do we have any leak here?”
@@ -46,7 +53,7 @@ final class RootViewController: UIViewController {
 
 The answer is NO. You can verify with Memory Graph Debugger
 
-<img src="/src/assets/content/post/automating-memory-leak-detection-with-ci-integration-for-ios/1_xTLjmDsNPgWJguy6UAD2UA.png" alt="Photo by Alexandre Debiève on Unsplash" style={{ width: '100%', height: 'auto' }} />
+<img src={image1.src} alt="Photo by Alexandre Debiève on Unsplash" style={{ width: '100%', height: 'auto' }} />
 
 You may ask: “Wait, what? We have a retain cycle right here, how it can’t be a leak?”
 
@@ -60,7 +67,7 @@ To summarize, if we can still access the object, it’s not a leak. In the piece
 
 Here is an example of a leak. After the *viewDidLoad*, we can’t ever access to *apartment* & *person*, but these objects will not be deallocated due to the retain cycle.
 
-<img src="/src/assets/content/post/automating-memory-leak-detection-with-ci-integration-for-ios/1_Aqm_lH1DpYYPVxETsx3z5w.png" alt="Photo by Alexandre Debiève on Unsplash" style={{ width: '100%', height: 'auto' }} />
+<img src={image2.src} alt="Photo by Alexandre Debiève on Unsplash" style={{ width: '100%', height: 'auto' }} />
 
 Now you may think: “In the first example, there’s nothing to worry about. Although we have a retain cycle between *apartment* & *person*, this is the root view controller of the application. The view controller will never be deallocated, so *apartment* & *person* will never be deallocated anyway. Nothing can go wrong.”
 
@@ -96,7 +103,7 @@ Example: We have a bunch of leaks in our current project due to the custom navig
 It makes me wonder: “Can I come up with a solution that can automate the leak-checking process?”
 
 <p align="center">
-  <img src="/src/assets/content/post/automating-memory-leak-detection-with-ci-integration-for-ios/1_I3Lh7AzoZH83WUM9wbJAbA.png" alt="Photo by Alexandre Debiève on Unsplash" style={{ width: '50%', height: 'auto' }} />
+  <img src={image3.src} alt="Photo by Alexandre Debiève on Unsplash" style={{ width: '50%', height: 'auto' }} />
 </p>
 
 ## Solution
@@ -143,7 +150,7 @@ leaks $PROGRAM_NAME --outputGraph=$MEMGRAPH_PATH
 
 If you open the generated memgraph file, you will get the result same as when you use the Memory Graph Debugger.
 
-<img src="/src/assets/content/post/automating-memory-leak-detection-with-ci-integration-for-ios/1_zWcBIuy2hYZNh2wkuWLjxQ.png" alt="Photo by Alexandre Debiève on Unsplash" style={{ width: '100%', height: 'auto' }} />
+<img src={image4.src} alt="Photo by Alexandre Debiève on Unsplash" style={{ width: '100%', height: 'auto' }} />
 
 With this memgraph file in our hand, we can easily check if the project has any leaks.
 
@@ -159,7 +166,7 @@ leaks $MEMGRAPH_PATH -q
 
 The output of the script will be like this
 
-<img src="/src/assets/content/post/automating-memory-leak-detection-with-ci-integration-for-ios/1_1cw2uVG1MEBT95eFif_ihg.png" alt="Photo by Alexandre Debiève on Unsplash" style={{ width: '100%', height: 'auto' }} />
+<img src={image5.src} alt="Photo by Alexandre Debiève on Unsplash" style={{ width: '100%', height: 'auto' }} />
 
 The executable program will handle this output. If it finds any leaks, it will mark the PR as failed or notify engineering team.
 
@@ -173,7 +180,7 @@ leaksdetector --process-name $PROCESS_NAME --executor-type maestro --maestro-flo
 
 ## Result
 
-<img src="/src/assets/content/post/automating-memory-leak-detection-with-ci-integration-for-ios/1_lwh1jwjRbcB1knT8bFI-3g.png" alt="Photo by Alexandre Debiève on Unsplash" style={{ width: '100%', height: 'auto' }} />
+<img src={image6.src} alt="Photo by Alexandre Debiève on Unsplash" style={{ width: '100%', height: 'auto' }} />
 
 ## Conclusion
 
