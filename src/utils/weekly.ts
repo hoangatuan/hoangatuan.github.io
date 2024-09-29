@@ -89,3 +89,13 @@ const getNormalizedNewsletter = async (newsletter: CollectionEntry<"newsletters"
         headings: headings,
       };
 };
+
+/** */
+export const getStaticPathsWeekly = async () => {
+    return (await fetchNewsletters()).flatMap((newsletter) => ({
+      params: {
+        book: newsletter.permalink,
+      },
+      props: { newsletter },
+    }));
+  };

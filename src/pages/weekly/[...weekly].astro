@@ -1,0 +1,129 @@
+---
+import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
+import PageLayout from "../../layouts/PageLayout.astro"
+import { getStaticPathsWeekly } from '../../utils/weekly';
+import { Icon } from 'astro-icon/components';
+import { getFormattedDate } from '../../utils/utils';
+import Image from '../../components/common/Image.astro';
+import PostComments from '../../components/common/PostComments.astro';
+import TableOfContents from '../../components/blog/TableOfContents.astro';
+
+export const getStaticPaths = (async () => {
+  return await getStaticPathsWeekly();
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { newsletter } = Astro.props as Props;
+const { Content } = newsletter;
+---
+
+<PageLayout>
+    <section class="py-8 sm:py-16 lg:py-20 mx-auto">
+      <article>
+        <header>
+          <div class="flex justify-between flex-col sm:flex-row max-w-3xl mx-auto mt-0 mb-2 px-4 sm:px-6 sm:items-center">
+            <p>
+              <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 dark:text-gray-400" />
+              <time datetime={String(newsletter.publishDate)} class="inline-block">{getFormattedDate(newsletter.publishDate)}</time>
+  
+              <!-- {
+                post.category && (
+                  <>
+                    {' '}
+                    ·{' '}
+                    <a class="capitalize hover:underline inline-block" href={getPermalink(post.category, 'category')}>
+                      {post.category.replaceAll('-', ' ')}
+                    </a>
+                  </>
+                )
+              } -->
+              {
+                newsletter.readingTime && (
+                  <>
+                    &nbsp;· <span>{newsletter.readingTime}</span> min read
+                  </>
+                )
+              }
+            </p>
+          </div>
+  
+          <h1
+          class="px-4 sm:px-6 max-w-3xl mx-auto text-3xl md:text-4xl font-bold leading-tighter tracking-tighter font-heading"
+        >
+          {newsletter.title}
+        </h1>
+  
+        <p
+          class="max-w-3xl mx-auto mt-4 mb-8 px-4 sm:px-6 text-xl md:text-xl text-muted dark:text-slate-400 text-justify"
+        >
+          {newsletter.excerpt}
+        </p>
+  
+        {
+          newsletter.image ? (
+            <Image
+              src={newsletter.image}
+              class="max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700"
+              widths={[400, 900]}
+              sizes="(max-width: 900px) 400px, 900px"
+              alt={newsletter?.excerpt || ''}
+              width={900}
+              height={506}
+              loading="eager"
+              decoding="async"
+            />
+          ) : (
+            <div class="max-w-3xl mx-auto px-4 sm:px-6">
+              <div class="border-t dark:border-slate-700" />
+            </div>
+          )
+        }
+        </header>
+        
+        <nav class="article-toc hidden xl:block ml-8">
+          <h3>Table of Content</h3>
+          <TableOfContents class="article-toc" headings={newsletter.headings}></TableOfContents>
+        </nav>
+  
+        <div
+          class="article-content mx-auto px-6 sm:px-6 max-w-3xl prose prose-md lg:prose-xl dark:prose-invert dark:prose-headings:text-slate-300 prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-[80px]"
+        >
+          {Content ? <Content /> : <Fragment set:html={newsletter.content || ''} />}
+        </div>
+  
+        <div class="container mx-auto px-4 lg:px-8">
+          <PostComments class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between"></PostComments>
+        </div>
+        
+      </article>
+    </section>
+  </PageLayout>
+  
+  <script>
+  
+    addIntersectionObserver();
+    
+    function addIntersectionObserver() {
+      const observer = new IntersectionObserver((sections) => {
+          console.log('sections', sections);
+          sections.forEach((section) => {
+              const heading = section.target.querySelector('h2, h3, h4, h5');
+              if (!heading) return;
+              const id = heading.getAttribute('id');
+  
+              // Get the link to this section's heading
+              const link = document.querySelector(`nav.toc li a[href="#${id}"]`);
+              if (!link) return;
+  
+              // Add/remove the .active class based on whether the
+              // section is visible
+              const addRemove = section.intersectionRatio > 0 ? 'add' : 'remove';
+              link.classList[addRemove]('active');
+          });
+      });
+  
+      document.querySelectorAll('.article-content section').forEach((section) => {
+          observer.observe(section);
+      })
+  }
+  </script>
