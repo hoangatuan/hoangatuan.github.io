@@ -12,7 +12,7 @@ export interface Props {
 }
 
 const { prefix, book } = Astro.props;
-const image = (await findImage(book.image)) as ImageMetadata | undefined;
+const coverImage = (await findImage(book.cover)) as string;
 const link = getPermalink(book.permalink, "book");
 ---
 
@@ -20,13 +20,12 @@ const link = getPermalink(book.permalink, "book");
   class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 hover:border-indigo-600 group cursor-pointer"
 >
   <a href={`/${prefix}${link}`} class="block">
-    <div class="flex items-center mb-6 h-60">
-      <img
-        src={book.cover}
-        alt="Harsh image"
-        class="rounded-lg w-full h-full object-contain"
-      />
-    </div>
+
+    {coverImage && (
+      <div class="flex items-center mb-6">
+        <img src={coverImage} alt="Book Cover" class="rounded-lg w-full object-contain h-40" />
+      </div>
+    )}
 
     <div class="block">
       <h2

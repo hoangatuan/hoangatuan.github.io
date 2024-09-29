@@ -94,7 +94,7 @@ const getNormalizedNewsletter = async (newsletter: CollectionEntry<"newsletters"
 export const getStaticPathsWeekly = async () => {
     return (await fetchNewsletters()).flatMap((newsletter) => ({
       params: {
-        book: newsletter.permalink,
+        newsletter: newsletter.permalink,
       },
       props: { newsletter },
     }));
