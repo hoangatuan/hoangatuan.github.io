@@ -1,0 +1,51 @@
+---
+import type { Newsletter } from '../../types/newsletter.types';
+import { getFormattedDate } from '../../utils/utils';
+import { getPermalink } from '../../utils/permalinks';
+
+export interface Props {
+  prefix: string;
+  newsletter: Newsletter;
+}
+
+const { prefix, newsletter } = Astro.props;
+const link = getPermalink(newsletter.permalink, 'post');
+const { Content } = newsletter;
+
+---
+
+<style>
+    .post-excerpt-component:hover ~ .post-title-component,
+    .post-excerpt-component:hover ~ .post-title-component {
+        color: red; /* Change the text color of Text Component 1 when hovering over Text Component 2 or Text Component 3 */
+    }
+</style>
+
+<article class="w-full bg-white">
+
+    <div class="flex space-x-4 items-start h-full">
+        
+        <div class="flex flex-col items-center h-full">
+            <div class="w-0.5 bg-gray-200 h-1.5"></div> 
+            <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+            <div class="w-0.5 bg-gray-200 flex-grow"></div>
+        </div>
+
+        <div>
+            <div class="flex items-center mb-2 text-gray-500 space-x-4">
+                <time datetime={String(newsletter.publishDate)} class="text-sm">{getFormattedDate(newsletter.publishDate)}</time>
+            </div>
+            
+            <h2 class="post-title-component text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-slate-300 line-clamp-3">
+                <a class="hover:text-C2a9d8f dark:hover:text-blue-700 transition ease-in duration-200" href={`/${prefix}${link}`}>
+                    {newsletter.title}
+                </a>
+            </h2>
+        
+            <p class="mb-5 font-light text-gray-500 dark:text-gray-400 line-clamp-3">
+                "Hi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issuethis is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issueHi, this is the first issue"
+            </p>
+        </div>
+    </div>
+
+</article>

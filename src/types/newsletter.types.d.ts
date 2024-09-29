@@ -4,7 +4,7 @@ export interface Newsletter {
     slug: string;
     permalink: string;
     title: string;
-    excerpt: string?;
+    excerpt?: string;
     publishDate: Date;
     image?: ImageMetadata | string;
     Content?: AstroComponentFactory;

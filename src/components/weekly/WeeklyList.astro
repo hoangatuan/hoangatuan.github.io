@@ -1,0 +1,22 @@
+---
+import WeeklyItem from "./WeeklyItem.astro"
+import type { Newsletter } from "../../types/newsletter.types";
+
+export interface Props {
+  prefix: string;
+  newsletters: Array<Newsletter>;
+}
+
+const { prefix, newsletters } = Astro.props;
+---
+
+  <div class="container mx-auto px-4 lg:px-8 pt-16">
+    <ul class="flex flex-col">
+      {newsletters.map((newsletter, index) => (
+        <li class="flex w-full">
+          <WeeklyItem prefix={prefix} newsletter={newsletter} />
+        </li>
+      ))}
+    </ul>
+  </div>
+  

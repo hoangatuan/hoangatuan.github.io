@@ -79,7 +79,17 @@ const bookCollection = defineCollection({
   }),
 });
 
+const newsletterCollection = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    excerpt: z.string().optional(),
+    publishDate: z.date(),
+    image: z.string().optional()
+  }),
+});
+
 export const collections = {
   post: postCollection,
-  books: bookCollection
+  books: bookCollection,
+  newsletters: newsletterCollection,
 };
