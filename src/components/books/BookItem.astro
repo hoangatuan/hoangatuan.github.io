@@ -6,14 +6,22 @@ import PostTags from "../common/Tags.astro";
 import { getPermalink } from "../../utils/permalinks";
 import { findImage } from "../../utils/images.ts";
 
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 export interface Props {
   prefix: string;
   book: Book;
 }
 
 const { prefix, book } = Astro.props;
-const coverImage = (await findImage(book.cover)) as string;
+const imagePath = book.cover;
 const link = getPermalink(book.permalink, "book");
+
+// Dynamic images: https://docs.astro.build/en/recipes/dynamically-importing-images/
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/content/book/*.{jpeg,jpg,png,gif}')
+if (!images[imagePath]) throw new Error(`"${imagePath}" does not exist in glob: "src/assets/content/book/*.{jpeg,jpg,png,gif}"`);
+
 ---
 
 <article
@@ -21,11 +29,9 @@ const link = getPermalink(book.permalink, "book");
 >
   <a href={`/${prefix}${link}`} class="block">
 
-    {coverImage && (
-      <div class="flex items-center mb-6">
-        <img src={coverImage} alt="Book Cover" class="rounded-lg w-full object-contain h-40" />
-      </div>
-    )}
+    <div class="flex items-center mb-6">
+      <Image class="rounded-lg w-full object-contain h-40" src={images[imagePath]()} alt={book.title} />
+    </div>
 
     <div class="block">
       <h2
