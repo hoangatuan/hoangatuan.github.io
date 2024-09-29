@@ -9,6 +9,7 @@ export interface Book {
     publishDate: Date; // publish date of the review blog post
     updateDate?: Date;
     excerpt?: string;
+    cover: string; // book cover local image
     image?: ImageMetadata | string;
     categories?: Array<string>;
     Content?: AstroComponentFactory;

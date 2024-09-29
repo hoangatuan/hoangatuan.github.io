@@ -72,6 +72,7 @@ const bookCollection = defineCollection({
     title: z.string(),
     subtitle: z.string().optional(),
     excerpt: z.string().optional(),
+    cover: z.string(),
     image: z.string().optional(),
     categories: z.array(z.string()),
     author: z.string(),

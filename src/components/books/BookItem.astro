@@ -20,13 +20,14 @@ const link = getPermalink(book.permalink, "book");
   class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 hover:border-indigo-600 group cursor-pointer"
 >
   <a href={`/${prefix}${link}`} class="block">
-    <div class="flex items-center mb-6">
+    <div class="flex items-center mb-6 h-60">
       <img
-        src="https://pagedone.io/asset/uploads/1696244553.png"
+        src={book.cover}
         alt="Harsh image"
-        class="rounded-lg w-full"
+        class="rounded-lg w-full h-full object-contain"
       />
     </div>
+
     <div class="block">
       <h2
         class="text-xl sm:text-2xl font-bold leading-tight mb-2 font-heading dark:text-slate-300 line-clamp-3"
@@ -37,19 +38,20 @@ const link = getPermalink(book.permalink, "book");
         {book.excerpt}
       </p>
 
-      <div class="flex items-center justify-between font-medium">
-        <PostTags tags={book.categories} />
-
-        <span class="text-sm">
+      <div class="flex items-center font-medium">
+        <div class="flex items-center">
+          <PostTags tags={book.categories} />
+        </div>
+      
+        <span class="text-sm ml-auto">
           <Icon
             name="tabler:clock"
             class="w-3.5 h-3.5 inline-block -mt-0.5 dark:text-gray-400"
           />
-          <time datetime={String(book.publishDate)} class="inline-block"
-            >{getFormattedDate(book.publishDate)}</time
-          >
+          <time datetime={String(book.publishDate)} class="inline-block">
+            {getFormattedDate(book.publishDate)}
+          </time>
         </span>
       </div>
-    </div>
   </a>
 </article>
