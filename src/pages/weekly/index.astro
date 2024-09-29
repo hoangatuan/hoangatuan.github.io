@@ -1,0 +1,18 @@
+---
+import PageLayout from "../../layouts/PageLayout.astro";
+import WeeklyList from "../../components/weekly/WeeklyList.astro";
+import { fetchNewsletters } from "../../utils/weekly.ts";
+
+// Define an async function to fetch posts and await its result
+const getNewsletters = async () => {
+  const newsletters = await fetchNewsletters();
+  return newsletters;
+};
+
+// Fetch posts asynchronously and store them in a variable
+const newsletters = await getNewsletters();
+---
+
+<PageLayout>
+    <WeeklyList prefix="weekly" newsletters={newsletters} />
+</PageLayout>

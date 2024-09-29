@@ -1,8 +1,6 @@
 import type { Book } from "../types/books.types";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
-import type { PaginateFunction } from "astro";
-import type { MarkdownHeading } from "astro";
 
 import {
   cleanSlug,

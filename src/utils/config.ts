@@ -43,6 +43,14 @@ export interface AppBlogConfig {
       follow: boolean;
     };
   };
+  newsletter: {
+    isEnabled: boolean;
+    permalink: string;
+    robots: {
+      index: boolean;
+      follow: boolean;
+    };
+  }
   list: {
     isEnabled: boolean;
     pathname: string;
@@ -159,6 +167,14 @@ const getAppBlog = () => {
     books: {
       isEnabled: true,
       permalink: '/books/%slug%',
+      robots: {
+        index: true,
+        follow: true,
+      },
+    },
+    newsletter: {
+      isEnabled: true,
+      permalink: '/newsletter/%slug%',
       robots: {
         index: true,
         follow: true,
