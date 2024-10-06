@@ -9,7 +9,7 @@ import sectionize from '@hbsnow/rehype-sectionize';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://hoangatuan.github.io',
+  site: 'https://ericsspace.com',
   // base: 'src',
   integrations: [
     astroExpressiveCode(),
