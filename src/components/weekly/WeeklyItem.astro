@@ -9,7 +9,7 @@ export interface Props {
 }
 
 const { prefix, newsletter } = Astro.props;
-const link = getPermalink(newsletter.permalink, 'post');
+const link = getPermalink(newsletter.permalink, 'newsletter');
 const { Content } = newsletter;
 
 ---

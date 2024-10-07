@@ -3,12 +3,19 @@ import PageLayout from "../layouts/PageLayout.astro"
 import LatestArticles from "../components/home/LatestArticles.astro"
 import LatestBooks from "../components/home/LatestBooks.astro"
 import IntroduceCard from "../components/home/IntroduceCard.astro"
+import LastestWeeklyView from "../components/home/LastestWeeklyView.astro"
 ---
+
 <PageLayout>
 
     <div class="pb-16">
 
         <IntroduceCard></IntroduceCard>
+
+        <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8 pt-16">
+            <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Best of the week ⭐</h2> 
+        </div>
+        <LastestWeeklyView></LastestWeeklyView>
 
         <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8 pt-16">
             <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Latest articles 📜</h2> 
