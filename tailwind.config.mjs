@@ -25,6 +25,11 @@ module.exports = {
       },
     },
   },
+  variants: {
+    extend: {
+      textColor: ['group-hover'], // Make sure this is included to allow hover effects
+    },
+  },
   plugins: [require('@tailwindcss/typography')],
   darkMode: 'class',
 };
