@@ -27,6 +27,22 @@ const footerData = {
         <meta charset="UTF-8">
         <link rel="icon" type="image/png" href="/favicon.png">
         <link rel="manifest" href="/manifest.webmanifest" />
+        <style>
+          html, body {
+              height: 100%;
+              margin: 0;
+          }
+          body {
+              display: flex;
+              flex-direction: column;
+          }
+          main {
+              flex: 1 0 auto;
+          }
+          footer {
+              flex-shrink: 0;
+          }
+      </style>
     </head>
 
     <body>
