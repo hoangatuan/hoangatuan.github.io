@@ -1,0 +1,47 @@
+---
+publishDate: 2024-10-14T00:00:00Z
+title: "#2: Automate testing"
+excerpt: "Starting a new blog website, a newsletter, and book reviews, ... a lot of things I want to do. Because of that, this week I'm focusing on building the inner system so that I can manage work and time more efficient. Hope this newsletter get better overtime 🥳"
+image: https://images.unsplash.com/flagged/photo-1562503542-2a1e6f03b16b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+---
+
+## What I'm reading
+
+### [Building Mobile app at scale](https://www.mobileatscale.com/)
+
+This is a cool book that mention about challenges when building mobile app at scale. 
+It's a good book, but I think the author doesn't go deep enough into the technical details. Because of that, I decided to investigate more time to dig deeper, and I will publish a book review at the end of the month. Stay tuned!
+
+## Great articles this week
+
+### 1. [Testing strategy in big tech companies](https://github.com/MobileNativeFoundation/discussions/discussions/6)
+
+This is an old and famous thread about testing strategy in big tech companies. It's a great thread to read if you are interested in testing strategy. It's a long thread, but it's worth reading.
+There are more to say about testing, but I will dig deeper into it in the other article.
+
+### 2. [Effortless iOS Snapshot Testing Using Emerge Tools](https://joinhandshake.com/blog/our-team/effortless-ios-snapshot-testing-using-emerge-tools/)
+
+This week, while I was reading about Snapshot testing, I found this article about how to use [Emerge Tools](https://github.com/EmergeTools/SnapshotPreviews) to make snapshot testing easier. I think it's a great tool to help you write snapshot tests faster and more efficiently.
+
+Some other tools like [FBSnapshotTestCase](https://github.com/uber/ios-snapshot-test-case), Pointfree's [SnapshotTesting](https://github.com/pointfreeco/swift-snapshot-testing), ... works by creating reference image and store it locally, writing snapshot tests, and comparing the reference image with the new image. 
+That techniques faces some problems like:
+
+- The reference image is stored locally, so it's make the repository larger.
+- We need to write and maintain snapshot tests.
+
+Emerge Tools leverage SwiftUI's Preview to solve these issues:
+
+- It find all Previews in the project and generate snapshot tests for them.
+- The reference image is stored in the cloud, so it's not make the repository larger.
+
+### 3. [Being a good citizen in the land of SwiftSyntax](https://www.pointfree.co/blog/posts/116-being-a-good-citizen-in-the-land-of-swiftsyntax)
+
+Using SwiftSyntax has several challenges: 
+
+- Versioning Complexity
+- Breaking Changes
+- Dependency Resolution
+
+The article has mention detail about these challenges and how to solve them. It's a great article to read if you are using SwiftSyntax in your project.
+
+To solve that problem, there is a open source Github Action tool to check for the compatibility of your SwiftSyntax version with the latest SwiftSyntax version. You can find it [here](https://github.com/Matejkob/swift-macro-compatibility-check)
