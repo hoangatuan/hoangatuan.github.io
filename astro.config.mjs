@@ -14,20 +14,6 @@ export default defineConfig({
   integrations: [
     astroExpressiveCode(),
     mdx(),
-    starlight({
-      title: 'Site with DocSearch',
-      // plugins: [
-      //   starlightDocSearch({
-      //     appId: 'MAM15PO3N4',
-      //     apiKey: 'a5d4344c07f11031a5943c14e9b2ebc7',
-      //     indexName: 'posts',
-      //   }),
-      // ],
-      components: {
-        // Override the default `Search` component.
-        Search: './src/components/search/Search.astro'
-      }
-    }),
     tailwind(),
     icon({
       include: {
