@@ -2,7 +2,7 @@
 publishDate: 2024-10-14T00:00:00Z
 title: "#2: Automate testing"
 excerpt: "Starting a new blog website, a newsletter, and book reviews, ... a lot of things I want to do. Because of that, this week I'm focusing on building the inner system so that I can manage work and time more efficient. Hope this newsletter get better overtime 🥳"
-image: https://images.unsplash.com/flagged/photo-1562503542-2a1e6f03b16b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+image: https://images.unsplash.com/photo-1705823637026-92c0ef6d6222?q=80&w=3548&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
 ---
 
 ## What I'm reading
@@ -45,3 +45,11 @@ Using SwiftSyntax has several challenges:
 The article has mention detail about these challenges and how to solve them. It's a great article to read if you are using SwiftSyntax in your project.
 
 To solve that problem, there is a open source Github Action tool to check for the compatibility of your SwiftSyntax version with the latest SwiftSyntax version. You can find it [here](https://github.com/Matejkob/swift-macro-compatibility-check)
+
+### 4. [A curious case of Mach-O Executable](https://medium.com/tokopedia-engineering/a-curious-case-of-mach-o-executable-26d5ecadd995)
+
+I want to understand how [Emerge Tools](https://github.com/EmergeTools/SnapshotPreviews) works, so I took a look at their implementation. There is a class called [ConformanceLookup](https://github.com/EmergeTools/SnapshotPreviews/blob/main/Sources/SnapshotPreviewsCore/ConformanceLookup.swift), which contains logic to find all the conformance of a specific protocols.
+They use a lot of low level code like Mach-O Executable, dyld, ... to achieve that.
+To understand their logic, first you'll need to understand what is MachO and how it works.
+
+The article `A curious case of Mach-O Executable` from Tokopedia Engineering is a great article to read that will help you understand Mach-O Executable.
