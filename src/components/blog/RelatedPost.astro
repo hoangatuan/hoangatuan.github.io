@@ -12,18 +12,12 @@ const { prefix, post } = Astro.props;
 
 const posts = await fetchRelatedPosts(post);
 ---
-
-<div class="container mx-auto px-4 lg:px-8">
-  <ul
-    class="grid gap-8 lg:grid-cols-2"
-    style="row-gap: 0.1rem; column-gap: 2rem;"
-  >
-    {
-      posts.map((post) => (
-        <li class="mb-8 flex">
-          <Item prefix={prefix} post={post} />
-        </li>
-      ))
-    }
+<div class="container mx-auto px-4 xl:px-[240px]">
+  <ul class="grid gap-8 lg:grid-cols-2" style="row-gap: 0.1rem; column-gap: 2rem;">
+    {posts.map((post) => (
+      <li class="mb-8 flex">
+        <Item prefix={prefix} post={post} />
+      </li>
+    ))}
   </ul>
 </div>
