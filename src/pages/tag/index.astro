@@ -3,6 +3,7 @@ import { getPermalink } from "../../utils/permalinks";
 
 import PageLayout from "../../layouts/PageLayout.astro";
 import TagsHeader from "../../components/common/TagsHeader.astro";
+
 import { fetchPosts } from "../../utils/blog.ts";
 
 // Define an async function to fetch posts and await its result
@@ -13,7 +14,8 @@ const getPosts = async () => {
 
 // Fetch posts asynchronously and store them in a variable
 const posts = await getPosts();
-const tags: Array<string> = posts.reduce((acc: Array<string>, post) => {
+
+var tags: Array<string> = posts.reduce((acc: Array<string>, post) => {
   (post.tags ?? []).forEach((tag) => {
     if (!acc.includes(tag)) {
       acc.push(tag);

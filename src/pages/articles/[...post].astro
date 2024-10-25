@@ -101,8 +101,8 @@ const { Content } = post;
         <PostTags tags={post.tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
       </div>
 
-      <div class="container mx-auto px-4 lg:px-8">
-        <PostComments class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between"></PostComments>
+      <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
+        <PostComments class=""></PostComments>
       </div>
 
       {post.relatedPostIDs.length > 0 && (

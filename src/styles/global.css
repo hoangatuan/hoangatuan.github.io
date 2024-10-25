@@ -1,19 +1,15 @@
 
 .article-toc{
-	float:left;
-	width:200px;
+	float:right;
+	width:320px;
 	position:sticky;top:40px;
-	font-size:medium;
+	font-size:small;
 	line-height: normal;
 	color: #6b7280
 }
-.article-toc a{display:inline-block; padding:4px 0}
+.article-toc a{display:inline-block; padding:4px}
 .article-toc a::after{display:none}
-.article-toc a.active{
-    text-decoration: none; /* Remove underline */
-    color: #f4a261; /* Set text color to red */
-}
-.article-toc ul ul{margin-left:20px}
+.article-toc ul ul{margin-left:16px}
 .article-toc h3{margin-top:0;}
 .article-toc>div{position:sticky;top:0}
 .article-toc .links{
@@ -38,7 +34,6 @@
 }
 .article-toc .links a:hover{
 	background-color: rgba(var(--text), .08);
-	
 	opacity: 1;
 }
 .article-toc .links svg{
