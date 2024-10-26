@@ -1,0 +1,28 @@
+---
+import type { Newsletter } from '../../types/newsletter.types';
+import { getPermalink } from '../../utils/permalinks';
+
+export interface Props {
+  newsletter: Newsletter;
+  isPrev: boolean;
+}
+
+const { newsletter, isPrev } = Astro.props;
+const link = getPermalink(newsletter.permalink, 'newsletter');
+---
+
+<article class="p-6 bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700">
+  <a href={`/weekly${link}`}>
+    {isPrev ? (
+      <div>
+        <p>⬅️ Previous issue</p>
+        <p class="font-bold">{newsletter.title}</p>
+      </div>
+    ) : (
+      <div>
+        <p>Next issue ➡️</p>
+        <p class="font-bold">{newsletter.title}</p>
+      </div>
+    )}
+  </a>
+</article>

@@ -99,3 +99,16 @@ export const getStaticPathsWeekly = async () => {
       props: { newsletter },
     }));
   };
+
+export const fetchRelatedNewletters = async (newsletter: Newsletter) => {
+  const newsletters = await fetchNewsletters();
+  const index = newsletters.findIndex((n) => n.id === newsletter.id);
+  const previous = newsletters[index + 1];
+  const next = newsletters[index - 1];
+  
+  return {
+    previous,
+    next,
+  };
+};
+  

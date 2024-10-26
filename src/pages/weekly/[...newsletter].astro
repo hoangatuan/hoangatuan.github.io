@@ -7,6 +7,7 @@ import { getFormattedDate } from '../../utils/utils';
 import Image from '../../components/common/Image.astro';
 import PostComments from '../../components/common/PostComments.astro';
 import TableOfContents from '../../components/blog/TableOfContents.astro';
+import RelatedWeekly from '../../components/weekly/RelatedWeekly.astro';
 
 export const getStaticPaths = (async () => {
   return await getStaticPathsWeekly();
@@ -90,9 +91,17 @@ const { Content } = newsletter;
         >
           {Content ? <Content /> : <Fragment set:html={newsletter.content || ''} />}
         </div>
-  
+
         <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
           <PostComments class=""></PostComments>
+        </div>
+
+        <div class="mx-auto max-w-screen-sm text-center lg:mb-8 mb-4 pt-16">
+          <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Related Newsletter</h2>
+        </div>
+
+        <div class="container mx-auto px-4 xl:px-[240px]">
+          <RelatedWeekly newsletter={newsletter}></RelatedWeekly>
         </div>
         
       </article>

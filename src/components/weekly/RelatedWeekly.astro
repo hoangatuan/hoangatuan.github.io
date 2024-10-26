@@ -1,0 +1,21 @@
+---
+import type { Newsletter } from '../../types/newsletter.types';
+import RelatedWeeklyItem from "./RelatedWeeklyItem.astro";
+import { fetchRelatedNewletters } from "../../utils/weekly";
+
+export interface Props {
+  newsletter: Newsletter;
+}
+
+const { newsletter } = Astro.props;
+const { previous, next } = await fetchRelatedNewletters(newsletter);
+---
+
+<div class={(previous && next) ? 'grid grid-cols-2 gap-4' : 'grid grid-cols-1'}>
+    {previous && (
+      <RelatedWeeklyItem newsletter={previous} isPrev={true} />
+    )}
+    {next && (
+      <RelatedWeeklyItem newsletter={next} isPrev={false} />
+    )}
+</div>
