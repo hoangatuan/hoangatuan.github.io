@@ -1,0 +1,67 @@
+---
+publishDate: 2024-11-4T00:00:00Z
+title: "#4: The rise of AI in Xcode"
+excerpt: "The rise of AI in Xcode, running, reading, ..."
+image: https://plus.unsplash.com/premium_photo-1683121710572-7723bd2e235d?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+---
+
+## Update on my running
+
+As mentioned on the previous newsletter, I've signed up for 100KM challange. I really hate running, but I want to challenge myself to do something that I hate.
+I've been running for 2 weeks, and I've run 50KM so far. 
+I'm happy with my progress, and I will try my best to finish 100KM.
+
+## Great articles this week
+
+### 1. [Slow incremental builds using xcodebuild](https://github.com/wojciech-kulik/xcodebuild.nvim/issues/201?source=post_page-----38f3d7b0c0bc--------------------------------)
+
+In this Github thread, the author dig deeper to understand why incremental builds using xcodebuild are slow. While this seems like a bug in Xcode16, the author provides some workarounds to make the incremental builds faster.
+Despite that, there are some things I've learned from the thread:
+
+- Using [Proxyman](https://proxyman.io/) to capture network requests of any processes on your Mac
+- The thread points to a [different thread](https://github.com/wojciech-kulik/xcodebuild.nvim/discussions/106), which have a respond from Apple about why xcodebuild is slower than Xcode: 
+
+> xcodebuild does a lot of work which building inside of Xcode doesn't need to do. For example, loading Xcode's libraries and plugins, and loading the workspace, or project from disk. All of that has already been done inside the IDE when you hit Build. Large workspaces can take a significant amount of time to load. From your timings, our guess is that your project is large and takes 3-10s to load.
+
+### 2. [Understanding String.Index in Swift](https://medium.com/@nsrajat/understanding-string-index-in-swift-a8c8a5229204) 
+
+Recently I started practicing Leetcode, and I wonder why String can't conform to RandomAccessCollection. 
+To answer this question, I dig deeper and learn a ton of things: What and why unicode, memory allocation for Int/Character in Swift, the trade off between performance and memory, and how String.Index works in Swift.
+This article explains why, and it's a good read if you want to understand how String.Index works in Swift.
+
+Some of others article that you might want to take a look:
+
+- https://forums.swift.org/t/string-o-1-access-to-character/19645
+- https://www.quora.com/Why-can-t-Swift-strings-be-subscripted-with-integers
+
+
+### 3. [Webcrawler using swift](https://www.fivestars.blog/articles/build-web-crawler-swift/) - FIVE STARS
+
+I'm reading the book "System Design Interview" by Alex Xu, and I'm curious about how web crawler works. 
+This article is a good introduction to how web crawler works, and how to build a simple web crawler using Swift.
+
+### 4. The rise of AI in Xcode
+
+One of the big announcements recently from Github is that they've released [GitHub Copilot for Xcode](https://github.blog/changelog/2024-10-29-github-copilot-code-completion-in-xcode-is-now-available-in-public-preview/).
+Turns out, this is actually a fork from the original Github Copilot for Xcode, which is announced [here](https://github.com/intitni/CopilotForXcode/discussions/597).
+
+Eventhouh it's a fork, the author mentioned:
+
+> Apparently, GitHub's version focuses more on the GitHub Copilot features, and their goal is to align the extension to the VSCode extension.
+On the other hand, GitHub Copilot is only one of the service providers in this repo, the original Copilot for Xcode. You can use different services like Codeium and other LLMs, too. We support many other features that are more Xcode-oriented and not likely to be implemented in GitHub's version, such as automatically closing idle tabs in Xcode.
+We are not aiming to align the extension to the GitHub Copilot VSCode extension, so we are handling code completions, inline suggestions, or chat in different ways, and they will be more different in the future.
+
+I haven't tried it out yet, but I will experience it this week to see if's better than the original Github Copilot for Xcode.
+
+Not only Github CopilotForXcode, there is another AI tool that is being developed for Xcode: [Alex Sidebar](https://alexsidebar.app/)
+I've tried this tool, and I must say it's pretty cool. It offers some features like:
+
+- Select text in Xcode and instantly chat with it.
+- Drag any image into the sidebar, and let Alex generate code for it.
+- Quickly spin up an in-file/inline suggestions into code.
+- Quickly apply code to your file.
+- And more...
+
+Some of the others AI tools for Xcode are: AI features in Xcode16 provided by Apple, [Cursor](https://www.cursor.com/), ...
+
+With the rise of AI, I think it will benefits us a lot in the future. We can save more time, write code faster and better, and learn more with the help of AI.
