@@ -1,0 +1,27 @@
+---
+publishDate: 2024-11-11T00:00:00Z
+title: "#5: "
+excerpt: ""
+image: https://plus.unsplash.com/premium_photo-1683121710572-7723bd2e235d?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+---
+
+### 1. [Making illegal states unrepresentable](https://swiftology.io/articles/making-illegal-states-unrepresentable/)
+
+The collection `Type-Driven Design with Swift` by Alex Ozun is a 
+
+### 2. [The evolution of iOS Performance Optimization](https://starming.com/2024/10/28/kwdc24-in-seoul/)
+
+This is a interesting article from Dai Ming that summarizes several important aspects of iOS performance optimization: crash, slow launch, app size, memory issue, ...
+He mentioned about the problems, root causes and solutions for each aspect that we should consider when optimizing the performance of an iOS app.
+
+### 3. [Deep dive Proton VPN](https://www.emergetools.com/deep-dives/proton-vpn)
+
+This article from Emerge team take a detail look at Proton VPN iOS app size.
+
+Some interesting points from the article:
+
+1. Proton VPN triplicate Alamofire library in 3 targets by using static library, but due to Dead code stripping, the total size is smaller than using 1 dynamic Alamofire library.
+2. The duplicate of assets in 3 targets is huge, and this kind of mistake is common in even big iOS projects. Please analyze carefully for assets in your project. More infor can be found at these 2 great articles:
+    - [How 7 iOS Apps Could Save You 500MB of Storage](https://www.emergetools.com/blog/posts/7AppsThatCouldSaveYou500MB)
+    - [](https://www.emergetools.com/blog/posts/make-your-ios-app-smaller-with-dynamic-frameworks)
+
