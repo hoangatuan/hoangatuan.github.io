@@ -1,0 +1,29 @@
+---
+import PageLayout from "../../layouts/PageLayout.astro";
+import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
+import type { PaginateFunction } from 'astro';
+import { fetchPosts } from '../../utils/blog';
+import BlogList from "../../components/blog/List.astro";
+import Pagination from "../../components/common/Pagination.astro";
+
+export async function getStaticPaths({paginate}: { paginate: PaginateFunction }) {
+  // Load your data with fetch(), Astro.glob(), etc.
+  const posts = await fetchPosts();
+  // Return a paginated collection of paths for all posts
+  return paginate(posts, { pageSize: 3 });
+}
+
+const { page } = Astro.props;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+---
+
+<!--Display the current page number. Astro.params.page can also be used!-->
+<!-- <h1>Page {page.currentPage}</h1> -->
+
+<PageLayout>
+    <BlogList prefix="articles" posts={page.data} />
+    <div class="flex justify-center">
+      <Pagination/>
+    </div>
+</PageLayout>
