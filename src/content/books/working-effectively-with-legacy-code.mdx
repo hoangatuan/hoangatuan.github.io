@@ -13,10 +13,10 @@ score: 7/10
 
 ## My review of Working Effectively with Legacy Code
 
-- Eventhough this is an old book, and some of the content is outdated since we have more advanced tools, the book still provides a lot of foundation knowledge about how to work with legacy code.
-- While working with legacy code, we often think about the R word (Refactor). Whoever, refactoring while adding new features is not easy and can be dangerous. This book provides a lot of techniques to help you refactor legacy code safely.
-- Let's also expand it that not only work with legacy code, but also work with any codebase.
-- I learned a lot
+While working with legacy code, we often think about the R word (Refactor). Whoever, refactoring while adding new features is not easy and can be dangerous. That's why we should learn how to refactor legacy code safely.    
+
+Eventhough this is an old book, and some of the content is outdated since we have more advanced tools, the book still provides a lot of foundation knowledge and techniques about how to work with legacy code. I've learned a lot from the book, and I think it's worth reading.    
+In this article, I will summarize the key points of the book, and also try to expand it to work with any codebase, not only legacy code.
 
 ## Problems
 
@@ -26,14 +26,14 @@ The main reasons that we need to change are:
 - Fixing bugs 
 - Refactoring
 
-While working with legacy code or bad codebase, we often think about the R word (Refactor). Someof the problems are:
+While working with legacy code or bad codebase, we often think about the R word (Refactor). Some of the problems are:
 
-- Easy to lose behavior or create bad behavior
-- The amount of behavior that we have to pre- serve is usually very large
-- Often don’t know how much of that behavior is at risk when we make our changes
+- Easy to lose existing behaviors or create bad behaviors
+- The amount of behaviors that we have to preserve is usually very large
+- We often don’t know how much of that behavior is at risk when we make our changes
 ...
 
-Not to mentioned that if you adding features and refactoring at the same time, it will be a mess for both you and the reviewers.
+Not to mentioned that if you adding features and refactoring at the same time, it will be a mess for both you and the reviewers:
 
 - For the engineer, a lot of things will happen at once, which makes it hard to focus and easy to make mistakes. Eventually, it takes more time to finish the task.
 - For the reviewers, they have to review a lot of things at once, which makes it hard to review and easy to miss something. Eventually, they often just merged the PR without understanding the changes.
@@ -44,12 +44,12 @@ Not to mentioned that if you adding features and refactoring at the same time, i
 
 To mitigate the risks, the core ideas are:
 
-- Do once thing at a time: Either adding features or refactoring
-- Should have tests before refactoring. If don't have tests, write it first.
+- **Do 1 thing at a time**: Either adding features or refactoring
+- **Should have tests before refactoring**. If don't have tests, write it first.
 
 ### Steps:
 
-1. Identify change points
+1. Identify change points - part of your app will be affected by your changes
 2. Find test points
 3. Break dependencies
 4. Write tests
@@ -58,9 +58,58 @@ To mitigate the risks, the core ideas are:
 That's theory. We still have a lot of problems. The book mentions those problems and techniques to help you refactor legacy code safely. 
 Let's focus on the techniques first, then we can discuss the problems later.
 
-## 1. How to add new features without refactoring
+## 1. How to identify change points?
 
-## 1. Sprout Method
+To identify change points, the book mentions 2 main points:
+
+1. **Effect up**: Who call your function?
+2. **Effect down**:
+  - Your func modify some states and this state is used by others => affect others 
+  - Your func modify global/static state
+
+Steps looking for change points:
+
+- Identify a method that will change
+- If a method has a return value, look at it's callers
+- If method modifies any values -> look at the methods that use those values, and the methods that use those methods
+- Look for superclass/subclass
+- See if the parameters will be changed silently
+- Global/static data is modified?
+
+## 2. Break dependencies
+
+The DI is the big topic, so I will not mention it here. Instead, I suggest you to read the book "Dependency Injection Principles, Practices, and Patterns" by Steven van Deursen and Mark Seemann.
+
+## 3. Write tests
+
+In the book, the author mentions 2 main purposes of tests:
+
+- Preserve the current logic from unwanted change: You write tests based on the current code
+- Finding bugs: In a legacy code, If you write tests based on document and you realized the current logic has issue
+
+When refactoring, we want to preserve the existing behavior. So we should write tests based on the current code, not the document. If we discover bugs or suspicious, we should escalate it later (Do 1 thing at a time).
+
+### 3.1. Dependency Injection
+
+Don't depend on the concrete class, depend on the protocol. This way, you can easily mock the dependencies in the test. This should be another topic, so I will not mention it here.
+
+### 3.2 Single responsibility principle
+
+- When you have a method that does a lot of things, it's hard to test. You should break it down into smaller methods, each method does only one thing.
+- When you have a class that does a lot of things, you should break it down into smaller classes, each class does only one thing. This way we can easily test each class.
+
+### 3.3. Test private methods
+
+- Test private methods by testing the public methods that use them. This way, we can test the private methods indirectly.
+- Move the private methods to a separated class, then test that class. (only use this when it has it's own responsibility)
+
+> Command/Query Separation: A method should either change the state of an object, or return some information about the object, but not both.
+
+## 4. How to add new features without refactoring
+
+Sometime, we need to deliver feature first and refactor later. The book mentions 3 techniques to add new features without refactoring:
+
+### 4.1 Sprout Method
 
 When you need to add a new feature, but the existing code is too complex to add the new feature. You need to do the refactoring, but we mentioned that we can't do both at the same time.   
 You can create a new method to handle the new feature. This method is called Sprout Method.
@@ -73,11 +122,11 @@ Cons:
 - Dont refactor old code. Bad code is still there.
 - Not single source of truth
 
-## 2. Wrap Method
+### 4.2 Wrap Method
 
 Similar to the Decorator pattern. You can create a new method that wraps the old method to customize the behavior. This method is called Wrap Method.
 
-## 3. Extract, Subclass and Override Method
+### 4.3 Extract, Subclass and Override Method
 
 When you need to change the behavior of a method, we can:
 
@@ -119,53 +168,13 @@ Pros:
 Cons:
 - Create a lot of new classes. We should not abuse it
 
-## 2. How to add unit tests to legacy code
+## 5. How to understand legacy code
 
-### 2.1. Dependency Injection
+### 5.1 Notes/Sketching
 
-Don't depend on the concrete class, depend on the protocol. This way, you can easily mock the dependencies in the test.
-This should be another topic, so I will not mention it here.
+This is a good advice that I use it all the time. The legacy code is hard to understand, and try to understand in thought is even harder.     
+What you can do is you can draw a diagram, write down the flow, write down the logic, etc. This way, you can see the big picture and understand the code better.
 
-### 2.2 Single responsibility principle
+### 5.2 Temp sketching
 
-- When you have a method that does a lot of things, it's hard to test. You should break it down into smaller methods, each method does only one thing.
-- When you have a class that does a lot of things, you should break it down into smaller classes, each class does only one thing. This way we can easily test each class.
-
-### 2.3. Test private methods
-
-- Test private methods by testing the public methods that use them. This way, we can test the private methods indirectly.
-- Move the private methods to a separated class, then test that class. (only use this when it has it's own responsibility)
-
-> Command/Query Separation: A method should either change the state of an object, or return some information about the object, but not both.
-
-## 3. Other problems
-
-### 3.1 Reasoning about effects: Which part of your app will be affected by your changed?
-
-1. Effect up: Who call your function?
-2. Effect down:
-  - Your func modify some states and this state is used by others => affect others 
-  - Your func modify global/static state
-
-Tips for looking affecs:
-
-- 1. Identify a method that will change
-- 2. If a method has a return value, look at it's callers
-- 3. If method modifies any values -> look at the methods that use those values, and the methods that use those methods
-- 4. Look for superclass/subclass
-- 5. See if the parameters will be changed silently
-- 6. global/static data is modified?
-
-### 3.2 Don’t Understand the Code Well Enough to Change It
-
-- Notes/Sketching
-- Temp sketching: Check out the code from your version-control system.. Extract methods, move variables, refactor it whatever way you want to get a better understanding of it; just don’t check it in again. Throw that code away. This is called Scratch refactoring.
-
-### 3.3 Purpose of tests
-
-- Preserve the current logic from unwanted change: You write tests based on the current code
-- Finding bugs: In a legacy code, If you write tests based on document and you realized the current logic has issue -> dis cover bugs
-
-To make new change, first you will need to focus on preserve the current logic, not discover bugs
-=> -> Write test based on current logic, then add new change
-=> If discover bugs or suspicious -> Escalate it later
+Check out the code from your version-control system.. Extract methods, move variables, refactor it whatever way you want to get a better understanding of it; just don’t check it in again. Throw that code away. This is called Scratch refactoring.
