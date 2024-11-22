@@ -1,0 +1,180 @@
+---
+title: Working Effectively with Legacy Code
+publishDate: 2024-11-24T00:00:00Z
+author: Michael Feathers
+excerpt: My review of Working Effectively with Legacy Code
+cover: /src/assets/content/book/working-effectively-with-legacy-code.jpg
+image: https://images.unsplash.com/photo-1516996087931-5ae405802f9f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80
+categories: 
+  - Engineering
+  - Refactoring
+score: 7/10
+---
+
+## My review of Working Effectively with Legacy Code
+
+While working with legacy code, we often think about the R word (Refactor). Whoever, refactoring while adding new features is not easy and can be dangerous. That's why we should learn how to refactor legacy code safely.    
+
+Eventhough this is an old book, and some of the content is outdated since we have more advanced tools, the book still provides a lot of foundation knowledge and techniques about how to work with legacy code. I've learned a lot from the book, and I think it's worth reading.    
+In this article, I will summarize the key points of the book, and also try to expand it to work with any codebase, not only legacy code.
+
+## Problems
+
+The main reasons that we need to change are:
+
+- Adding new features/Changing requirements
+- Fixing bugs 
+- Refactoring
+
+While working with legacy code or bad codebase, we often think about the R word (Refactor). Some of the problems are:
+
+- Easy to lose existing behaviors or create bad behaviors
+- The amount of behaviors that we have to preserve is usually very large
+- We often don’t know how much of that behavior is at risk when we make our changes
+...
+
+Not to mentioned that if you adding features and refactoring at the same time, it will be a mess for both you and the reviewers:
+
+- For the engineer, a lot of things will happen at once, which makes it hard to focus and easy to make mistakes. Eventually, it takes more time to finish the task.
+- For the reviewers, they have to review a lot of things at once, which makes it hard to review and easy to miss something. Eventually, they often just merged the PR without understanding the changes.
+
+> The key thing about refactoring is that there aren’t supposed to be any functional changes when you refactor
+
+## How to mitigate the risks?
+
+To mitigate the risks, the core ideas are:
+
+- **Do 1 thing at a time**: Either adding features or refactoring
+- **Should have tests before refactoring**. If don't have tests, write it first.
+
+### Steps:
+
+1. Identify change points - part of your app will be affected by your changes
+2. Find test points
+3. Break dependencies
+4. Write tests
+5. Make changes and refactor
+
+That's theory. We still have a lot of problems. The book mentions those problems and techniques to help you refactor legacy code safely. 
+Let's focus on the techniques first, then we can discuss the problems later.
+
+## 1. How to identify change points?
+
+To identify change points, the book mentions 2 main points:
+
+1. **Effect up**: Who call your function?
+2. **Effect down**:
+  - Your func modify some states and this state is used by others => affect others 
+  - Your func modify global/static state
+
+Steps looking for change points:
+
+- Identify a method that will change
+- If a method has a return value, look at it's callers
+- If method modifies any values -> look at the methods that use those values, and the methods that use those methods
+- Look for superclass/subclass
+- See if the parameters will be changed silently
+- Global/static data is modified?
+
+## 2. Break dependencies
+
+The DI is the big topic, so I will not mention it here. Instead, I suggest you to read the book "Dependency Injection Principles, Practices, and Patterns" by Steven van Deursen and Mark Seemann.
+
+## 3. Write tests
+
+In the book, the author mentions 2 main purposes of tests:
+
+- Preserve the current logic from unwanted change: You write tests based on the current code
+- Finding bugs: In a legacy code, If you write tests based on document and you realized the current logic has issue
+
+When refactoring, we want to preserve the existing behavior. So we should write tests based on the current code, not the document. If we discover bugs or suspicious, we should escalate it later (Do 1 thing at a time).
+
+### 3.1. Dependency Injection
+
+Don't depend on the concrete class, depend on the protocol. This way, you can easily mock the dependencies in the test. This should be another topic, so I will not mention it here.
+
+### 3.2 Single responsibility principle
+
+- When you have a method that does a lot of things, it's hard to test. You should break it down into smaller methods, each method does only one thing.
+- When you have a class that does a lot of things, you should break it down into smaller classes, each class does only one thing. This way we can easily test each class.
+
+### 3.3. Test private methods
+
+- Test private methods by testing the public methods that use them. This way, we can test the private methods indirectly.
+- Move the private methods to a separated class, then test that class. (only use this when it has it's own responsibility)
+
+> Command/Query Separation: A method should either change the state of an object, or return some information about the object, but not both.
+
+## 4. How to add new features without refactoring
+
+Sometime, we need to deliver feature first and refactor later. The book mentions 3 techniques to add new features without refactoring:
+
+### 4.1 Sprout Method
+
+When you need to add a new feature, but the existing code is too complex to add the new feature. You need to do the refactoring, but we mentioned that we can't do both at the same time.   
+You can create a new method to handle the new feature. This method is called Sprout Method.
+
+Pros: 
+- Clearly separating new code from old code
+- Can add test to new code easily, later remove old code
+
+Cons:
+- Dont refactor old code. Bad code is still there.
+- Not single source of truth
+
+### 4.2 Wrap Method
+
+Similar to the Decorator pattern. You can create a new method that wraps the old method to customize the behavior. This method is called Wrap Method.
+
+### 4.3 Extract, Subclass and Override Method
+
+When you need to change the behavior of a method, we can:
+
+1. Extract the logic to a separated method  
+2. Create a subclass and override that method
+
+```swift
+import Foundation
+
+// Step 1: Define a base class with a method
+class LegacyClass {
+    func workflow() {
+      ...
+      performOperation()
+      ...
+    }
+    func performOperation() {
+        // Original implementation
+        print("Performing operation in LegacyClass")
+    }
+}
+
+// Step 2: Create a subclass that overrides the method
+class SubclassedClass: LegacyClass {
+    override func performOperation() {
+        // New implementation
+        print("Performing operation in SubclassedClass")
+    }
+}
+
+// Step 3: Use the subclass
+let subclassed = SubclassedClass()
+subclassed.workflow()
+```
+
+Pros:
+- This approach also separated the old code from the new code
+
+Cons:
+- Create a lot of new classes. We should not abuse it
+
+## 5. How to understand legacy code
+
+### 5.1 Notes/Sketching
+
+This is a good advice that I use it all the time. The legacy code is hard to understand, and try to understand in thought is even harder.     
+What you can do is you can draw a diagram, write down the flow, write down the logic, etc. This way, you can see the big picture and understand the code better.
+
+### 5.2 Temp sketching
+
+Check out the code from your version-control system.. Extract methods, move variables, refactor it whatever way you want to get a better understanding of it; just don’t check it in again. Throw that code away. This is called Scratch refactoring.
