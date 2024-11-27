@@ -1,0 +1,63 @@
+---
+publishDate: 2024-11-25T00:00:00Z
+title: "#6: Swift weekly newsletter #6"
+excerpt: Finish 100km Challenge!!!"
+image: https://plus.unsplash.com/premium_photo-1672046217997-4e40a3d7987d?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+---
+
+## Great articles this week
+
+### 1. [Avoiding Memory Leaks with Async Sequences in Swift](https://www.linkedin.com/pulse/avoiding-memory-leaks-async-sequences-swift-dima-bronnikov-buibf/?trackingId=2CBDamiFq4zZvGi5tA4OKg%3D%3D)
+
+This is a nice reminder about using `guard self` in enless async sequence.   
+Using `guard self` will create a strong reference to `self`, and it will only release when the Task is completed. However, the enless async sequence will never complete, so the strong reference will never be released, which will cause a memory leak.    
+
+The author also provides [a cleaner way to handle task cancellation by using Combine](https://www.linkedin.com/posts/dmitriy-bronnikov_following-up-on-my-recent-post-about-managing-activity-7262840342217940994-cCaV?utm_source=share&utm_medium=member_desktop).
+
+### 2. [What is a crash](https://blog.jacobstechtavern.com/p/what-is-a-crash)
+
+The article explain detail how Swift runtime and kernel crash the program in order to protect the system integrity, and how crashing is still better than [running the program with corrupted memory](https://blog.jacobstechtavern.com/p/jailbreak-enemies-with-a-link-remote-execution).
+The author also explain some common crash types, such as SIGSEGV, SIGBUS, SIGILL, SIGABRT, EXC_BAD_ACCESS, ...
+It's worth a read to understand more about the crash, and how to debug the crash.
+
+### 3. [Why Swift's type checker is so slow](https://danielchasehooper.com/posts/why-swift-is-slow/)
+
+> The nature of constraint solvers is that they may find unexpected solutions, or have unpredictable performance.
+
+In the article, the author explain the reason why Swift's type checker is slow is because of type inference. If we have a long and complex operation, Swift will need to check for a lot of possible solutions, which will take a lot of time.
+The author also suggests some ways to improve the performance of the type checker. Some of the ideas that we can apply to our codebase are:
+
+- **Use explicit types**: Explicit types will help the compiler to reduce the number of possible solutions.
+- Break down complex operations into smaller ones: This will help the compiler to reduce the number of possible solutions.
+- Enable warning for slow type checking: This will help us to identify the slow type checking code and optimize it.
+
+### 4. [Focus not on the task, but on the problem behind the task](https://swiftrocks.com/focus-not-on-the-task-but-on-the-problem-behind-the-task)
+
+Recently, I realized 1 problem I had is that I always like to jump into the coding part without understanding the task carefully.   
+
+That has some problems:
+
+- Waste time on coding the wrong thing
+- Issues/Problems will be found later, and it's hard to fix
+- The integration part with otherteam is pushed back to the end, which eventually causing delays.
+- Not understand the problem well, so the solution is not fit into the big picture
+
+This problem from Bruno Rocha is a good reminder that we should analyze the problem carefully before jumping into the coding part.
+
+1. **Understand the problem carefully by asking questions**:
+    - What's the context behind this ask?
+    - How it will benefit users? What's the impact?
+    - Can we have a better solution?
+
+2. **Discuss with PM/PD/BE:**
+    + Ask for the worst scenario design: error case, slow loading, nil API response ...
+    + Ask for the edge cases
+    + Ask for BE document, API design, ...
+
+3. Design the solutions: architecture, components, data flow, ...
+4. Start coding
+
+### 5. [Why you should use Xcode 16 buildable folders instead of groups](https://dimillian.medium.com/why-you-should-use-xcode-16-buildable-folders-instead-of-groups-6f438611914d)
+
+- Before Xcode16, we only has the option to create New Group, dont have option to create New Folder. To use Folder, we need to create outside Xcode and add manually.
+- Xcode16 has the option to create New Folder. By using Folder, it can helps to solve merge conflicts that related to folder structure, xcodeproj, ... 
