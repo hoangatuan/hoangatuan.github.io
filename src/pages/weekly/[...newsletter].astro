@@ -9,6 +9,15 @@ import PostComments from '../../components/common/PostComments.astro';
 import TableOfContents from '../../components/blog/TableOfContents.astro';
 import RelatedWeekly from '../../components/weekly/RelatedWeekly.astro';
 
+import {
+  FacebookShareButton,
+  LinkedInShareButton,
+  TwitterShareButton,
+  SocialShare
+} from "astro-social-share";
+
+const BUTTONS = [TwitterShareButton, FacebookShareButton, LinkedInShareButton];
+
 export const getStaticPaths = (async () => {
   return await getStaticPathsWeekly();
 }) satisfies GetStaticPaths;
@@ -93,6 +102,18 @@ const { Content } = newsletter;
         </div>
 
         <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
+          <!-- <PostTags tags={book.categories} class="mr-5 rtl:mr-0 rtl:ml-5" /> -->
+          
+          <div class="flex-grow"></div>
+
+          <SocialShare
+              buttons={BUTTONS}
+              description="Description of the page/post"
+              title="Page Title"
+          />
+        </div>
+
+        <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
           <PostComments class=""></PostComments>
         </div>
 
@@ -136,3 +157,19 @@ const { Content } = newsletter;
       })
   }
   </script>
+
+<slot name="astro-social-share-css">
+  <style is:global>
+    .astro-social-share {
+        margin: 0px 0px;
+        height: 24px;
+    }
+    .astro-social-share a {
+        text-decoration: none;
+        margin-right: 12px;
+    }
+    .astro-social-share svg {
+        height: 24px;
+    }
+  </style>
+</slot>

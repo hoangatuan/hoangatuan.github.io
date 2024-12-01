@@ -11,6 +11,15 @@ import PostTags from '../../components/common/Tags.astro';
 import RelatedPost from '../../components/blog/RelatedPost.astro';
 import PostComments from '../../components/common/PostComments.astro';
 
+import {
+  FacebookShareButton,
+  LinkedInShareButton,
+  TwitterShareButton,
+  SocialShare
+} from "astro-social-share";
+
+const BUTTONS = [TwitterShareButton, FacebookShareButton, LinkedInShareButton];
+
 import TableOfContents from '../../components/blog/TableOfContents.astro';
 import "../../styles/global.css";
 
@@ -99,6 +108,12 @@ const { Content } = post;
 
       <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
         <PostTags tags={post.tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
+        
+        <SocialShare
+            buttons={BUTTONS}
+            description="Description of the page/post"
+            title="Page Title"
+        />
       </div>
 
       <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
@@ -147,3 +162,19 @@ const { Content } = post;
 	})
 }
 </script>
+
+<slot name="astro-social-share-css">
+  <style is:global>
+    .astro-social-share {
+        margin: 0px 0px;
+        height: 24px;
+    }
+    .astro-social-share a {
+        text-decoration: none;
+        margin-right: 12px;
+    }
+    .astro-social-share svg {
+        height: 24px;
+    }
+  </style>
+</slot>
