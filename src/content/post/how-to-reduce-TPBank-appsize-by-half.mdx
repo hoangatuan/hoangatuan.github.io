@@ -1,0 +1,130 @@
+---
+publishDate: 2024-12-1T00:00:00Z
+author: Tuan Hoang
+title: How to cut TPBank app size by half
+excerpt: In this article, we will learn some techniques that can be applied to reduce the TPBank app size by half.
+image: https://images.unsplash.com/photo-1491156855053-9cdff72c7f85?q=80&w=2128&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+category: software
+tags:
+  - ios
+  - performance
+relatedPostIDs: 
+  - 5-effective-strategies-for-managing-image-resources-in-ios.mdx
+  - reducing-ios-test-execution-time-with-selective-testing.mdx
+---
+
+import chillguy from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/chillguy.png';
+
+TPBank is my daily use Vietnam banking app, and I've used it for 6 years. Recently, I looked at its app size for the first time.    
+**650 MB**. 2x bigger than the average Vietnam banking app size
+
+I still feel comfortable because I'm just a chill guy.
+
+<p align="center">
+    <img src={chillguy.src} alt="image" style={{ width: '50%', height: 'auto' }} />
+</p>
+
+But I was curious, and I dug into it.   
+In this article, I will write about things I've found and some solutions to cut the app size by half. I hope you can learn something and apply these techniques to your iOS project.   
+Shout out to Emerge for their awesome tools.
+___
+
+import image1 from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/Screenshot 2024-11-30 at 21.20.33.png';
+import image2 from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/Screenshot 2024-11-30 at 18.52.53.png';
+import image3 from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/Screenshot 2024-11-30 at 21.21.24.png';
+import image4 from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/Screenshot 2024-11-30 at 22.34.28.png';
+import image5 from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/Screenshot 2024-11-30 at 23.49.59.png';
+import image6 from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/Screenshot 2024-11-30 at 21.25.30.png';
+import image7 from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/Screenshot 2024-11-30 at 21.27.18.png';
+import image8 from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/Screenshot 2024-11-30 at 21.30.37.png';
+import image9 from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/Screenshot 2024-11-30 at 22.42.49.png';
+import image10 from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/Screenshot 2024-11-30 at 18.57.17.png';
+import image11 from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/Screenshot 2024-11-30 at 18.54.40.png';
+import image12 from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/Screenshot 2024-11-30 at 19.05.28.png';
+
+## 1. Unused heavy resources
+
+When checking their bundle, I realized they use specific mp4 files and images for special events, such as the New Year and Christmas. However, it's December now. Keeping the 2024 New Year event resources in the app is unnecessary and we should remove it.    
+I found these New Year resources by filtering the keyword "tet" (New Year in Vietnamese). **Removing all of these resources can reduce the app size by 30MB**.
+
+<img src={image1.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+## 2. Non-optimize resources
+
+The asset size of the TPBank app is 200MB. It's even bigger than some other banking apps.   
+I noticed 2 problems when I analyzed the app:
+
+### 2.1. Not compress images
+
+The TPBank app has a lot of big images. Lots of image sizes are greater than 2MB.    
+We can reduce the image sizes through lossy compression or convert it to HEIC format. **It can reduce the app size by 159.7 MB** 🤯
+
+<img src={image2.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+### 2.2. Using iPad image for iOS app
+
+Filtering the resources with the "iPad" keyword gave me these results:
+
+<img src={image3.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+The TPBank iOS Bundle contains resources for iPad. This is because they configured the images as Universal. We can change it to iPad for these images, and Apple will help us to remove it for the iOS App (App Thinning). **Doing that will help to reduce the iOS app size by 20MB**.
+
+<img src={image4.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+### 2.3 Can't utilize App thinning
+
+Some of the modules of the TPBank app are built by using Flutter.
+
+<img src={image5.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+However, the assets in the Flutter module can't be optimized by using 1x/2x/3x assets and App thinning. That leads to a huge asset size (**17.1 MB assets just for the Flutter module**).
+
+## 3. Duplicate resources
+
+A bird's-eye view can easily see that TPBank contains a lot of duplicated resources: **images** and **fonts**.
+
+<img src={image6.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+<img src={image7.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+Upon examining the bundle, I noticed that some of the frameworks include their own embedded fonts.
+
+<img src={image8.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+We can transfer these duplicated resources and fonts to a shared UI bundle. **The potential savings calculated by the Emerge tool is almost 28MB**.
+
+We can also integrate some tools to help us detect duplicate resources, which I have mentioned in my previous article.
+
+## 4. Unstrip Binary Symbols
+
+Swift binaries include large amounts of symbols in a segment of the binary used by the dynamic linker. These are generally not needed in production builds. The TPBank app doesn't strip these unnecessary symbols, which increases the app size.
+
+<img src={image10.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+To strip binary symbols, we can refer to this [guidance from Emerge](https://docs.emergetools.com/docs/strip-binary-symbols). The potential savings for the app size are 55 MB
+
+<img src={image11.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+## 5. Low exposure rate resources
+
+I used Emerge Tools and Asset Catalog Tinkerer to examine the assets more closely. I found numerous advertisement-heavy images that I have never seen used in the app.
+
+<img src={image12.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+99% of users will not see these event images because they are not in the core business flows of the app. These images have a low exposure rate.    
+Due to their heavy size (lots of images are ~4MB), we can consider moving them to CDN to help reduce the app size and benefit 99% of users.
+
+___
+
+**These simple, low-hanging fruit solutions can reduce the app size by more than 300MB (~ 50% of the original size). **    
+
+Some further improvements we can make, such as:
+- Removing unused images (I believe they have many)
+- Change to use static library (Strip unused code)
+- Enhancing the app's security (I better not mention it here)   
+…
+
+Now, where can I submit this article to TPBank Bounty Bug to get some cash?
+
+___
+
+Thanks for reading.
