@@ -57,7 +57,7 @@ I noticed 2 problems when I analyzed the app:
 ### 2.1. Not compress images
 
 The TPBank app has a lot of big images. Lots of image sizes are greater than 2MB.    
-We can reduce the image sizes through lossy compression or convert it to HEIC format. **It can reduce the app size by 159.7 MB** 🤯
+We can reduce the image sizes through [lossy compression](https://ericsspace.com/articles/5-effective-strategies-for-managing-image-resources-in-ios/) or convert it to HEIC format. **It can reduce the app size by 159.7 MB** 🤯
 
 <img src={image2.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
@@ -92,7 +92,7 @@ Upon examining the bundle, I noticed that some of the frameworks include their o
 
 We can transfer these duplicated resources and fonts to a shared UI bundle. **The potential savings calculated by the Emerge tool is almost 28MB**.
 
-We can also integrate some tools to help us detect duplicate resources, which I have mentioned in my previous article.
+We can also integrate some tools to help us detect duplicate resources, which I have mentioned in my [previous article](https://ericsspace.com/articles/5-effective-strategies-for-managing-image-resources-in-ios/).
 
 ## 4. Unstrip Binary Symbols
 
