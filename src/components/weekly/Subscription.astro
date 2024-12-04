@@ -54,11 +54,35 @@
 <script>
   // Find all buttons with the `alert` class on the page.
   const submitBtn = document.querySelectorAll("button.submit")[0];
-  submitBtn.addEventListener("click", () => {
+  submitBtn.addEventListener("click", async () => {
     const emailInput = document.getElementById(
       "email-address"
     ) as HTMLInputElement;
     const value = emailInput.value;
-    alert("Button was clicked!" + value); // Show an alert when the button is clicked
+
+    // alert(value);
+
+    try {
+      const res = await fetch("/api/subscribe.json", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: value }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Something went wrong");
+      }
+
+      const resData = await res.json();
+      alert(resData.message);
+    } catch (error) {
+      console.error(error);
+      // toast.error("Failed to submit email");
+      alert("Failed to submit email");
+    } finally {
+      
+    }
   });
 </script>
