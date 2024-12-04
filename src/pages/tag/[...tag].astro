@@ -16,7 +16,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { tag, posts } = Astro.props as Props;
 ---
 
-<PageLayout>
+<PageLayout title={tag}>
   <TagsHeader name=`#${tag}`` />
   <section class="">
     <BlogList prefix="articles" posts={posts} />

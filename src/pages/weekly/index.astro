@@ -13,6 +13,6 @@ const getNewsletters = async () => {
 const newsletters = await getNewsletters();
 ---
 
-<PageLayout>
+<PageLayout title="Weekly">
     <WeeklyList prefix="weekly" newsletters={newsletters} />
 </PageLayout>

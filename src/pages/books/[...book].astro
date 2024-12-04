@@ -31,7 +31,7 @@ const { book } = Astro.props as Props;
 const { Content } = book;
 ---
 
-<PageLayout>
+<PageLayout title={book.title}>
   <section class="py-8 sm:py-16 lg:py-20 mx-auto">
     <article>
       <header>
