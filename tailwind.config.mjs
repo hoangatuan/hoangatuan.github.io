@@ -11,6 +11,7 @@ module.exports = {
         default: 'var(--aw-color-text-default)',
         muted: 'var(--aw-color-text-muted)',
 
+        CEA4D21: '#EA4D21',
         C2a9d8f: '#2a9d8f',
         C264653: '#264653',
         Ce9c46a: '#e9c46a',
