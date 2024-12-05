@@ -8,7 +8,7 @@ import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
  
 interface Props {
   params: { post: string };
-  props: { post: CollectionEntry<"post"> };
+  props: { post: Post };
 }
  
 export async function GET({ props }: Props) {
@@ -61,8 +61,7 @@ export async function GET({ props }: Props) {
                     fontSize: '48px',
                     fontFamily: 'DM Sans Bold',
                   },
-                  children: post.data.title,
-                  // children: 'Hello World',
+                  children: post.title,
                 },
               },
             ],
