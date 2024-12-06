@@ -1,18 +1,15 @@
-import { getCollection, type CollectionEntry } from 'astro:content';
-import fs from 'fs';
-import path from 'path';
-import type { Post } from "../../../types/post.types";
+import type { Book } from "../../../types/books.types";
 import { ImageResponse } from '@vercel/og';
-import { getStaticPathsBlogPost } from '../../../utils/blog';
+import { getStaticPathsBook } from '../../../utils/book';
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
  
 interface Props {
-  params: { post: string };
-  props: { post: Post };
+  params: { book: string };
+  props: { book: Book };
 }
  
 export async function GET({ props }: Props) {
-  const { post } = props;
+  const { book } = props;
  
   // using custom font files
 //   const DmSansBold = fs.readFileSync(path.resolve('./fonts/DMSans-Bold.ttf'));
@@ -52,36 +49,16 @@ export async function GET({ props }: Props) {
         {
           type: 'div',
           props: {
-            tw: 'absolute left-[40px] top-[40px] flex',
+            tw: 'pl-10 shrink flex',
             children: [
               {
                 type: 'div',
                 props: {
-                  tw: 'text-gray-200 text-sm',
-                  style: {
-                    fontSize: '24px',
-                    fontFamily: 'DM Sans Bold',
-                  },
-                  children: "ericsspace.com",
-                },
-              },
-            ],
-          },
-        },
-        {
-          type: 'div',
-          props: {
-            tw: 'pl-10 shrink flex items-center',
-            children: [
-              {
-                type: 'div',
-                props: {
-                  tw: 'text-white text-3xl text-center',
                   style: {
                     fontSize: '48px',
                     fontFamily: 'DM Sans Bold',
                   },
-                  children: post.title,
+                  children: book.title,
                 },
               },
             ],
@@ -92,35 +69,31 @@ export async function GET({ props }: Props) {
           props: {
             tw: 'absolute right-[40px] bottom-[40px] flex items-center',
             children: [
-              // {
-              //   type: 'div',
-              //   props: {
-              //     tw: 'text-blue-600 text-3xl',
-              //     style: {
-              //       fontFamily: 'DM Sans Bold',
-              //     },
-              //     children: post.author,
-              //   },
-              // },
-              // {
-              //   type: 'div',
-              //   props: {
-              //     tw: 'px-2 text-3xl',
-              //     style: {
-              //       fontSize: '30px',
-              //     },
-              //     children: '|',
-              //   },
-              // },
               {
                 type: 'div',
                 props: {
-                  tw: 'text-gray-200 text-sm',
+                  tw: 'text-blue-600 text-3xl',
                   style: {
-                    fontSize: '24px',
                     fontFamily: 'DM Sans Bold',
                   },
-                  children: 'Blog',
+                  children: 'Eric',
+                },
+              },
+              {
+                type: 'div',
+                props: {
+                  tw: 'px-2 text-3xl',
+                  style: {
+                    fontSize: '30px',
+                  },
+                  children: '|',
+                },
+              },
+              {
+                type: 'div',
+                props: {
+                  tw: 'text-3xl',
+                  children: 'Book Review',
                 },
               },
             ],
@@ -129,7 +102,7 @@ export async function GET({ props }: Props) {
       ],
       tw: 'w-full h-full flex items-center justify-center relative px-22',
       style: {
-        background: '#EA4D21',
+        background: '#f7f8e8',
         fontFamily: 'DM Sans Regular',
       },
     },
@@ -154,5 +127,5 @@ export async function GET({ props }: Props) {
 }
  
 export const getStaticPaths = (async () => {
-    return await getStaticPathsBlogPost();
+    return await getStaticPathsBook();
 }) satisfies GetStaticPaths;
