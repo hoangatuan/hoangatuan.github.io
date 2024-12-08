@@ -35,7 +35,5 @@ export default defineConfig({
     rehypePlugins: [responsiveTablesRehypePlugin, sectionize],
   },
   output: 'server',
-  adapter: vercel({
-    isr: true,
-  })
+  adapter: vercel()
 });

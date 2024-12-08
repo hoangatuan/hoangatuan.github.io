@@ -12,29 +12,29 @@ export const POST: APIRoute = async ({ request }) => {
       throw new Error("Please provide an email");
     }
 
-    // check if the email is already subscribed
-    const subRes = await fetch(
-      `https://api.convertkit.com/v3/subscribers?api_secret=XYjcG5MVJLKU3N7jqyHqRE2kiQuo4YPmg_dVU1r1VB0&email_address=${email}`,
-    );
+    // // check if the email is already subscribed
+    // const subRes = await fetch(
+    //   `https://api.convertkit.com/v3/subscribers?api_secret=XYjcG5MVJLKU3N7jqyHqRE2kiQuo4YPmg_dVU1r1VB0&email_address=${email}`,
+    // );
 
-    if (!subRes.ok) {
-      throw new Error("Something went wrong");
-    }
+    // if (!subRes.ok) {
+    //   throw new Error("Something went wrong");
+    // }
 
-    const subData = await subRes.json();
-    const isSubscribed = subData.total_subscribers > 0;
+    // const subData = await subRes.json();
+    // const isSubscribed = subData.total_subscribers > 0;
 
-    if (isSubscribed) {
-      return new Response(
-        JSON.stringify({
-          message: "You're already subscribed!",
-        }),
-        {
-          status: 200,
-          statusText: "OK",
-        },
-      );
-    }
+    // if (isSubscribed) {
+    //   return new Response(
+    //     JSON.stringify({
+    //       message: "You're already subscribed!",
+    //     }),
+    //     {
+    //       status: 200,
+    //       statusText: "OK",
+    //     },
+    //   );
+    // }
 
     // subscribe email
     const res = await fetch(
@@ -64,7 +64,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response(
       JSON.stringify({
         message:
-          "Thanks! Please check your email to confirm your subscription.",
+          "I've sent you a confirmation email! Please check your email to confirm your subscription!",
       }),
       {
         status: 200,
