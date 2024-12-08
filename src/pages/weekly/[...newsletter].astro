@@ -25,6 +25,8 @@ export const getStaticPaths = (async () => {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { newsletter } = Astro.props as Props;
 const { Content } = newsletter;
+
+export const prerender = true
 ---
 
 <PageLayout title={newsletter.title}>

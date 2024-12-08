@@ -1,6 +1,5 @@
 import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
-import starlight from '@astrojs/starlight';
 import icon from "astro-icon";
 import mdx from "@astrojs/mdx";
 import astroExpressiveCode from "astro-expressive-code";
@@ -9,6 +8,7 @@ import sectionize from '@hbsnow/rehype-sectionize';
 
 // https://www.freecodecamp.org/news/how-to-add-google-analytics-to-your-astro-website/
 import partytown from '@astrojs/partytown'
+import vercel from "@astrojs/vercel/serverless";
 
 // https://astro.build/config
 export default defineConfig({
@@ -34,5 +34,8 @@ export default defineConfig({
     remarkPlugins: [readingTimeRemarkPlugin],
     rehypePlugins: [responsiveTablesRehypePlugin, sectionize],
   },
-  output: 'server'
+  output: 'server',
+  adapter: vercel({
+    isr: true,
+  })
 });

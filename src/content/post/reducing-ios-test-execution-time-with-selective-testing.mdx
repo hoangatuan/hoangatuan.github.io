@@ -13,6 +13,7 @@ relatedPostIDs:
   - 5-effective-strategies-for-managing-image-resources-in-ios.mdx
 ---
 
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
 import image1 from '/src/assets/content/post/reducing-ios-test-execution-time-with-selective-testing/1_xMfvWgnOwMQFGbl5Net_PQ.png';
 import image2 from '/src/assets/content/post/reducing-ios-test-execution-time-with-selective-testing/1_hawMmYR_laMyvHjnSG3j9A.png';
 import image3 from '/src/assets/content/post/reducing-ios-test-execution-time-with-selective-testing/1_Ji7863mF50Dnh5Y0OwhOew.png';
@@ -132,6 +133,8 @@ Now how can we get the affected modules?
 The work here is quite simple, we need to compare the module hash before and after the change. If they are different, that means the module is affected by the change and needs to re-run the test of that module.
 
 After we got all the affected modules, we updated the [test plan](https://developer.apple.com/documentation/xcode/organizing-tests-to-improve-feedback) to run those affected modules only, skipping all the unaffected modules.
+
+<SubscriptionCard/>
 
 ### 5. Update cache
 

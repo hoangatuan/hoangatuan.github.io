@@ -13,6 +13,8 @@ relatedPostIDs:
   - automating-memory-leak-detection-with-ci-integration-for-ios.mdx
 ---
 
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
+
 Method swizzling is a cool feature that allows us to change the implementation of an existing selector at runtime.
 
 If you never heard of it, please check out [my previous article](https://magz.techover.io/2021/07/25/method-swizzling-in-swift/). In that article, I’ve explained pretty detail what method swizzling is, how we can use method swizzling, and what we should consider before using it.
@@ -72,6 +74,8 @@ public extension URLSessionProxyDelegate {
 }
 
 ```
+
+<SubscriptionCard/>
 
 ## New native API to achieve method swizzling
 

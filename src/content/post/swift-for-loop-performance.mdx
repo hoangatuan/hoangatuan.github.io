@@ -13,6 +13,7 @@ relatedPostIDs:
   - modular-navigation-in-swiftui-a-comprehensive-guide.mdx
 ---
 
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
 import image1 from '/src/assets/content/post/swift-for-loop-performance/1_N_oV53_Vv64sdEqxE0JFaQ.png';
 import image2 from '/src/assets/content/post/swift-for-loop-performance/1_63zTM8_3XNcv9ShGuDJYiQ.png';
 import image3 from '/src/assets/content/post/swift-for-loop-performance/1_44QEVKboJyv7KqsAIREYng.png';
@@ -106,6 +107,8 @@ Therefore, we must look at the vtable at runtime and use protocol witness.
 
 After all, compare that to your while loop, which only needs to manage a single parameter and doesn’t need to perform any table look-up.
 It does less work, that’s why while loop has better performance than for-in and reduce .
+
+<SubscriptionCard/>
 
 ## Explore the Swift compiler
 
