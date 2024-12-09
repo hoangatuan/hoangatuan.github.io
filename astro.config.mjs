@@ -31,7 +31,5 @@ export default defineConfig({
   markdown: {
     remarkPlugins: [readingTimeRemarkPlugin],
     rehypePlugins: [responsiveTablesRehypePlugin, sectionize],
-  },
-  output: 'server',
-  adapter: vercel()
+  }
 });
