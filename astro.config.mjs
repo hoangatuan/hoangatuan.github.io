@@ -1,9 +1,7 @@
 import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
-import starlight from '@astrojs/starlight';
 import icon from "astro-icon";
 import mdx from "@astrojs/mdx";
-import astroExpressiveCode from "astro-expressive-code";
 import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './src/utils/frontmatter.mjs';
 import sectionize from '@hbsnow/rehype-sectionize';
 
@@ -15,7 +13,6 @@ export default defineConfig({
   site: 'https://ericsspace.com',
   // base: 'src',
   integrations: [
-    astroExpressiveCode(),
     mdx(),
     tailwind(),
     icon({
