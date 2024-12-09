@@ -13,6 +13,7 @@ relatedPostIDs:
   - how-to-make-a-super-app.mdx
 ---
 
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
 import image1 from '/src/assets/content/post/dont-trust-your-code-coverage/1_A24_1aj_4c8yKL9hHMm-Ag.png';
 import image2 from '/src/assets/content/post/dont-trust-your-code-coverage/1_6cM59J2LSHSY-vc4mDAqnA.png';
 
@@ -179,6 +180,8 @@ Besides, Muter applies some advanced techniques like [Mutation schemata](https:/
 <img src={image2.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 4. **Safe Mutation**: Muter applies all the mutants in a copy of your source code, ensuring zero impact on your primary codebase.
+
+<SubscriptionCard/>
 
 ### Consideration
 

@@ -14,6 +14,7 @@ relatedPostIDs:
 ---
 
 import chillguy from '/src/assets/content/post/how-to-reduce-TPBank-appsize-by-half/chillguy.png';
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
 
 TPBank is my daily use Vietnam banking app, and I've used it for 6 years. Recently, I looked at its app size for the first time.    
 **650 MB**. 2x bigger than the average Vietnam banking app size
@@ -78,6 +79,8 @@ Some of the modules of the TPBank app are built by using Flutter.
 <img src={image5.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 However, the assets in the Flutter module can't be optimized by using 1x/2x/3x assets and App thinning. That leads to a huge asset size (**17.1 MB assets just for the Flutter module**).
+
+<SubscriptionCard/>
 
 ## 3. Duplicate resources
 

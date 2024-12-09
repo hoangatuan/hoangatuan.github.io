@@ -13,6 +13,7 @@ relatedPostIDs:
   - reducing-ios-test-execution-time-with-selective-testing.mdx
 ---
 
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
 import image1 from '/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_IFy9ESECEu2c_2Xhqi3YpA.png';
 import image2 from '/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_p__irNWZ7606rIrZH2r7Eg.png';
 import image3 from '/src/assets/content/post/how-to-customize-ios-ci-workflows-when-you-dont-control-the-ci-system/1_MMtVZNNWuHmb5WCTZnzICw.png';
@@ -64,6 +65,8 @@ Also in my script, I added logic to send the result to our work channel:
 <img src={image2.src} alt="image" style={{ width: '100%', height: 'auto' }} />
 
 With this logic, when an engineer creates/updates a PR, the runner will run the unit test, then run my custom script and notify us automatically 🥳
+
+<SubscriptionCard/>
 
 ## Create the scheduled pipeline ourselves
 
