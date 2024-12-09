@@ -7,6 +7,8 @@ interface Props {
   params: { post: string };
   props: { newsletter: Newsletter };
 }
+
+export const prerender = true;
  
 export async function GET({ props }: Props) {
   const { newsletter } = props;

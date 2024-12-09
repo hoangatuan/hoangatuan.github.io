@@ -4,12 +4,14 @@ import LatestArticles from "../components/home/LatestArticles.astro"
 import LatestBooks from "../components/home/LatestBooks.astro"
 import IntroduceCard from "../components/home/IntroduceCard.astro"
 import LastestWeeklyView from "../components/home/LastestWeeklyView.astro"
+import Subscription from "../components/home/HomeSubscriptionCard.astro"
 ---
 
 <PageLayout title="Eric's Space">
     <div class="pb-16">
-
         <IntroduceCard></IntroduceCard>
+
+        <Subscription></Subscription>
 
         <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8 pt-16">
             <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Best of the week ⭐</h2> 
@@ -28,6 +30,4 @@ import LastestWeeklyView from "../components/home/LastestWeeklyView.astro"
         <LatestBooks></LatestBooks>
         <a href="/books" class="cursor-pointer border border-gray-300 shadow-sm rounded-full py-3.5 px-7 w-52 flex justify-center items-center text-gray-900 font-semibold mx-auto transition-all duration-300 hover:bg-gray-100">View All</a>
     </div>
-    
-
 </PageLayout>

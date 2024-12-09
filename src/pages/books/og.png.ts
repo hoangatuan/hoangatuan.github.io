@@ -1,4 +1,6 @@
 import { ImageResponse } from '@vercel/og';
+
+export const prerender = true;
  
 export async function GET() {
  

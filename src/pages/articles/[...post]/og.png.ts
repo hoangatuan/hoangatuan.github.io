@@ -5,6 +5,8 @@ import type { Post } from "../../../types/post.types";
 import { ImageResponse } from '@vercel/og';
 import { getStaticPathsBlogPost } from '../../../utils/blog';
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
+
+export const prerender = true;
  
 interface Props {
   params: { post: string };

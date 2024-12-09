@@ -7,6 +7,8 @@ interface Props {
   params: { book: string };
   props: { book: Book };
 }
+  
+export const prerender = true;
  
 export async function GET({ props }: Props) {
   const { book } = props;
