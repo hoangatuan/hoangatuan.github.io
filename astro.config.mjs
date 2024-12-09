@@ -7,6 +7,7 @@ import sectionize from '@hbsnow/rehype-sectionize';
 
 // https://www.freecodecamp.org/news/how-to-add-google-analytics-to-your-astro-website/
 import partytown from '@astrojs/partytown'
+import netlify from '@astrojs/netlify';
 
 // https://astro.build/config
 export default defineConfig({
@@ -31,4 +32,5 @@ export default defineConfig({
     remarkPlugins: [readingTimeRemarkPlugin],
     rehypePlugins: [responsiveTablesRehypePlugin, sectionize],
   },
+  adapter: netlify(),
 });
