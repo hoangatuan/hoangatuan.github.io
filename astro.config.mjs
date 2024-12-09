@@ -32,5 +32,6 @@ export default defineConfig({
     remarkPlugins: [readingTimeRemarkPlugin],
     rehypePlugins: [responsiveTablesRehypePlugin, sectionize],
   },
+  output: 'server',
   adapter: netlify(),
 });
