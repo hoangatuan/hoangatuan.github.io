@@ -1,5 +1,6 @@
 ---
-
+import checkmark from '/src/assets/common/checkmark.png';
+import loading from '/src/assets/common/loading.png';
 ---
 
   <form id="newsletter-form" class="bg-red-600 px-6 py-1 rounded-lg shadow-md max-w-2xl mx-auto">
@@ -16,22 +17,54 @@
         class="email min-w-0 flex-auto rounded-md bg-white px-3.5 py-2 text-base text-black border border-gray-300 outline-none placeholder:text-gray-500 sm:text-sm h-full"
         placeholder="Your email address..."
       />
-      <p id="confirmation-message" class="text-center text-white text-sm mt-4 hidden">I've sent you a confirmation email! Please check your email to confirm your subscription!</p>
-      <button id="subscribe-button" type="submit" class="bg-CEA4D21 rounded-md text-white px-4 h-full fixed-width text-sm">Subscribe</button>
+
+      <button id="subscribe-button" type="submit" class="bg-CEA4D21 rounded-md text-white px-4 h-full fixed-width text-sm flex items-center justify-center relative">
+        <span id="button-text">Subscribe</span>
+        <img id="loading-icon" src={loading.src} class="hidden w-5 h-5 filter-white animate-spin" alt="Loading"/>
+        <img id="checkmark-icon" src={checkmark.src} class="hidden w-5 h-5 filter-white" alt="Checkmark"/>
+      </button>
     </div>
   
     <p id="confirmation-message" class="text-center text-stone-100 text-sm mt-4 hidden">I've sent you a confirmation email! Please check your email to confirm your subscription! 🕊️</p>
     <p class="text-center text-gray-300 text-sm mt-4">100% free. Unsubscribe at any time.</p>
   </form>
 
+  <style>
+    .filter-white {
+      filter: invert(1) brightness(2);
+    }
+  
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  
+    .animate-spin {
+      animation: spin 1s linear infinite;
+    }
+  </style>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const form = document.getElementById("newsletter-form");
       const confirmationMessage = document.getElementById("confirmation-message");
       const subscribeButton = document.getElementById("subscribe-button") as HTMLButtonElement;
+
+      const buttonText = document.getElementById('button-text');
+    const loadingIcon = document.getElementById('loading-icon');
+    const checkmarkIcon = document.getElementById('checkmark-icon');
   
       form?.addEventListener("submit", async (event) => {
         event.preventDefault(); // Prevent the form from submitting the traditional way
+
+        buttonText?.classList.add('hidden');
+        loadingIcon?.classList.remove('hidden');
+        checkmarkIcon?.classList.add('hidden');
+        confirmationMessage?.classList.add("hidden");
         
         const emailInput = document.getElementById("email-address") as HTMLInputElement;
         const value = emailInput.value;
@@ -51,11 +84,15 @@
   
           // const resData = await res.json();
           confirmationMessage?.classList.remove("hidden");
-          subscribeButton!.disabled = true;
-          subscribeButton.innerHTML = '✔';
+          checkmarkIcon?.classList.remove('hidden');
+          loadingIcon?.classList.add('hidden');
   
         } catch (error) {
           console.error(error);
+          confirmationMessage?.classList.add("hidden");
+          checkmarkIcon?.classList.add('hidden');
+          loadingIcon?.classList.add('hidden');
+          buttonText?.classList.remove('hidden');
           alert("Failed to submit email");
         }
       });
