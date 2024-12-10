@@ -1,0 +1,102 @@
+---
+publishDate: 2024-12-10T00:00:00Z
+title: "#7: Trust the progress!"
+excerpt: "Book reading, new newsletter, and great articles this week."
+image: https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+---
+
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
+
+## What I'm reading
+
+[The Mobile System Design](https://www.mobilesystemdesign.com/)
+
+Recently I just finish reading the book "The Mobile System Design" by TJEED IN 'T VEEN. As the name suggests, the book is about designing mobile systems, especially for iOS.    
+I think the book is best fit for junior and mid-level iOS developers who want to level up their system design skills.   
+I will write a review about the book soon.
+
+## What I've been developing
+
+Recently I've been working on building the subscription newsletter for my blog. I just released it today.    
+Hopefully it will help me to keep in touch with my readers and share more interesting content with them.    
+If you're interested, you can subscribe to my newsletter below 😛 It will make my day ❤️
+
+<SubscriptionCard/>
+
+## Great articles this week
+
+### 1. [Adidas iOS App Architecture](https://www.youtube.com/watch?v=F6ezwCB8Ti0)
+
+This is a tech talk about the architecture of the Adidas iOS app. Some of the techniques that they're using:
+
+- Modular architecture
+- SwiftUI 
+- TCA
+- Tuist
+
+It's quite interesting that Adidas is using TCA and Tuist in their app. There a lot of arguments about TCA in the community, so it's good to see a big company like Adidas using them.
+
+### 2. [Xcode Cache: Boost your iOS Testing and Deploy on GitHub Actions](https://levelup.gitconnected.com/xcode-caching-boost-your-ci-cd-workflows-on-github-actions-e00a38c8dd40)
+
+The author mentioned a workflow to boost your CI/CD workflows on GitHub Actions by caching the Xcode cache. The steps are:
+
+- Cache DerivedData/SPM resolved
+- Delete old cache, Update cache on post merge only to prevent increase storage cache
+- Get cache to use for PR
+
+### 3. [The Problem with withCheckedThrowingContinuation and Task Cancelation: A Video Capturing Example](https://ahmed-yamany.medium.com/the-problem-with-withcheckedthrowingcontinuation-and-task-cancelation-a-video-capturing-example-00557935a720)
+
+The author state a problem when using `withCheckedThrowingContinuation` that can easily cause wasting resources. The root cause is the even if the Task is cancelled, the `withCheckedThrowingContinuation` block will still be executed.  
+
+The solution to resolve the issue is to use `withTaskCancellationHandler(operation, onCancel)`, and perform the cleanup in the `onCancel` block (the block will be triggered when the Task is cancelled).   
+
+It's an good article to read and take note 💪
+
+### 4. [The Definitive Guide to Technical Debt](https://refactoring.fm/p/the-definitive-guide-to-manage-technical?utm_source=substack&utm_campaign=post_embed&utm_medium=web)
+
+This is a really detail article about Technical Debt. Since it's a long article, I will summarize the key points here:
+
+**Definition**:   
+Technical debt is something that doesn't match with the business reality and needs.   
+
+**Types of tech debt**:    
+Sometimes the requirement changes (especially when your product move fast) → the current software stops working → tech debt. We have 2 kinds of tech debt:
+    - Tech debt from the start: Wrong from the start cuz we can’t adapt the business requirement ⇒ Bad debt
+    - Tech debt over time: due to requirement change.
+
+**How to prevent**: 
+    - Understand the requirements before start coding:
+        - Why need this requirement, is it finalized, do we need to support scalable, …
+    - Good design: Clean and scalable design (but don't over-engineer)
+    - Minimize the chance of tech debt:
+        - Remove unused code
+        - Add tests
+        - Refactoring code that's not scalable/maintainalbe in long term.
+
+**How to solve**
+    - Small: Do it right away since it small and quick to fix
+    - Medium: The whole team spend a dedicated day per week on the tech debt, rotation assigning to fix, …
+    - Large: Analyze, investigate and plan
+
+**Measure tech debt**:
+    - Impact: business metrics impacted by the debt, or the value you unlock
+    - Fix cost
+    - Contagion: The cost to fix will higher overtime → should prioritize, …
+
+> If you want to learn more about how to deal with legacy code, you can read my book review [here](https://ericsspace.com/books/working-effectively-with-legacy-code/)
+
+### 5. [How to Create Diagrams in Draw.io Using ChatGPT](https://medium.com/@thilina3001/how-to-create-diagrams-in-draw-io-using-chatgpt-e765f495640c)
+
+The author shows how to use ChatGPT & [Mermaid.js](https://mermaid.js.org/) code to generate diagrams in Draw.io. It's a good way to generate diagrams quickly and easily. Great article!
+
+### 6. [How I Ship Projects at Big Tech Companies](https://www.developing.dev/p/how-i-ship-projects-at-big-tech-companies)
+
+The question that I faced recently is: *"Should you do what you think is right or what the boss wants you to do?"*    
+Sometime the bosses doesn't care about the quality of the codebase, and they only care about delivery more features. As an engineer, we know that rushing features will lead to tech debt, and it will slow down the development in the long run.
+
+In the article, Ryan mentioned some key points:
+
+- We should focusing on user-impact oriented: easy to market your work, level up your level, and a good engineer should know how to push back the management to avoid work that isn’t impactful
+- "Although companies get more political as they grow, even the biggest companies (e.g. FAANG) have designed their organizations to minimize this. These companies are data-driven where possible and reward people who improve metrics that help the business." - This is a nice idea to minimize the political in big tech companies and maintain good work culture.
+
+> If your organization values pleasing leadership over impact, I’d recommend switching teams. Your career will grow faster in the long term if you go where people are prioritizing impact. Not to mention that doing work that matters is much more fulfilling than pleasing people who may be wrong.
