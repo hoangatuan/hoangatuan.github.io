@@ -1,0 +1,55 @@
+---
+publishDate: 2024-12-16T00:00:00Z
+title: "#8: Good things take time!"
+excerpt: "Book reading, new newsletter, and great articles this week."
+image: https://images.unsplash.com/photo-1480632563560-30f503c09195?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+---
+
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
+
+## What I'm reading
+
+[Clean Architecture: A Craftsman's Guide to Software Structure and Design](https://www.amazon.sg/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164)
+
+I dont remember how many times I've read this book. I never finish the book before, because back then I don't have enough experience to understand the content of the book.    
+But now, after years of working as a software engineer, I will challange the book again.    
+I hope this time I can finish the book and learn more about software architecture, and I will challange myself write a review about the book next month 💪
+
+## Great articles this week
+
+### 1. [Be careful wrapping a throwing function in a Task](https://www.swiftwithvincent.com/blog/be-careful-wrapping-a-throwing-function-in-a-task?utm_source=convertkit&utm_medium=email&utm_campaign=SwiftLee%20Weekly%20-%20Issue%20249%20-%2015935191)
+
+An easy mistake to make when working with async/await is to wrap a throwing function in a Task. Since the Task doesn't force us to wrap the throwing function in a do-catch block, it's easy to forget or misuse the error handling.   
+This is an consise article to remind us to be careful when working with async/await.
+
+### 2. [Task closure life time](https://github.com/swiftlang/swift/blob/c1ff2c339251c8adbdd63a08cb6ae45b339e15bd/stdlib/public/Concurrency/Task.swift#L80)
+
+Recently I got a question from an engineer: "Why don't we need to use weak self in the closure of a Task?"    
+The simple answer is the closure of a Task is just a non-escaping closure, so that it will execute immediately when the Task is created, then release the reference to `self`. We also don't need to use [weak self] when we retain the Task object.    
+However, 1 important thing is for never-ending Tasks, we will need to use [weak self].
+
+This document from Apple explains the life cycle of the Task closure in detail and some examples of how to use it.   
+
+### 3. [Image Caching](https://kean.blog/post/image-caching)
+
+This is a quite old article, but the knowledge is still valuable. It's the foundation knowledge about HTTP Caching, and how we can use NSURLRequestCachePolicy in Swift to override the cache policy of the request.    
+It's a good article to strengthen your foundation knowledge about networking.
+
+### 4. [Integrating Extensions into Large-Scale iOS apps](https://eng.lyft.com/integrating-extensions-into-large-scale-ios-apps-8f15dc5f3be9)
+
+This is a great article about how Lyft integrates extensions into their large-scale iOS app. This advanced article covers a lot of interesting topics:
+
+- Introduce to [Booking Rides with SiriKit](https://developer.apple.com/documentation/sirikit/booking-rides-with-sirikit)
+- Modular Architecture
+- Dependency Analysis
+- Duplicate the codebase for extensions
+
+Why do I like this article? Because recently we are building the AppClip for our company app, and we faced the similiar challanges, and our approach is similar to their.   
+I will share more about our approach in the next article.
+
+### 5. [Self-assessment debugging: làm thế nào để code của bạn lên lương?](https://bryanthuynh.substack.com/p/self-assessment-de-tang-luong)
+
+I used to think that softskill is not important in the tech world, but now I've opened my eyes.    
+Softskill is as important as technical skill, so I decided we should have 1 article about software engineering softskill.   
+
+This week is a Vietnamese article about how to self-assessment your work to get a raise. The article is a must read on how to prepare for your next review cycle!!!
