@@ -1,0 +1,154 @@
+---
+publishDate: 2025-1-19T00:00:00Z
+author: Tuan Hoang
+title: Remove unused code in a real-world iOS project
+excerpt: Real world challanges when removing unused code in iOS project
+image: https://images.unsplash.com/photo-1528127269322-539801943592?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+category: software
+tags:
+  - ios
+  - performance
+relatedPostIDs: 
+  - 5-effective-strategies-for-managing-image-resources-in-ios.mdx
+  - how-to-reduce-TPBank-appsize-by-half.mdx.mdx
+---
+
+import problem from '/src/assets/content/post/remove-unused-code-in-a-real-world-iOS-project/problem.png';
+import output from '/src/assets/content/post/remove-unused-code-in-a-real-world-iOS-project/output.png';
+
+While searching for how to remove unused code online, we will find articles about setting up Periphery in our iOS project. However, is it just as simple as that?
+I integrated Periphery into our work project recently, and I faced lots of challenges. In this article, I will share the problems and I solved them.
+This is not another how to set up tools, so stay tuned! 😎
+
+## Why should we remove unused code?
+
+But first, let's quickly talk about why we should remove unused code. Does removing unused code outweigh the engineering effort and the risk?
+
+### 1. Increase the app size
+
+Swift is a verbose language. For example, consider these 6 lines of code:
+
+```swift
+import Foundation
+struct JSONTest: Codable {
+    let firstName: String
+    let lastName: String
+}
+```
+
+The code above will generate [1936 lines of assembly](https://godbolt.org/z/csna1zTqa). So, the more code we have, the more it affects our app size.
+
+### 2. Increase maintenance cost
+
+When it comes to updating/refactoring logic, it confuses engineers about why some logics are never executed. Is it because something is wrong, or is it simply because logic is no longer used?
+It takes us more time to analyze and investigate the legacy code to understand what is happening.
+
+### 3. More issues
+
+- By leaving unused codes/deprecated code in the codebase, there is a chance that we call that logic mistakenly.
+- We commented out some code to do the testing, but we forgot to revert. That became unused codes in the codebase without any notice.
+
+> Because of that, we decided integrating Periphery into our project to detect unused code and block introducing new unused code to the codebase. 
+> The earlier we integrate, the better.
+
+## Problems 
+
+So, what is the problem? Here is the result when I run Periphery on our project:
+
+<p align="center">
+    <img src={problem.src} alt="image" style={{ width: '50%', height: 'auto' }} />
+</p>
+
+We have over 1000 unused codes in our project. The problem is the number of unused codes over time is huge, and we can't remove all the unused codes in just a day.    
+**We need to find a solution to allow us to slowly remove unused codes, but at the same time, we also need to have an automated mechanism to prevent introducing new unused codes.**   
+The idea is simple, whenever an engineer creates a new PR, let's use the Periphery tool to scan for new unused codes. If we find any, we will block the PR from being merged.   
+Sound easy?   
+Sadly, the Periphery tool doesn't support detecting new unused code in feature_branch.
+
+---
+
+To summarize, now the problem become:   
+
+**Given**    
+- The target branch develop contains 1000 unused code elements
+- The feature branch feature_A adds 10 new unused code elements.
+- When Periphery is run on the feature branch, it reports 1010 unused code elements (the combined total from develop and feature_A).
+
+**Challenge**  
+
+It is difficult to determine whether the feature branch introduces new unused code because Periphery does not distinguish between pre-existing unused code from the develop branch and new unused code added in the feature branch.
+
+**Goal**
+
+To make it easier to identify new unused code introduced by the feature branch, we want Periphery to output only the 10 unused code elements specific to the feature branch.
+
+## Solution
+
+My solution is:    
+
+1. Retrieve all unused code elements in the current branch using Periphery.   
+2. For each unused code, identify the file path where it exists.    
+3. Use the command git diff $TARGET_BRANCH -- $FILE_PATH to find the changes in that file compared to the target branch.    
+4. Check if the line number of the unused code falls within the range of the new changes in the diff.    
+5. If it does, this indicates that the unused code was introduced by the new changes in the feature branch.    
+
+Talk is cheap, here is the PR I've created to Periphery: https://github.com/peripheryapp/periphery/pull/829
+
+However, the owner of Periphery didn't want to merge it. In the comment section, he provided some alternative solutions to achieve that. His suggested solution required us to build the project 3 times instead of only 1 time. It's not efficient, and also the API interface is not nice.    
+Because of that, I decided to fork the repository to our company Gitlab, make the changes, and integrate it into our CI workflow.    
+On CI, the work is simple. If it detects new unused code, it will block the PR from being merged. The engineer will need to remove the unused code before merging the PR.    
+
+## Results
+
+<p align="center">
+    <img src={output.src} alt="image" style={{ width: '50%', height: 'auto' }} />
+</p>
+
+No more new unused code getting merged, and engineers can slowly remove existing unused code 🥳    
+And by the time of writing this article, we have successfully remove all the unused code 🚀
+
+## Other problems
+
+1. Running Periphery on CI
+
+In a CI pipeline, creating a new PR typically includes a unit test step that uses xcodebuild, which builds the project. If you add a Periphery step with the default configuration, it will rebuild the project, leading to inefficiency.   
+To avoid building the project twice, you can customize the Periphery configuration with the following options:    
+
+- `skip_build: true` - Prevents Periphery from rebuilding the project.
+- `--index-store-path` - Specifies the path to the index store generated during the unit test step.
+
+2. Establishing Clear Guidelines for Ignoring Unused Code
+
+Not all of the unused codes that are reported by Periphery are unused. There are some edge cases that we need to consider carefully.    
+
+For example:
+
+```swift
+class A {
+    // Will be marked as assign but never used
+    // However, actually we want to keep a strong reference here to keep the service alive, 
+    // so that we can keep observing value from the service
+    let aService: Service? 
+    
+    init(aService: Service?) {
+        self.aService = aService
+        
+        aService.valueDidChange.subscribe {
+            // do something when value change
+        }
+    }
+}
+```
+
+It's important to carefully evaluate and establish your standards for ignoring unused code. For example, in our team, we follow these rules:
+
+```bash
+// periphery:ignore - Reason for ignoring
+
+If you ignore this unused code temporarily (ex: this code will be used later), then please add both the reason and your name here. You will be the owner of this unused code, and you will have the responsibility to maintain it
+// periphery:ignore - Ignore this for now. This code will be used later - Eric
+```
+
+## Conclusion
+
+Above are navigation problems I met and how I solved them in the project. If you know of any better solutions, don’t hesitate to leave a comment, I love to hear that.
