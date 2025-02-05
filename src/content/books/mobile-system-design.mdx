@@ -1,12 +1,10 @@
 ---
-
-
 title: Mobile system design
 publishDate: 2025-02-05T00:00:00Z
 author: Tjeerd in ’t Veen
 excerpt: My review of Mobile system design from Tjeerd in ’t Veen
 cover: /src/assets/content/book/mobile-system-design/cover.png
-image: /src/assets/content/book/mobile-system-design/cover.png
+image: https://www.mobilesystemdesign.com/assets/book-visual.png
 categories: 
   - Engineering
 score: for junior/middle:9/10, for senior+:7/10
@@ -16,10 +14,10 @@ import abcproblem from '/src/assets/content/book/mobile-system-design/abc-proble
 
 ## My review of Mobile system design
 
-With this book, the author try to define System Design as designing a technical solution to satisfy business requirements. So, *the book focus on the steps we should follow to solve a design system problem*.     
+In this book, the author tries to define System Design as designing a technical solution to satisfy business requirements. So, the book focuses on the steps we should follow to solve a design system problem.    
 
-This book is a good book for junior/middle engineers, since the author write about the every steps very detail. If you are senior+, I think you can skim some chapters related to testing, dependency injection and UI.   
-I think in Design system, we also need to consider non-business requirement, such as performance, security, ... However, so far the author doesn't mention it. The book is not finalise, and more chapters are comming. I hope the book will mention these in the next chapters.
+This book is good for junior/middle engineers since the author describes every step in detail. If you are senior+, I think you can skim some chapters related to testing, dependency injection, and UI.     
+In Designing systems, we also need to consider non-business requirements, such as performance and security. However, so far, the author has not mentioned this. The book is not finalised, and more chapters are coming. I hope the book will mention these in the next chapters.
 
 ## Key points
 
@@ -27,8 +25,8 @@ I think in Design system, we also need to consider non-business requirement, suc
 
 **Problems**
 
-A lot of engineers, including myself sometime, start coding without understanding the requirements carefully. They often start doing the UI part, then integrate with the API, ... The problem is that later they discover issues with the requirements or API, and they have to rewrite the code.   
-It wastes a lot of time, and that's one of the main reason why they miss the deadline.
+A lot of engineers, including myself some time, start coding without understanding the requirements carefully. They often start doing the UI part, then integrate with the API, ... The problem is that later they discover issues with the requirements or API, and they have to rewrite the code.   
+It wastes a lot of time, and that's one of the main reasons why they miss the deadline.
 
 **Take away from the book**
 
@@ -37,30 +35,30 @@ So, **the first step is to understand the requirements carefully**. We can do th
 1. Break down the requirements into smaller tasks, it could be feature tasks and technical tasks.
 2. Ask questions, challenge the requirements, and try to find the edge cases.
 
-  - Ask functionality-related questions: Try to come up with ways the feature might work different from intended
-    + Ex: If user press “reset all”, would the user get a warning? Some sort of alert perhaps?
+  - Ask functionality-related questions: Try to come up with ways the feature might work differently from intended
+    + Ex: If the user presses “reset all”, would the user get a warning? Some sort of alert perhaps?
     + Do we need to support deeplink/websocket?
     ...
   - Challenge the design: Try to find the edge cases, the problems with the design.
     + What is the design for loading/error/empty cases?
-    + What if the text is too long? What if BE doesnt return data for that field?
+    + What if the text is too long? What if BE doesn't return data for that field?
     ...
   - Aligning with backend engineers:
-    + Asking BE to provide API document. Check if which field is optional/require
-    + Which API we need to call to get the data?
+    + Asking BE to provide API document. Check which field is optional/require
+    + Which API do we need to call to get the data?
     ...
 
-3. You can also sketching out a landscape, which is a collection of domains and components that will be required to make our feature work. It helps all the stakeholders to understand the big picture of the feature.
+3. You can also sketch out a landscape, which is a collection of domains and components that will be required to make our feature work. It helps all the stakeholders to understand the big picture of the feature.
 
 ### 2. Holistic-Driven Development
 
 **Take away from the book**
 
 **1. What is Holistic (top-down approach)?**
-  + Create inteface and placeholder implementation for all the components (from top to bottom), and integrate them to create a running application, ... Then slowly replce with real implementation.
+  + Create interface and placeholder implementation for all the components (from top to bottom), and integrate them to create a running application, ... Then slowly replace them with the real implementation.
 
 **2. Benefits**
-  - We can defer critical decisions (such as Database, Networking call, Caching, ...)
+  - We can defer critical decisions (such as Database, Networking calls, Caching, ...)
   - Easier to work in parallel with other team members
   - "In an interview, it will be a similar approach. People will want to see how you think about the interplay between all systems. They want to see how data flows and how all parts connect together into a complete system"
   
@@ -68,9 +66,9 @@ So, **the first step is to understand the requirements carefully**. We can do th
   - API design: 
     + Desgin domain model
     + Normally in workflow, we have BE team to provide the API document. But in the interview, we need to do it ourselves
-  - Create interface for components, and create a placeholder implementation for those components
+  - Create interfaces for components, and create a placeholder implementation for those components
     + Ex: For UseCase, at this stage, we can hardcode some response data instead of making a real network call.
-  - Integrate those placeholder components together to create a running flow
+  - Integrate those placeholder components to create a running flow
   - One by one, replace placeholders with real implementations one abstraction layer at a time
 
 Note:
@@ -79,7 +77,7 @@ Note:
 
 ### 3. Testing
 
-In the next chapters, the author mentioned about some foundation knowledge of testing, unit-test vs system-testing, how to do testing.   
+In the next chapters, the author mentioned some foundation knowledge of testing, unit-test vs system testing, and how to do testing.   
 This chapter is basically for junior/middle, so I will not add it here.
 
 ### 4. Dependency Injection
@@ -87,12 +85,12 @@ This chapter is basically for junior/middle, so I will not add it here.
 **Take away from the book**
 
 - Should use DI for 3rd party libraries
-- Avoid using Singleton (There are many articles mention about why, so I will not mention it here)
+- Avoid using Singleton (There are many articles that mention about why, so I will not mention it here)
 - **Avoid ABC Problem**
   <img src={abcproblem.src} alt="image" style={{ width: '100%', height: 'auto' }} />
-  + In the book, the author introduce the concept "ABC problem". It means if the A component should not know about the C's dependencies. We easy to face this problem if the A init the instance of B directly.
-  + To avoid this problem, we can use **DI Container technique**.
-  + Throughout the rest of an app, avoid breaking the ABC rule to keep types decoupled.
+  + In the book, the author introduces the concept "ABC problem". It means that the A component should not know about the C's dependencies. We easy to face this problem if the A init the instance of B directly.
+  + To avoid this problem, we can use **Composition Root technique**.
+  + Throughout the rest of the app, avoid breaking the ABC rule to keep types decoupled.
 
 - **Lazy initialization**
   + When using DI container, we init the B component from outside, then inject the B component to A via A's init function. However, in some cases, the B component can't be init in the first place. 
@@ -144,14 +142,17 @@ In these chapters, the author focuses on implement the UI components
 **2. Develop UI components**
 
 - 3 types of view:
-  + View primitive: Simple view, unaware of feature they are used in
+  + View primitive: Simple view, unaware of the feature they are used in
   + View components: These are smarter views, such as a map view, or a navigation bar. They have more logic and/or data bindings. But just like view primitives, they do not know about the feature(s) they’re used in.
   + Feature views: They have logic and/or data bindings, and are connected to business logic.
 
 - Develpoing primitive view (reusable views)
-  + Naming a view:
-    Problems: One very common “mistake” is that developers give a type (such as a view) a name that’s too specific => Less reusable view
-    Advice: We should make it reusable view if possible, later we can move it to share UI module.
+  + Naming a view:    
+
+    **Problems**:  
+    One very common “mistake” is that developers give a type (such as a view) a name that’s too specific => Less reusable view     
+    **Advice**:    
+    We should make it reusable view if possible, later we can move it to share UI module.    
 
     + Should not know how it's used, dont be too specific
     + Should not know how it's implemented

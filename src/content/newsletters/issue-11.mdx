@@ -1,0 +1,39 @@
+---
+publishDate: 2025-2-3T00:00:00Z
+title: "#11: Focus!"
+excerpt: "Great articles this week."
+image: https://images.unsplash.com/photo-1591815595153-ace4f4f5464c?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+---
+
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
+
+## Great articles this week
+
+### 1. [Fixing Image Performance for The Worst iPhone ](https://www.youtube.com/watch?v=DCxjfQ_sx_I)
+
+This is a great talk about optimizing image performance in the iPhone 6s Plus device. During the talk, the speaker mentioned the problems and techniques to improve image performance, such as Caching (Network and disk), Displaying low-resolution images, Solving thread explosion ...   
+
+### 2. [Typestate - the new Design Pattern in Swift 5.9 ](https://www.youtube.com/watch?v=qPHjDlqHsUQ)
+
+Another amazing talk about writing safe code. In the talk, the author presented a great idea that using NonCopyable to make a compiler helps us to protect our logic from misuse.    
+You should also take a look at the author's series of blogs about this topic:
+
+- https://swiftology.io/collections/type-driven-design/
+- https://swiftology.io/articles/typestate/
+
+### 3. [Strategies to Avoid Parameter Overload: Stop Big-Head Components in SwiftUI](https://www.youtube.com/watch?v=eB9_wyZbj6U)
+
+The speaker share strategies to avoid unnecessary parameter expansion, which results in components with a "big head" in complex SwiftUI environments.  
+Whenever there's a minor fix to a single parameter, you're forced to edit the component itself and test all cases to determine potential side effects. More parameters mean more dependencies, ultimately consuming more resources. The speaker's approach emphasises the strategic use of the declarative framework to separate responsibilities.
+
+### 4. [Intermediate Fastlane](https://nowham.dev/posts/intermediate_fastlane/)
+
+Fastlane is one of my favorite tools when talking about CI CD stuff for iOS applications. When the CI grows, engineers often tend to put all the scripting logic in the Fastfile. That makes the Fastfile too big and hard to read.    
+This article introduces some advanced techniques to help us write readable and cleaner Fastfile.
+
+### 5. [Good Developer / Great Developer / Exceptional Developer](https://medium.com/@mike.s.chambers/good-developer-great-developer-exceptional-developer-ec4213565938)
+
+Without a good team lead to review our work regularly, we're often stuck at being a good developer.   
+This article is written by an experienced Engineering Manager about the differences between Good, Great, and Exceptional Engineer from an EM perspective. We can follow this guidance to improve ourselves.
+
+<SubscriptionCard/>
