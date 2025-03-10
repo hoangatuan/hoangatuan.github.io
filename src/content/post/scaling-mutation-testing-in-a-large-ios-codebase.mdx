@@ -1,0 +1,98 @@
+---
+publishDate: 2025-3-10T00:00:00Z
+author: Tuan Hoang
+title: Scaling Mutation Testing in a Large iOS Codebase
+excerpt: Learn how we apply mutation testing into our large iOS project and make it scalable.
+image: https://images.unsplash.com/photo-1585926449367-64689895b3fe?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+category: software
+tags:
+  - ios
+  - cicd
+  - testing
+relatedPostIDs: 
+  - dont-trust-your-code-coverage.mdx
+  - reducing-ios-test-execution-time-with-selective-testing.mdx
+---
+
+## Introduction
+
+Last year, I [wrote a blog about using Mutation testing technique and Muter](https://ericsspace.com/articles/dont-trust-your-code-coverage/) — an open source tool for iOS project to apply Mutation testing. Muter is a great tool, but it’s far from scalable to integrate into a real-world project.
+
+In this article, I will explain the challenge of using Muter, how I made it scalable enough for our company, and how you can integrate it into your work project 🚀.
+
+Shout out to Muter for the awesome tool.
+
+___
+
+import image1 from '/src/assets/content/post/scaling-mutation-testing-in-a-large-ios-codebase/1_NPaQnGQk8ZNCOrPtlWUgGg.png';
+import image2 from '/src/assets/content/post/scaling-mutation-testing-in-a-large-ios-codebase/Screenshot 2025-03-09 at 11.16.21 AM.png';
+import image3 from '/src/assets/content/post/scaling-mutation-testing-in-a-large-ios-codebase/output.png';
+
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
+
+## Challenge of using Muter
+
+In my team project, we have over 1000 unit tests. Running Muter on our project introduces 1657 mutants. As mentioned about how Muter works, it will run the whole test suite for each mutant.
+
+So, for 1657 introduced mutants, Muter will run the test suite for 1657 times. The estimation finish time for the process is over 8 hours. 🫠
+
+At OKX, we have 300+ mobile engineers working on different feature projects. If 1 single project takes 8 hours to finish, it’s not scalable to integrate it for the whole team.
+
+<p align="center">
+    <img src={image1.src} alt="image" style={{ width: '50%', height: 'auto' }} />
+</p>
+
+## Solution
+
+> To make it scalable, our goal is to reduce the Muter execution time as much as possible.
+
+### 1. Boot simulator before running Muter
+
+Muter uses **“xcodebuild test -destination”** command to run the tests. This command will launch the simulator, run the test, and kill the simulator. Running 1657 times means we need to launch the simulator 1657 times. This is a lengthy process, and the simulator can hang if we kill and launch it constantly.
+
+After researching, I’ve learned that *the system won’t terminate the simulator if it’s already running before the test starts*. To address this, I added logic to boot the simulator before executing Muter using the command **“xcrun simctl boot $simulator_udid”**.
+
+### 2. Run Muter in parallel
+
+Muter runs processes sequentially and doesn’t take advantage of the Mac’s CPU cores. To resolve this, I prelaunch three simulators and run Muter on three different simulators simultaneously.
+
+### 3. Running single test file instead of running all the tests
+
+For each introduced mutant, Muter runs all the tests. While this ensures result accuracy, it is time-consuming and inefficient.
+
+To reduce the execution time, I propose running the corresponding test file of the mutated Swift file instead of running all the tests. For example, if a mutant is introduced in **AViewModel.swift**, we only need to run **AViewModelTests.swift** to verify the result.
+
+To apply this approach, we need to ensure 2 things:
+
+- *Consistent naming convention:* Test files must follow a standardized naming pattern, where the test file name is the corresponding Swift file name with a specific suffix (e.g., Tests).
+- *Proper test coverage:* The logic in the Swift file must be thoroughly tested in its corresponding test file.
+
+This is a trade-off to improve Muter’s performance. However, I believe this approach not only speeds up mutation testing but also makes it easier to locate relevant tests for specific code.
+
+After applying those solutions, we reduced the process run time to around *52 minutes* 🥳
+
+<img src={image2.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+### 4. Run Muter on new change code only
+
+Fixing all the existing weak tests takes time. In the meantime, we can enforce better quality unit tests for new features by:
+
+- Using **git diff** to identify new changes
+- Applying mutation testing only to those changes
+- Failing the PR if the unit tests don’t kill the introduced mutants
+
+Running Muter on changed files takes just 2–3 minutes, but it ensures that all new code is backed by strong tests.
+
+<img src={image3.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+## Integration
+
+Alright. That’s enough theory.
+
+Here is [the pull request that adds all these changes](https://github.com/hoangatuan/muter/pull/1). In this PR, I focused on making it work to support our use case, the code might not be clean, and support all the use cases. If you’re interested, feel free to review or update the code to support your use case.
+
+You can check the PR’s description about how to integrate it. Feel free to comment in the PR or this article if you need any guidance 🫡
+
+---
+
+Thanks for reading.
