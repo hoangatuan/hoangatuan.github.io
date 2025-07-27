@@ -1,0 +1,111 @@
+---
+title: OWASP Mobile Application Security Testing Guide
+publishDate: 2025-07-27T00:00:00Z
+author: OWASP
+excerpt: My review of OWASP Mobile Application Security Testing Guide
+cover: /src/assets/content/book/owasp-mobile-application-security-testing-guide/mastg_cover.png
+image: https://images.unsplash.com/photo-1461685265823-f8d5d0b08b9b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+categories: 
+  - Engineering
+score: 8/10
+---
+
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
+import logs from '/src/assets/content/book/owasp-mobile-application-security-testing-guide/logs.png'; 
+
+## My review of OWASP Mobile Application Security Testing Guide
+
+The OWASP Mobile Application Security Testing Guide (MSTG) is a comprehensive resource for mobile application security testing. It provides a detailed framework for testing the security of mobile applications, covering both Android and iOS platforms.
+In the AI world, where we use lots of AI tools to generate code, we often forget about security. This book is a good resource to help us understand the security risks and how to mitigate them.
+
+Since this is a book review article, I will not explain security concepts in detail. You should understand:
+- [Static analysis & Dynamic analysis](https://www.guardsquare.com/blog/addressing-static-and-dynamic-attacks)
+- [Reverse engineering](https://www.guardsquare.com/blog/protect-ios-apps-against-reverse-engineering)
+
+## What I've learned from the book
+
+### 1. Mobile App Authentication Architectures
+
+> Authentication and authorization problems are prevalent security vulnerabilities. In fact, they consistently rank second highest in the OWASP Top 10.
+
+- Use [best practices](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Authentication_Cheat_Sheet.md#implement-proper-password-strength-controls) for strong password.
+- [Using salt to make password hashing more secure](https://auth0.com/blog/adding-salt-to-hashing-a-better-way-to-store-passwords/)
+- The user sensitive data should be stored in the secure storage, such as Keychain on iOS and Keystore on Android. When user logout, the sensitive data should be removed from the secure storage.
+- Implement biometric authentication (e.g., fingerprint or facial recognition) or device-level authentication (e.g., PIN, Push notification, TOTP) as an additional layer of security for sensitive data (ex: banking data, health records, ...).
+
+### 2. Mobile Networking
+
+SSL Pinning is a technique used to ensure that the mobile application communicates with the intended server that you can apply. 1 thing to note is we have 2 approaches to implement SSL Pinning:
+- **Certificate Pinning**: The app contains the public key of the server's SSL certificate
+- **Public Key Pinning**: The app contains the public key of the server's SSL certificate, which allows the app to accept any certificate signed by that key.
+
+The author suggest using Public Key Pinning to avoid the risk of certificate expiration. With public key pinning, we can pin 2 public keys, one for the current certificate and one for the next certificate. This way, when the current certificate expires, we can switch to the next certificate without having to update the app.    
+Also, please note that hacker can still [bypass SSL Pinning on rooted/jailbroken devices](https://mas.owasp.org/MASTG/techniques/ios/MASTG-TECH-0064/).
+
+### 3. Mobile Cryptography
+
+> The goal of cryptography is to provide constant confidentiality, data integrity, and authenticity, even in the face of an attack
+
+- Don't use custom cryptographic algorithms, always use well-known and tested algorithms.
+- Algorithms that were considered secure in the past may become insecure over time; therefore, it’s important to periodically check current best practices and adjust configurations accordingly.
+- Don’t reuse keys: Cryptographic means are not mixed with each other: e.g. you do not sign with a public key, or try to reuse a key pair used for a signature to do encryption.
+- Ensure that no keys or passwords are stored within the source code, Secret keys must be stored in secure device storage.
+
+### 4. Data Storage
+
+> The protection of sensitive data, such as authentication tokens and private information, is key for mobile security.
+
+1. Data
+
+- Use [strong encryption](https://developer.apple.com/documentation/uikit/encrypting-your-app-s-files) when writing data to storage based on its sensitivity.
+- UserDefault data can be viewed in the application bundle. This class stores data in a plist file, but it’s meant to be used with small amounts of data.
+- CoreData is not encrypted by default. need to customize to encrypt the data: [encrypted-core-data](https://github.com/evgenyneu/encrypted-core-data).
+- Should not store sensitive data/ API key/… on UserDefault, InfoPlist, Filesystem, hardcoded string in code … Hacker can easily read those data, ex: [How to get hardcoded string](https://mas.owasp.org/MASTG/techniques/ios/MASTG-TECH-0071/)
+- Should use Keychain to store sensitive data, such as authentication tokens, passwords, and encryption keys. 
+
+2. UI
+
+- To prevent data leaks in UI (ex: shoulder surfing), sensitive data should be properly masked, typically by showing asterisks or dots instead of clear text.
+- Carefully review all UI components, and evaluate if it need to be masked.
+- Screenshot: Carefully hide sensitive data when user screenshot:
+    - https://github.com/Kyle-Ye/ScreenShieldKit
+- Keyboard caching, UIPasteboard should be clear after use.
+
+3. Keychain
+
+- The structure of the Keychain on iOS is different: only one Keychain is available to all apps.
+- Data store in keychain is encrypted by default.
+- We can request the [user’s bio authentication](https://developer.apple.com/documentation/security/restricting-keychain-item-accessibility#Demand-user-presence) when access keychain to make sure that only the user can access the sensitive data.
+- On iOS, when an application is uninstalled, the Keychain data used by the application is retained by the device, unlike the data stored by the application sandbox which is wiped. There’s no iOS API that developers can use to force wipe data when an application is uninstalled.
+- Hacker can still [access the Keychain data on a jailbroken device](https://mas.owasp.org/MASTG/techniques/ios/MASTG-TECH-0061/#keychain-dumper-jailbroken).
+
+4. Logs
+
+- Sensitive data should not be logged or added to log file, such as authentication tokens, passwords, and encryption keys.
+- If you need to log sensitive data for debugging purposes, make sure to remove it before releasing the app because hacker can easily read logs: [Monitoring System Logs](https://mas.owasp.org/MASTG/techniques/ios/MASTG-TECH-0060/)
+
+ <img src={logs.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+### 5. Local Authentication
+
+> Secure Enclave: some hardware-ish module that holds cryptographic secrets inside, and can perform operations like signing or encryption, but will never hand out the keys.
+
+Using [Secure Enclave](https://developer.apple.com/documentation/security/protecting-keys-with-the-secure-enclave) to store sensitive data is a good practice. Secure Enclave is a hardware-based security feature that provides an isolated environment for sensitive operations, such as cryptographic operations and biometric authentication.
+
+- Secure Enclave is a hardware-based key manager that’s isolated from the main processor to provide an extra layer of security.
+- When you protect a private key with the Secure Enclave, you never handle the plain-text key. Instead, you instruct the Secure Enclave to create and encode the key, and later to decode and perform operations with it. You receive only the output of these operations, such as encrypted data or a cryptographic signature verification outcome.
+
+### 6. App integrity
+
+- The app integrity is the process of ensuring that the app has not been tampered with or modified in any way. 
+- The app integrity can be checked by verifying the app's signature, checking the app's hash, or using a third-party service to verify the app's integrity.
+- The app integrity can be bypassed by using a jailbroken device or a rooted device, so it is important to implement multiple layers of security to protect the app's integrity.    
+
+## Conclusion
+
+This is a great book for iOS engineers to understand the security risks and how to mitigate them. We should read to have the mindset of security first, especially when we use AI tools to generate code.
+
+## References
+
+- [Techniques for Mobile hacking by OWASP](https://mas.owasp.org/MASTG/techniques/)
+- [Guardsquare docs](https://www.guardsquare.com/blog/common-mobile-app-security-myths): Guardsquare is a company that provides mobile app security solutions, and their blog contains a lot of useful information about mobile app security.
