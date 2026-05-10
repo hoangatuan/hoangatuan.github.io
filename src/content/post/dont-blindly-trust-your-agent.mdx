@@ -1,0 +1,103 @@
+---
+publishDate: 2026-05-10T00:00:00Z
+author: Tuan Hoang
+title: Dont blindly trust your agent
+excerpt: Why coding agents sound sure when they are wrong, what actually causes that behavior, and how to keep automation from damaging your system.
+image: https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+category: software
+tags:
+  - AI
+  - llm
+relatedPostIDs:
+  - dont-trust-your-code-coverage.mdx
+---
+
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
+
+You asked the agent to wire a new step into your workflow. It ran tools, printed steps, and closed the task with the calm tone of someone who just shipped production code.
+
+Then you opened the diff and felt your stomach drop.
+
+The file exists. The imports compile. The summary reads like a release note. And somewhere in the middle, the agent quietly invented a constant, assumed an API shape, or filled a gap with fiction that matches the grammar of truth.
+
+That specific feeling is why I stopped treating agent output like employee output with faster typing.
+
+Recently I joined a company project to build an AI workflow. We had to grow an orchestrator on top of real SDKs and real constraints, which meant spending serious time inside agent loops: prompts, tools, transcripts, retries.
+
+Here is what that work reinforced for me. Agents fail in a uniquely dangerous way. They fail forward. And if you trust the voice, you pay in production.
+
+## What “agent hallucination” looks like in practice
+
+Ask a person a question they cannot answer and you often get hesitation. Ask a model-driven agent the same question and you may get a story with characters: file paths, function names, version numbers, all arranged like evidence.
+
+In our workflow, a common pattern looked like this. The agent could not find the information it needed in the context it had. Instead of stopping, it assumed the missing fact, then continued as if the assumption were verified. The final message still sounded confident. The UI still looked done.
+
+That is the heart of the problem. The failure mode is not only wrong text. It is wrong text with authority.
+
+## Why agents hallucinate
+
+The reasons stack on top of each other.
+
+**Training rewards answers more than silence.** [OpenAI’s write-up on why language models hallucinate](https://openai.com/index/why-language-models-hallucinate/) makes the uncomfortable point plain. These systems are shaped to produce helpful completions. “I do not know” is a valid answer for you. For the model, it can be a harder move than a plausible guess.
+
+**The model is built to finish thoughts.** It is trained to generate coherent continuations, not to leave holes. When the context is thin, coherence and accuracy diverge.
+
+**Next-token prediction is not fact checking.** The model can “feel” certain because probability mass piles up behind a fluent completion. [Anthropic’s research on tracing thoughts in language models](https://www.anthropic.com/research/tracing-thoughts-language-model) is a useful reminder that internal states and external truth are not the same thing.
+
+None of this is a moral failure. It is geometry. Fluency rides one curve. Grounding rides another.
+
+## Can providers remove it
+
+They can reduce it. They cannot promise zero.
+
+Even with better tools, search, and reasoning, some questions are genuinely unanswerable from the evidence at hand. And the model can still believe it knows.
+
+So the practical stance is not “wait for a perfect model.” The practical stance is “assume completion is not confirmation.”
+
+## Protect yourself as an LLM user
+
+### Prompt engineering still matters
+
+Prompting will not solve everything. It is still the cheapest layer of defense.
+
+**Give the model permission to stop.** I like explicit language that rewards uncertainty. For example: if any part of the task is unclear, say you do not have enough information and ask for human input instead of guessing.
+
+**Force reasoning before conclusions.** Ask for step-by-step thinking before the final answer. Faulty reasoning often surfaces early when it has to be spelled out in order.
+
+**Tie claims to sources.** One pattern that worked well on document-heavy tasks: after drafting, review each claim, attach a supporting quote from the provided materials, and delete any claim you cannot anchor. Leave a visible marker where you removed something so the gap is obvious.
+
+For a broader menu, Claude’s guide on reducing hallucinations is a solid starting point: [Strengthen guardrails: reduce hallucinations](https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations).
+
+<SubscriptionCard/>
+
+### Add deterministic rails
+
+Agents sometimes ignore instructions. They respect physics less than they respect token pressure. So I treat prompts as soft rules and tooling as hard rules.
+
+**Hooks.** [Claude Code hooks](https://code.claude.com/docs/en/hooks) run code at predictable points in the lifecycle. The [hooks guide](https://code.claude.com/docs/en/hooks-guide#auto-approve-specific-permission-prompts) includes patterns like auto-handling permissions. On iOS projects I have used `PreToolUse` to block reads and writes outside allow lists, block dangerous commands, and keep edits inside the areas we actually trust the agent to touch.
+
+**Gates.** Think of a gate as “no green checkmark until a script agrees.” We used hooks such as task completion checkpoints to verify outputs before the orchestration moved on. If verification failed, we sent the agent back with a tight error payload instead of letting the workflow advance on vibes.
+
+If you do not use Claude Code, you can steal the same idea with Git hooks. The industry has formatted and linted commits for years. Agents just made the need more obvious.
+
+**Logging and observability.** None of the above removes the root cause. The root cause is often missing information that makes the model guess.
+
+So we instrument the behavior we care about. In the orchestrator we explored secondary review: another pass that reads transcripts and flags suspicious patterns, then stores reports for later tuning. In prompts we asked the primary agent to log when it felt unsure or when context was thin, so we could connect failures to evidence. We also tracked coarse metrics: how often the agent assumed facts, skipped steps, or contradicted earlier tool output.
+
+The point is not perfect telemetry on day one. The point is a feedback loop you can actually improve.
+
+## Conclusion
+
+A coding agent is a powerful teammate. It is also a confident narrator. The moment you confuse those two roles, you inherit risk you cannot see in a single green summary line.
+
+I still use agents every day. I just trust them the way I trust a brilliant intern with production access: clear boundaries, automatic checks, and an expectation that the final owner of the system is still me.
+
+If you have patterns that work for your stack, especially around gates and transcripts, I would love to read them.
+
+## References
+
+1. [Why language models hallucinate — OpenAI](https://openai.com/index/why-language-models-hallucinate/)
+2. [Tracing thoughts in a language model — Anthropic](https://www.anthropic.com/research/tracing-thoughts-language-model)
+3. [Reduce hallucinations — Claude documentation](https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations)
+4. [Claude Code hooks](https://code.claude.com/docs/en/hooks)
+5. [Claude Code hooks guide](https://code.claude.com/docs/en/hooks-guide#auto-approve-specific-permission-prompts)
