@@ -33,4 +33,12 @@ export default defineConfig({
     rehypePlugins: [responsiveTablesRehypePlugin, sectionize],
   },
   adapter: netlify(),
+  vite: {
+    server: {
+      watch: {
+        usePolling: true,
+        interval: 300,
+      },
+    },
+  },
 });
