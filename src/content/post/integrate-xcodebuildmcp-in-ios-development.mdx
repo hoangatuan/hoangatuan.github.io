@@ -1,0 +1,212 @@
+---
+publishDate: 2026-05-23T00:00:00Z
+author: Tuan Hoang
+title: Integrating XcodebuildMCP in iOS Development
+excerpt: How to integrate XcodebuildMCP in iOS development to improve your productivity and efficiency.
+category: software
+tags:
+  - AI
+  - iOS
+relatedPostIDs:
+  - dont-blindly-trust-your-agent.mdx
+---
+
+import uiautomation from '/src/assets/content/post/integrate-xcodebuildmcp-in-ios-development/ui-automation.png';
+import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
+
+## Introduction
+
+In this article, we will explore how to integrate XcodebuildMCP into your iOS project to improve the AI-powered development experience.
+
+## XcodebuildMCP
+
+### What is XcodebuildMCP?
+
+XcodebuildMCP is an MCP server that gives AI agents full control over Xcode: building, testing, debugging, UI automation, and more.
+
+### Why XcodebuildMCP?
+
+As discussed in the previous article, [Leverage AI in iOS development](./dont-blindly-trust-your-agent.mdx), an AI agent's goal is to provide an answer, which leads it to make assumptions and act overconfidently at the same time. Because of that, we spend a lot of time verifying and retrying.
+Especially with the Xcodebuild process:
+
+- Missing context: Agents don't know how to find the simulator, schemes, targets, and so on, which leads them to make assumptions.
+- Long feedback loop: Xcodebuild is a time-consuming process, even with incremental builds.
+- Context consumption: Xcodebuild logs are verbose and painful to read.
+- Missing abilities: Agents don't know how to manage simulators, capture logs, take screenshots, and more.
+
+### Integration
+
+There are several ways to integrate the MCP. In my experience, the best approach is to integrate XcodebuildMCP at the project level and commit all configuration files. This way, the team shares the same configuration and workflow.
+
+1. Create a project-level `.mcp.json` file in your iOS project:
+
+```json
+{
+  "mcpServers": {
+    "XcodebuildMCP": {
+      "command": "npx",
+      "args": ["-y", "xcodebuildmcp@latest", "mcp"]
+    }
+  }
+}
+```
+
+2. Create a `.xcodebuildmcp/config.yaml` file:
+
+```yaml
+schemaVersion: 1
+sessionDefaults:
+  projectPath: "./MyApp.xcodeproj"
+  scheme: "MyApp"
+  simulatorName: "iPhone 17 Pro"
+  configuration: "Debug"
+enabledWorkflows:
+  - simulator
+  - ui-automation
+```
+
+## Example Use Cases
+
+The goal when using agents is to create a [closed-loop](https://antran.app/blogs/2026/clossed_ai_loop/), so the AI can implement, verify its own results, and loop until the requirement is met. It's similar to what Claude `/goals` does.
+
+**1. Fix build errors autonomously**
+
+With XcodebuildMCP, the agent runs a build, reads the structured diagnostics, makes edits, rebuilds, and repeats until the project compiles, without human intervention.
+
+**2. UI automation with XcodebuildMCP**
+
+XcodebuildMCP can automate UI actions such as swiping, tapping, and scrolling. Best of all, you can describe those actions in natural language.
+With this, we can close the E2E loop: `Requirement → Implementation → Build → UI verification` until the requirement is met.
+
+**Example**
+
+Here is the requirement I gave to my agent in an example chat app:
+
+```
+Let's implement a feature that allows users to recall their messages. On long press, show a popup asking whether they want to recall; they tap YES or NO.
+After you implement it, run UI automation to verify it works. The recalled message should disappear.
+Loop until the requirement is met.
+```
+
+From the agent's transcript, you can see that it takes screenshots to verify that UI actions work—not just by guessing.
+
+```
+⏺ XcodeBuildMCP - Build Run Simulator (MCP)
+  ⎿  {
+       "schema": "xcodebuildmcp.output.build-run-result",
+       "schemaVersion": "1",
+     … +35 lines (ctrl+o to expand)
+
+⏺ Build succeeded. Now let me navigate to the Welcome Chat and test the recall feature.
+
+⏺ XcodeBuildMCP - Tap (MCP)(id: "chatRow_Welcome Chat", postDelay: 0.5)
+  ⎿  {
+       "schema": "xcodebuildmcp.output.ui-action-result",
+       "schemaVersion": "1",
+     … +15 lines (ctrl+o to expand)
+
+⏺ First, let me send the two messages as before.
+
+⏺ XcodeBuildMCP - Tap (MCP)(x: 165, y: 798)
+  ⎿  {
+       "schema": "xcodebuildmcp.output.ui-action-result",
+       "schemaVersion": "1",
+     … +25 lines (ctrl+o to expand)
+
+⏺ XcodeBuildMCP - Type Text (MCP)(text: "Hello")
+  ⎿  {
+       "schema": "xcodebuildmcp.output.ui-action-result",
+       "schemaVersion": "1",
+     … +14 lines (ctrl+o to expand)
+
+⏺ XcodeBuildMCP - Snapshot UI (MCP)
+  ⎿  {
+       "schema": "xcodebuildmcp.output.capture-result",
+       "schemaVersion": "1",
+     … +61 lines (ctrl+o to expand)
+
+⏺ Good, "Hello" is typed. Let me send it.
+
+⏺ XcodeBuildMCP - Tap (MCP)(id: "arrow.up.circle.fill", postDelay: 1.5)
+  ⎿  {
+       "schema": "xcodebuildmcp.output.ui-action-result",
+       "schemaVersion": "1",
+     … +15 lines (ctrl+o to expand)
+
+⏺ Now send the second message.
+
+⏺ XcodeBuildMCP - Tap (MCP)(x: 165, y: 798)
+  ⎿  {
+       "schema": "xcodebuildmcp.output.ui-action-result",
+       "schemaVersion": "1",
+     … +16 lines (ctrl+o to expand)
+
+⏺ XcodeBuildMCP - Type Text (MCP)(text: "Today is 23 May")
+  ⎿  {
+       "schema": "xcodebuildmcp.output.ui-action-result",
+       "schemaVersion": "1",
+     … +14 lines (ctrl+o to expand)
+
+⏺ XcodeBuildMCP - Tap (MCP)(id: "arrow.up.circle.fill", postDelay: 1.5)
+  ⎿  {
+       "schema": "xcodebuildmcp.output.ui-action-result",
+       "schemaVersion": "1",
+     … +15 lines (ctrl+o to expand)
+
+⏺ Both messages sent. Now let me get the UI hierarchy to find the "Hello" message coordinates, then long press on it.
+
+⏺ XcodeBuildMCP - Snapshot UI (MCP)
+  ⎿  {
+       "schema": "xcodebuildmcp.output.capture-result",
+       "schemaVersion": "1",
+     … +95 lines (ctrl+o to expand)
+
+⏺ I can see "Hello" at (333, 359) and "Today is 23 May" at (249, 499). Let me long press on "Hello" to test the recall feature.
+
+⏺ XcodeBuildMCP - Long Press (MCP)(x: 350, y: 359, duration: 1500)
+  ⎿  {
+       "schema": "xcodebuildmcp.output.ui-action-result",
+       "schemaVersion": "1",
+     … +17 lines (ctrl+o to expand)
+
+⏺ XcodeBuildMCP - Snapshot UI (MCP)
+  ⎿  {
+       "schema": "xcodebuildmcp.output.capture-result",
+       "schemaVersion": "1",
+     … +63 lines (ctrl+o to expand)
+
+⏺ The alert is showing with "Recall Message?" title and YES/NO buttons. Let me tap YES to recall the message.
+
+⏺ XcodeBuildMCP - Tap (MCP)(label: "YES", postDelay: 0.5)
+  ⎿  {
+       "schema": "xcodebuildmcp.output.ui-action-result",
+       "schemaVersion": "1",
+     … +15 lines (ctrl+o to expand)
+
+⏺ XcodeBuildMCP - Snapshot UI (MCP)
+  ⎿  {
+       "schema": "xcodebuildmcp.output.capture-result",
+       "schemaVersion": "1",
+     … +85 lines (ctrl+o to expand)
+
+⏺ The "Hello" message is gone. The UI now shows:
+  - "Welcome to ChatFlow! 🎉" (bot)
+  - "Thanks! Glad to be here." (user)
+  - "Feel free to send a message anytime." (bot)
+  - "Wow, I hadn't thought of it that way." (bot reply - was to "Hello")
+  - "Today is 23 May" (user - still present)
+  - "Could you elaborate on that?" (bot reply)
+
+```
+
+## Bonus: How XcodebuildMCP Handles UI Automation
+
+<img src={uiautomation.src} alt="XcodebuildMCP UI automation architecture" style={{ width: '100%', height: 'auto' }} />
+
+## References
+
+- [XcodebuildMCP](https://github.com/getsentry/XcodeBuildMCP)
+- [AXe](https://github.com/cameroncooke/AXe)
+- [FBIDB](https://fbidb.io/docs/overview)
+- [AXe build script](https://github.com/cameroncooke/AXe/blob/550b3ab1/scripts/build.sh#L8-L10)
+- [XcodebuildMCP snapshot UI fixture](https://github.com/getsentry/XcodeBuildMCP/blob/main/src/snapshot-tests/__fixtures__/cli/json/ui-automation/snapshot-ui--success.json)
