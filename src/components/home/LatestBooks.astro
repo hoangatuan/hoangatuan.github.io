@@ -1,22 +1,16 @@
 ---
-import BookItem from "../books/BookItem.astro";
-import { fetchLatestBooks } from "../../utils/book";
+import BookItem from '../books/BookItem.astro';
+import { fetchLatestBooks } from '../../utils/book';
 
 const books = await fetchLatestBooks();
 ---
 
-<div class="container mx-auto px-4 lg:px-8">
-    <ul
-      class="grid gap-8 lg:grid-cols-3"
-      style="row-gap: 0.1rem; column-gap: 2rem;"
-    >
-      {
-        books.map((book) => (
-          <li class="mb-8 flex">
-            <BookItem prefix='books' book={book} />
-          </li>
-        ))
-      }
-    </ul>
-  </div>
-  
+<ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+  {
+    books.map((book) => (
+      <li class="flex min-w-0">
+        <BookItem prefix="books" book={book} />
+      </li>
+    ))
+  }
+</ul>

@@ -19,16 +19,49 @@ module.exports = {
         Ce76f51: '#e76f51',
       },
       fontFamily: {
-        serif: ['Times New Roman', 'serif'],
-        heading: ['var(--aw-font-heading)', ...defaultTheme.fontFamily.sans],
-        'noto-serif': ['var(--noto-serif-font)', 'serif'],
-        'open-sans': ['var(--open-sans-font)', 'sans-serif'],
+        sans: ['Roboto', ...defaultTheme.fontFamily.sans],
+        serif: ['Newsreader', ...defaultTheme.fontFamily.serif],
+        heading: ['Newsreader', ...defaultTheme.fontFamily.serif],
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            fontSize: '1.0625rem',
+            lineHeight: '1.65',
+            maxWidth: '65ch',
+            color: 'var(--aw-color-text-default)',
+            p: {
+              marginTop: '1em',
+              marginBottom: '1em',
+            },
+            h2: {
+              marginTop: '2em',
+              marginBottom: '0.75em',
+              fontWeight: '600',
+            },
+            h3: {
+              marginTop: '1.5em',
+              marginBottom: '0.5em',
+              fontWeight: '600',
+            },
+            a: {
+              color: 'var(--aw-color-primary)',
+              textDecoration: 'underline',
+              fontWeight: '500',
+            },
+            code: {
+              fontSize: '0.875em',
+            },
+            'code::before': { content: '""' },
+            'code::after': { content: '""' },
+          },
+        },
       },
     },
   },
   variants: {
     extend: {
-      textColor: ['group-hover'], // Make sure this is included to allow hover effects
+      textColor: ['group-hover'],
     },
   },
   plugins: [require('@tailwindcss/typography')],

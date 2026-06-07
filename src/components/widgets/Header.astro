@@ -23,12 +23,13 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
 
 <header
   class:list={[
-     "top-0 z-40 flex-none mx-auto w-full border-b border-gray-50/0 transition-[opacity] ease-in-out",
+    "top-0 z-40 flex-none mx-auto w-full border-b border-zinc-200 bg-white/90 backdrop-blur-sm transition-[opacity] ease-in-out",
   ]}
+  id="site-header"
 >
   <div
     class:list={[
-      "relative text-default py-3 px-3 md:px-6 mx-auto w-full md:flex md:justify-between",
+      "relative text-default py-3 px-3 md:px-6 mx-auto w-full md:flex md:justify-between max-w-7xl",
     ]}
   >
     <div
@@ -46,21 +47,22 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
     </div>
 
     <nav
+      id="mobile-nav"
       class="items-center w-full md:w-auto hidden md:flex text-default overflow-y-auto overflow-x-hidden md:overflow-y-visible md:overflow-x-auto md:mx-5"
       aria-label="Main navigation"
     >
       <ul
-        class="flex flex-col md:flex-row md:self-center w-full md:w-auto text-xl md:text-[0.9375rem] tracking-[0.01rem] font-medium"
+        class="flex flex-col md:flex-row md:self-center w-full md:w-auto text-base md:text-[0.9375rem] tracking-[0.01rem] font-medium py-2 md:py-0"
       >
         {
           links.map(({ text, href }) => (
             <li>
               <a
                 class:list={[
-                  "hover:text-C2a9d8f dark:hover:text-white px-4 py-3 flex items-centers",
-                  { 
-                    "aw-link-active text-C2a9d8f": href === currentPath, // change text color for active link
-                    "text-default": href !== currentPath 
+                  "hover:text-primary dark:hover:text-white px-4 py-3 flex items-center cursor-pointer transition-colors duration-200",
+                  {
+                    "aw-link-active text-primary": href === currentPath,
+                    "text-default": href !== currentPath,
                   },
                 ]}
                 href={href}
@@ -81,11 +83,42 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
     >
       <div class="items-center flex justify-between w-full md:w-auto">
         <div class="flex space-x-2 items-center">
-          <TagsMenu/>
-          <!-- <Search /> -->
-          <!-- <ToggleTheme iconClass="w-6 h-6 md:w-5 md:h-5 md:inline-block" /> -->
+          <TagsMenu />
         </div>
       </div>
     </div>
   </div>
 </header>
+
+<script>
+  function initMobileNav() {
+    const toggle = document.querySelector('[data-aw-toggle-menu]');
+    const nav = document.getElementById('mobile-nav');
+    if (!toggle || !nav) return;
+
+    toggle.addEventListener('click', () => {
+      const isExpanded = toggle.classList.toggle('expanded');
+      toggle.setAttribute('aria-expanded', String(isExpanded));
+
+      if (window.innerWidth < 768) {
+        nav.classList.toggle('hidden', !isExpanded);
+        nav.classList.toggle('flex', isExpanded);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) {
+        nav.classList.remove('hidden');
+        nav.classList.add('md:flex');
+        toggle.classList.remove('expanded');
+        toggle.setAttribute('aria-expanded', 'false');
+      } else if (!toggle.classList.contains('expanded')) {
+        nav.classList.add('hidden');
+        nav.classList.remove('flex');
+      }
+    });
+  }
+
+  initMobileNav();
+  document.addEventListener('astro:page-load', initMobileNav);
+</script>

@@ -3,13 +3,13 @@ import checkmark from '/src/assets/common/checkmark.png';
 import loading from '/src/assets/common/loading.png';
 ---
 
-  <form id="newsletter-form" class="bg-red-600 px-6 py-1 rounded-lg shadow-md max-w-2xl mx-auto">
-    <h2 class="text-2xl font-bold text-center text-white">Subscribe to my space 🚀</h2>
-    <p class="text-center text-white">Stay updated on my weekly readings about Swift & iOS, Software Engineer, and book review.</p>
+  <form id="article-subscribe-form" class="bg-accent px-6 py-1 rounded-lg shadow-md max-w-2xl mx-auto">
+    <h2 class="text-2xl font-bold text-center text-white">Subscribe to my space</h2>
+    <p class="text-center text-white">Stay updated on new articles and book reviews about Swift, iOS, and software engineering.</p>
   
     <div class="flex justify-center items-center space-x-2 h-10">
       <input
-        id="email-address"
+        id="article-email-address"
         name="email"
         type="email"
         autocomplete="email"
@@ -18,14 +18,14 @@ import loading from '/src/assets/common/loading.png';
         placeholder="Your email address..."
       />
 
-      <button id="subscribe-button" type="submit" class="bg-CEA4D21 rounded-md text-white px-4 h-full fixed-width text-sm flex items-center justify-center relative">
-        <span id="button-text">Subscribe</span>
-        <img id="loading-icon" src={loading.src} class="hidden w-5 h-5 filter-white animate-spin" alt="Loading"/>
-        <img id="checkmark-icon" src={checkmark.src} class="hidden w-5 h-5 filter-white" alt="Checkmark"/>
+      <button id="article-subscribe-button" type="submit" class="bg-CEA4D21 rounded-md text-white px-4 h-full fixed-width text-sm flex items-center justify-center relative">
+        <span id="article-button-text">Subscribe</span>
+        <img id="article-loading-icon" src={loading.src} class="hidden w-5 h-5 filter-white animate-spin" alt="Loading"/>
+        <img id="article-checkmark-icon" src={checkmark.src} class="hidden w-5 h-5 filter-white" alt="Checkmark"/>
       </button>
     </div>
   
-    <p id="confirmation-message" class="text-center text-stone-100 text-sm mt-4 hidden">I've sent you a confirmation email! Please check your email to confirm your subscription! 🕊️</p>
+    <p id="article-confirmation-message" class="text-center text-stone-100 text-sm mt-4 hidden">I've sent you a confirmation email! Please check your email to confirm your subscription.</p>
     <p class="text-center text-gray-300 text-sm mt-4">100% free. Unsubscribe at any time.</p>
   </form>
 
@@ -50,13 +50,12 @@ import loading from '/src/assets/common/loading.png';
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const form = document.getElementById("newsletter-form");
-      const confirmationMessage = document.getElementById("confirmation-message");
-      const subscribeButton = document.getElementById("subscribe-button") as HTMLButtonElement;
+      const form = document.getElementById("article-subscribe-form");
+      const confirmationMessage = document.getElementById("article-confirmation-message");
 
-      const buttonText = document.getElementById('button-text');
-    const loadingIcon = document.getElementById('loading-icon');
-    const checkmarkIcon = document.getElementById('checkmark-icon');
+      const buttonText = document.getElementById('article-button-text');
+      const loadingIcon = document.getElementById('article-loading-icon');
+      const checkmarkIcon = document.getElementById('article-checkmark-icon');
   
       form?.addEventListener("submit", async (event) => {
         event.preventDefault(); // Prevent the form from submitting the traditional way
@@ -66,7 +65,7 @@ import loading from '/src/assets/common/loading.png';
         checkmarkIcon?.classList.add('hidden');
         confirmationMessage?.classList.add("hidden");
         
-        const emailInput = document.getElementById("email-address") as HTMLInputElement;
+        const emailInput = document.getElementById("article-email-address") as HTMLInputElement;
         const value = emailInput.value;
   
         try {

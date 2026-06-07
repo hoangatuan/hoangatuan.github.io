@@ -1,0 +1,182 @@
+---
+import Image from '../components/common/Image.astro';
+import { Icon } from 'astro-icon/components';
+import { getFormattedDate } from '../utils/utils';
+import PostTags from '../components/common/Tags.astro';
+import PostComments from '../components/common/PostComments.astro';
+import TableOfContents from '../components/blog/TableOfContents.astro';
+import {
+  FacebookShareButton,
+  LinkedInShareButton,
+  TwitterShareButton,
+  SocialShare,
+} from 'astro-social-share';
+import type { MarkdownHeading } from 'astro';
+import type { ImageMetadata } from 'astro';
+
+const BUTTONS = [TwitterShareButton, FacebookShareButton, LinkedInShareButton];
+
+const proseClasses =
+  'prose prose-zinc max-w-none font-sans text-base leading-7 prose-headings:font-heading prose-headings:font-semibold prose-headings:tracking-tight prose-h2:mt-10 prose-h2:mb-4 prose-h2:text-2xl prose-h3:mt-8 prose-h3:mb-3 prose-h3:text-xl prose-p:my-4 prose-p:leading-7 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-img:rounded-md prose-li:my-1 prose-headings:scroll-mt-24';
+
+export interface Props {
+  title: string;
+  publishDate: Date;
+  excerpt?: string;
+  image?: string | ImageMetadata;
+  headings?: MarkdownHeading[];
+  tags?: string[];
+  readingTime?: number;
+  shareTitle: string;
+  shareDescription: string;
+}
+
+const {
+  title,
+  publishDate,
+  excerpt,
+  image,
+  headings = [],
+  tags = [],
+  readingTime,
+  shareTitle,
+  shareDescription,
+} = Astro.props;
+
+const hasToc = headings.length > 0;
+const articleGridCols =
+  'xl:grid xl:grid-cols-[minmax(1rem,calc(50%-24rem))_min(48rem,calc(100%-2rem))_220px_minmax(1rem,1fr)] xl:gap-x-10 xl:px-0';
+const articleMainCol = 'mx-auto min-w-0 max-w-3xl xl:col-start-2 xl:mx-0 xl:max-w-none';
+---
+
+<section class="mx-auto py-10 sm:py-12 lg:py-14">
+  <div class:list={['w-full px-4 sm:px-6', hasToc && articleGridCols]}>
+    <header class:list={['border-b border-zinc-200 pb-8 text-left', articleMainCol]}>
+      <div class="mb-3 flex flex-wrap items-center gap-x-2 gap-y-2 text-sm text-zinc-500">
+        <Icon name="tabler:clock" class="-mt-0.5 inline-block h-4 w-4" />
+        <time datetime={String(publishDate)}>{getFormattedDate(publishDate)}</time>
+        {
+          tags.length > 0 && (
+            <>
+              <span aria-hidden="true">·</span>
+              <PostTags tags={tags} />
+            </>
+          )
+        }
+        {
+          readingTime && (
+            <>
+              <span aria-hidden="true">·</span>
+              <span>{readingTime} min read</span>
+            </>
+          )
+        }
+      </div>
+
+      <h1 class="font-heading text-3xl font-semibold leading-tight tracking-tight text-zinc-900 sm:text-4xl">
+        {title}
+      </h1>
+
+      {
+        excerpt && (
+          <p class="mt-4 text-lg leading-relaxed text-zinc-600">
+            {excerpt}
+          </p>
+        )
+      }
+
+      {
+        image && (
+          <Image
+            src={image}
+            class="mt-8 max-w-full rounded-lg bg-zinc-100"
+            widths={[400, 900]}
+            sizes="(max-width: 900px) 400px, 900px"
+            alt={excerpt || title}
+            width={900}
+            height={506}
+            loading="eager"
+            decoding="async"
+          />
+        )
+      }
+    </header>
+  </div>
+
+  <!-- Content centered on the page; TOC sits in the right gutter (not part of the centered block). -->
+  <div class:list={['mt-10 w-full px-4 sm:px-6', hasToc && articleGridCols]}>
+    <div class={articleMainCol}>
+      <div class:list={['article-content', proseClasses]}>
+        <slot />
+      </div>
+
+      <div class="mt-10 flex flex-col gap-4 border-t border-zinc-200 pt-8 sm:flex-row sm:items-center sm:justify-end">
+        <SocialShare buttons={BUTTONS} description={shareDescription} title={shareTitle} />
+      </div>
+
+      <div class="mt-10 border-t border-zinc-200 pt-8">
+        <PostComments />
+      </div>
+    </div>
+
+    {
+      hasToc && (
+        <aside class="hidden xl:block">
+          <div class="sticky top-24 rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
+            <h2 class="mb-3 font-heading text-sm font-semibold uppercase tracking-wide text-zinc-900">
+              On this page
+            </h2>
+            <nav class="article-toc" aria-label="Table of contents">
+              <TableOfContents headings={headings} />
+            </nav>
+          </div>
+        </aside>
+      )
+    }
+  </div>
+
+  <div class:list={['mt-10 w-full px-4 sm:px-6', hasToc && articleGridCols]}>
+    <div class={articleMainCol}>
+      <slot name="related" />
+    </div>
+  </div>
+</section>
+
+<script>
+  addIntersectionObserver();
+
+  function addIntersectionObserver() {
+    const observer = new IntersectionObserver((sections) => {
+      sections.forEach((section) => {
+        const heading = section.target.querySelector('h2, h3, h4, h5');
+        if (!heading) return;
+        const id = heading.getAttribute('id');
+        if (!id) return;
+
+        const link = document.querySelector(`nav.toc li a[href="#${id}"]`);
+        if (!link) return;
+
+        const addRemove = section.intersectionRatio > 0 ? 'add' : 'remove';
+        link.classList[addRemove]('active');
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    document.querySelectorAll('.article-content section').forEach((section) => {
+      observer.observe(section);
+    });
+  }
+</script>
+
+<style is:global>
+  .astro-social-share {
+    margin: 0;
+    height: 24px;
+  }
+  .astro-social-share a {
+    text-decoration: none;
+    margin-right: 12px;
+  }
+  .astro-social-share svg {
+    height: 24px;
+  }
+</style>

@@ -1,7 +1,7 @@
 ---
-import type { Post } from "../../types/post.types";
-import Item from "./ListItem.astro";
-import { fetchRelatedPosts } from "../../utils/blog";
+import type { Post } from '../../types/post.types';
+import Item from './ListItem.astro';
+import { fetchRelatedPosts } from '../../utils/blog';
 
 export interface Props {
   prefix: string;
@@ -12,12 +12,15 @@ const { prefix, post } = Astro.props;
 
 const posts = await fetchRelatedPosts(post);
 ---
-<div class="container mx-auto px-4 xl:px-[240px]">
-  <ul class="grid gap-8 lg:grid-cols-2" style="row-gap: 0.1rem; column-gap: 2rem;">
-    {posts.map((post) => (
-      <li class="mb-8 flex">
-        <Item prefix={prefix} post={post} />
-      </li>
-    ))}
+
+<div class="mx-auto max-w-5xl px-4 lg:px-8">
+  <ul class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
+    {
+      posts.map((relatedPost) => (
+        <li class="flex min-w-0">
+          <Item prefix={prefix} post={relatedPost} />
+        </li>
+      ))
+    }
   </ul>
 </div>

@@ -1,6 +1,6 @@
 ---
-import BookItem from "./BookItem.astro";
-import type { Book } from "../../types/books.types";
+import BookItem from './BookItem.astro';
+import type { Book } from '../../types/books.types';
 
 export interface Props {
   prefix: string;
@@ -10,17 +10,19 @@ export interface Props {
 const { prefix, books } = Astro.props;
 ---
 
-<div class="container mx-auto px-4 lg:px-8 pt-16">
-  <ul
-    class="grid gap-8 lg:grid-cols-3"
-    style="row-gap: 0.1rem; column-gap: 2rem; grid-auto-rows: 1fr;"
-  >
+<section class="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:py-14">
+  <header class="mb-8 border-b border-zinc-200 pb-6">
+    <h1 class="font-heading text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">Book reviews</h1>
+    <p class="mt-2 text-base text-zinc-600">Short reviews of books that shaped how I think about engineering.</p>
+  </header>
+
+  <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
     {
       books.map((book) => (
-        <li class="mb-8 flex">
+        <li class="flex min-w-0">
           <BookItem prefix={prefix} book={book} />
         </li>
       ))
     }
   </ul>
-</div>
+</section>

@@ -11,17 +11,18 @@ const footerData = {
 
 ---
 
-<section class="w-full max-w-full flex flex-col items-center justify-center text-center pt-8" aria-label="About Me">
+<section class="w-full max-w-full flex flex-col items-center justify-center px-4 pt-10 text-center" aria-label="About Me">
     <div class="content">
-        <h1 class="h1 font-serif font-bold text-3xl mb-4">
-          Hi 👋, 
-          <a href="/about" style="color: #EA4D21;" class="hover:underline">I'm Eric</a>
+        <h1 class="font-heading text-3xl font-semibold text-zinc-900 sm:text-4xl">
+          Hi,
+          <a href="/about" class="text-accent hover:underline"> I'm Eric</a>
         </h1>
-        <p class="text-lg">
-            Welcome to my space on the internet 🛰️
+        <p class="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-zinc-600">
+            Welcome to my space on the internet.
         </p>
-        <p class="text-lg">
-          I write about advanced topic in Swift/iOS development, weekly newsletter, software engineer books review and my experience as a software engineer.</p>
+        <p class="mx-auto mt-2 max-w-2xl text-base leading-relaxed text-zinc-600">
+          I write about advanced topics in Swift/iOS development, software engineering book reviews, and my experience as a software engineer.
+        </p>
 
         <div class="flex w-full justify-center">
             {
@@ -30,8 +31,9 @@ const footerData = {
                   {footerData.socialLinks.map(({ href, name, icon }) => (
                     <li>
                       <a
-                        class="text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center"
+                        class="text-muted dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 inline-flex items-center cursor-pointer transition-colors duration-200"
                         href={href}
+                        aria-label={name}
                       >
                         {icon && <Icon name={icon} class="w-5 h-5" />}
                       </a>

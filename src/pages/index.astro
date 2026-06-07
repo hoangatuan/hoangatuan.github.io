@@ -1,33 +1,47 @@
 ---
-import PageLayout from "../layouts/PageLayout.astro"
-import LatestArticles from "../components/home/LatestArticles.astro"
-import LatestBooks from "../components/home/LatestBooks.astro"
-import IntroduceCard from "../components/home/IntroduceCard.astro"
-import LastestWeeklyView from "../components/home/LastestWeeklyView.astro"
-import Subscription from "../components/home/HomeSubscriptionCard.astro"
+import PageLayout from '../layouts/PageLayout.astro';
+import LatestArticles from '../components/home/LatestArticles.astro';
+import LatestBooks from '../components/home/LatestBooks.astro';
+import IntroduceCard from '../components/home/IntroduceCard.astro';
+import Subscription from '../components/home/HomeSubscriptionCard.astro';
 ---
 
 <PageLayout title="Eric's Space">
-    <div class="pb-16">
-        <IntroduceCard></IntroduceCard>
+  <IntroduceCard />
 
-        <Subscription></Subscription>
+  <Subscription />
 
-        <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8 pt-16">
-            <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Best of the week ⭐</h2> 
-        </div>
-        <LastestWeeklyView></LastestWeeklyView>
+  <section class="mx-auto max-w-6xl px-4 pb-16 pt-12 text-left sm:px-6">
+    <header class="mb-8 text-center">
+      <h2 class="font-heading text-3xl font-semibold tracking-tight text-zinc-900 lg:text-4xl">Latest articles</h2>
+    </header>
 
-        <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8 pt-16">
-            <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Latest articles 📜</h2> 
-        </div>
-        <LatestArticles></LatestArticles>
-        <a href="/articles" class="cursor-pointer border border-gray-300 shadow-sm rounded-full py-3.5 px-7 w-52 flex justify-center items-center text-gray-900 font-semibold mx-auto transition-all duration-300 hover:bg-gray-100">View All</a>
-    
-        <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8 pt-16">
-            <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Latest book reviews 📚</h2> 
-        </div>
-        <LatestBooks></LatestBooks>
-        <a href="/books" class="cursor-pointer border border-gray-300 shadow-sm rounded-full py-3.5 px-7 w-52 flex justify-center items-center text-gray-900 font-semibold mx-auto transition-all duration-300 hover:bg-gray-100">View All</a>
+    <LatestArticles />
+
+    <div class="mt-10 flex justify-center">
+      <a
+        href="/articles"
+        class="inline-flex cursor-pointer items-center justify-center rounded-full border border-zinc-300 px-7 py-3.5 font-semibold text-zinc-900 shadow-sm transition-colors duration-200 hover:border-zinc-400 hover:bg-zinc-100"
+      >
+        View All
+      </a>
     </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-4 pb-16 text-left sm:px-6">
+    <header class="mb-8 text-center">
+      <h2 class="font-heading text-3xl font-semibold tracking-tight text-zinc-900 lg:text-4xl">Latest book reviews</h2>
+    </header>
+
+    <LatestBooks />
+
+    <div class="mt-10 flex justify-center">
+      <a
+        href="/books"
+        class="inline-flex cursor-pointer items-center justify-center rounded-full border border-zinc-300 px-7 py-3.5 font-semibold text-zinc-900 shadow-sm transition-colors duration-200 hover:border-zinc-400 hover:bg-zinc-100"
+      >
+        View All
+      </a>
+    </div>
+  </section>
 </PageLayout>

@@ -42,7 +42,7 @@ export async function GET() {
                     fontSize: '24px',
                     fontFamily: 'DM Sans Bold',
                   },
-                  children: "A weekly newsletter, book review, and blog about Swift, iOS & Software Development",
+                  children: "Articles, book reviews, and notes on Swift/iOS & software engineering",
                 },
               },
             ],

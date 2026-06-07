@@ -1,27 +1,10 @@
 ---
 import type { InferGetStaticPropsType, GetStaticPaths } from 'astro';
-import PageLayout from "../../layouts/PageLayout.astro"
+import PageLayout from '../../layouts/PageLayout.astro';
+import ContentDetailLayout from '../../layouts/ContentDetailLayout.astro';
 import { getStaticPathsBlogPost } from '../../utils/blog';
-import Image from '../../components/common/Image.astro';
-
-import { Icon } from 'astro-icon/components';
-import { getFormattedDate } from '../../utils/utils';
-import { getPermalink } from '../../utils/permalinks';
-import PostTags from '../../components/common/Tags.astro';
 import RelatedPost from '../../components/blog/RelatedPost.astro';
-import PostComments from '../../components/common/PostComments.astro';
-
-import {
-  FacebookShareButton,
-  LinkedInShareButton,
-  TwitterShareButton,
-  SocialShare
-} from "astro-social-share";
-
-const BUTTONS = [TwitterShareButton, FacebookShareButton, LinkedInShareButton];
-
-import TableOfContents from '../../components/blog/TableOfContents.astro';
-import "../../styles/global.css";
+import '../../styles/global.css';
 
 export const getStaticPaths = (async () => {
   return await getStaticPathsBlogPost();
@@ -32,149 +15,33 @@ const { post } = Astro.props as Props;
 const { Content } = post;
 ---
 
-<PageLayout title={post.title}>
-  <section class="py-8 sm:py-16 lg:py-20 mx-auto">
-    <article>
-      <header>
-        <div class="flex justify-between flex-col sm:flex-row max-w-3xl mx-auto mt-0 mb-2 px-4 sm:px-6 sm:items-center">
-          <p>
-            <Icon name="tabler:clock" class="w-4 h-4 inline-block -mt-0.5 dark:text-gray-400" />
-            <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
-
-            {
-              post.category && (
-                <>
-                  {' '}
-                  ·{' '}
-                  <a class="capitalize hover:underline inline-block" href={getPermalink(post.category, 'category')}>
-                    {post.category.replaceAll('-', ' ')}
-                  </a>
-                </>
-              )
-            }
-            {
-              post.readingTime && (
-                <>
-                  &nbsp;· <span>{post.readingTime}</span> min read
-                </>
-              )
-            }
-          </p>
-        </div>
-
-        <h1
-        class="px-4 sm:px-6 max-w-3xl mx-auto text-3xl md:text-4xl font-bold leading-tighter tracking-tighter font-heading"
-      >
-        {post.title}
-      </h1>
-
-      <p
-        class="max-w-3xl mx-auto mt-4 mb-8 px-4 sm:px-6 text-xl md:text-xl text-muted dark:text-slate-400 text-justify"
-      >
-        {post.excerpt}
-      </p>
-
-      {
-        post.image ? (
-          <Image
-            src={post.image}
-            class="max-w-full lg:max-w-[900px] mx-auto mb-6 sm:rounded-md bg-gray-400 dark:bg-slate-700"
-            widths={[400, 900]}
-            sizes="(max-width: 900px) 400px, 900px"
-            alt={post?.excerpt || ''}
-            width={900}
-            height={506}
-            loading="eager"
-            decoding="async"
-          />
-        ) : (
-          <div class="max-w-3xl mx-auto px-4 sm:px-6">
-            <div class="border-t dark:border-slate-700" />
+<PageLayout
+  title={post.title}
+  description={post.excerpt}
+  type="article"
+  publishedTime={post.publishDate.toISOString()}
+>
+  <ContentDetailLayout
+    title={post.title}
+    publishDate={post.publishDate}
+    excerpt={post.excerpt}
+    image={post.image}
+    headings={post.headings}
+    tags={post.tags}
+    readingTime={post.readingTime}
+    shareTitle={post.title}
+    shareDescription={post.excerpt || post.title}
+  >
+    {Content ? <Content /> : <Fragment set:html={post.content || ''} />}
+    {
+      post.relatedPostIDs.length > 0 && (
+        <Fragment slot="related">
+          <div class="mx-auto max-w-prose text-center lg:mb-16 mb-8 pt-16 px-4">
+            <h2 class="mb-4 text-2xl lg:text-3xl tracking-tight font-semibold text-zinc-900 font-heading">Related posts</h2>
           </div>
-        )
-      }
-      </header>
-      
-      <nav class="article-toc hidden xl:block ml-8">
-        <h3>Table of Content</h3>
-        <TableOfContents class="article-toc" headings={post.headings}></TableOfContents>
-      </nav>
-
-      <div
-        class="article-content mx-auto px-6 sm:px-6 max-w-3xl prose prose-md lg:prose-xl dark:prose-invert dark:prose-headings:text-slate-300 prose-headings:font-heading prose-headings:leading-tighter prose-headings:tracking-tighter prose-headings:font-bold prose-a:text-primary dark:prose-a:text-blue-400 prose-img:rounded-md prose-img:shadow-lg mt-8 prose-headings:scroll-mt-[80px]"
-      >
-        {Content ? <Content /> : <Fragment set:html={post.content || ''} />}
-      </div>
-
-      <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
-        <PostTags tags={post.tags} class="mr-5 rtl:mr-0 rtl:ml-5" />
-        
-        <SocialShare
-            buttons={BUTTONS}
-            description="Description of the page/post"
-            title="Page Title"
-        />
-      </div>
-
-      <div class="mx-auto px-6 sm:px-6 max-w-3xl mt-8 flex justify-between flex-col sm:flex-row">
-        <PostComments class=""></PostComments>
-      </div>
-
-      {post.relatedPostIDs.length > 0 && (
-            <>
-        <div class="mx-auto max-w-screen-sm text-center lg:mb-16 mb-8 pt-16">
-          <h2 class="mb-4 text-3xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Related Posts</h2>
-        </div>
-
-        <RelatedPost prefix="articles" post={post} />
-      </>
-      )}
-
-    </article>
-  </section>
+          <RelatedPost prefix="articles" post={post} />
+        </Fragment>
+      )
+    }
+  </ContentDetailLayout>
 </PageLayout>
-
-<script>
-
-  addIntersectionObserver();
-  
-  function addIntersectionObserver() {
-	const observer = new IntersectionObserver((sections) => {
-		console.log('sections', sections);
-		sections.forEach((section) => {
-			const heading = section.target.querySelector('h2, h3, h4, h5');
-			if (!heading) return;
-			const id = heading.getAttribute('id');
-
-			// Get the link to this section's heading
-			const link = document.querySelector(`nav.toc li a[href="#${id}"]`);
-			if (!link) return;
-
-			// Add/remove the .active class based on whether the
-			// section is visible
-			const addRemove = section.intersectionRatio > 0 ? 'add' : 'remove';
-			link.classList[addRemove]('active');
-		});
-	});
-
-	document.querySelectorAll('.article-content section').forEach((section) => {
-		observer.observe(section);
-	})
-}
-</script>
-
-<slot name="astro-social-share-css">
-  <style is:global>
-    .astro-social-share {
-        margin: 0px 0px;
-        height: 24px;
-    }
-    .astro-social-share a {
-        text-decoration: none;
-        margin-right: 12px;
-    }
-    .astro-social-share svg {
-        height: 24px;
-    }
-  </style>
-</slot>

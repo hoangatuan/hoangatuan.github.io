@@ -5,68 +5,100 @@ import Metadata from '../components/common/Metadata.astro';
 import '../styles/global.css';
 
 const links = [
-  // { text: 'Home', href: '/' },
   { text: 'Articles', href: '/articles' },
-  { text: 'Weekly', href: '/weekly' },
+  // { text: 'Weekly', href: '/weekly' },
   { text: 'Books', href: '/books' },
   { text: 'About', href: '/about' },
 ];
 
 const footerData = {
   socialLinks: [
-    { name: 'GitHub', icon: 'tabler:brand-github', href: 'https://github.com/hoangatuan' },
-    { name: 'Linkedin', icon: 'tabler:brand-linkedin', href: 'https://www.linkedin.com/in/tuan-hoang-b02025183/' },
-    { name: 'Medium', icon: 'tabler:brand-medium', href: 'https://medium.com/@hoangatuan' }
+    { name: 'GitHub', ariaLabel: 'GitHub', icon: 'tabler:brand-github', href: 'https://github.com/hoangatuan' },
+    { name: 'LinkedIn', ariaLabel: 'LinkedIn', icon: 'tabler:brand-linkedin', href: 'https://www.linkedin.com/in/tuan-hoang-b02025183/' },
+    { name: 'Medium', ariaLabel: 'Medium', icon: 'tabler:brand-medium', href: 'https://medium.com/@hoangatuan' },
   ],
-  footNote: "© 2024 Eric Hoang. All rights reserved."
+  footNote: '© 2026 Eric Hoang. All rights reserved.',
 };
 
-const { title } = Astro.props;
+export interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+}
+
+const {
+  title,
+  description = 'Articles, book reviews, and notes on Swift/iOS and software engineering by Eric Hoang.',
+  image = 'https://ericsspace.com/og.png',
+  type = 'website',
+  publishedTime,
+} = Astro.props;
+
+const siteTitle = title === "Eric's Space" ? title : `${title} — Eric's Space`;
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="en" class="2xl:text-[20px]">
-    <head>
-        <!-- Google Analytics Require constent -->
-        <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="71e2d143-f8ef-4f1e-abf6-2c2cfdd8bb84" type="text/javascript" async></script>
+<html lang="en">
+  <head>
+    <script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="71e2d143-f8ef-4f1e-abf6-2c2cfdd8bb84" type="text/javascript" async></script>
 
-        <meta charset="UTF-8">
-        <link rel="icon" type="image/png" href="/favicon.png">
-        <link rel="manifest" href="/manifest.webmanifest" />
-        <title>{title}</title>
-        <style>
-          html, body {
-              height: 100%;
-              margin: 0;
-          }
-          body {
-              display: flex;
-              flex-direction: column;
-          }
-          main {
-              flex: 1 0 auto;
-          }
-          footer {
-              flex-shrink: 0;
-          }
-      </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
 
-      <!-- Google Analytics -->
-      <script type="text/partytown" async src="https://www.googletagmanager.com/gtag/js?id=G-05X4C6TPGF"></script>
-      <script type="text/partytown">
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+    <Metadata
+      title={siteTitle}
+      description={description}
+      image={image}
+      canonicalUrl={canonicalUrl}
+      type={type}
+      publishedTime={publishedTime}
+    />
 
-        gtag('config', 'G-05X4C6TPGF');
-      </script>
-    </head>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      main {
+        flex: 1 0 auto;
+      }
+      footer {
+        flex-shrink: 0;
+      }
+    </style>
 
-    <body>
-      <Header links={links}/>
-      <main>
-          <slot />
-      </main>
-      <Footer {...footerData} />
-    </body>
+    <script type="text/partytown" async src="https://www.googletagmanager.com/gtag/js?id=G-05X4C6TPGF"></script>
+    <script type="text/partytown">
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-05X4C6TPGF');
+    </script>
+  </head>
+
+  <body>
+    <Header links={links} />
+    <main>
+      <slot />
+    </main>
+    <Footer {...footerData} />
+  </body>
 </html>

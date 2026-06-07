@@ -1,6 +1,5 @@
 ---
-import Item from './ListItem.astro';
-import BlogHorizontalItem from './BlogHorizontalItem.astro';
+import Item from './BlogHorizontalItem.astro';
 import type { Post } from '../../types/post.types';
 
 export interface Props {
@@ -10,16 +9,20 @@ export interface Props {
 
 const { prefix, posts } = Astro.props;
 ---
-<div class="container mx-auto px-4 lg:px-8 pt-16">
-  <ul class="flex flex-col">
-    {posts.map((post, index) => (
-      <li class="flex w-full mb-4">
-        <BlogHorizontalItem 
-          prefix={prefix} 
-          post={post} 
-          isLast={index === posts.length - 1} 
-        />
-      </li>
-    ))}
+
+<section class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:py-14">
+  <header class="mb-8 border-b border-zinc-200 pb-6">
+    <h1 class="font-heading text-3xl font-semibold tracking-tight text-zinc-900 sm:text-4xl">Articles</h1>
+    <p class="mt-2 text-base text-zinc-600">Notes on Swift, iOS, testing, and software engineering.</p>
+  </header>
+
+  <ul>
+    {
+      posts.map((post, index) => (
+        <li>
+          <Item prefix={prefix} post={post} isLast={index === posts.length - 1} />
+        </li>
+      ))
+    }
   </ul>
-</div>
+</section>

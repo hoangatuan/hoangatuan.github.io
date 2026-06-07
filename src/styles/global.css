@@ -1,44 +1,63 @@
+:root {
+  --aw-color-primary: #2a9d8f;
+  --aw-color-secondary: #3f3f46;
+  --aw-color-accent: #ea4d21;
+  --aw-color-text-default: #18181b;
+  --aw-color-text-muted: #52525b;
+  --aw-font-heading: 'Newsreader', serif;
+  --aw-font-body: 'Roboto', sans-serif;
+}
 
-.article-toc{
-	float:right;
-	width:240px;
-	position:sticky;top:40px;
-	font-size:small;
-	line-height: normal;
-	color: #6b7280
+body {
+  font-family: var(--aw-font-body);
+  color: var(--aw-color-text-default);
+  background-color: #fafafa;
 }
-.article-toc a{display:inline-block; padding:4px}
-.article-toc a::after{display:none}
-.article-toc ul ul{margin-left:16px}
-.article-toc h3{margin-top:0;}
-.article-toc>div{position:sticky;top:0}
-.article-toc .links{
-	display: flex;
-	gap: 10px;
-	margin-top:15px; padding-top:15px;
-	border-top: 1px solid rgba(var(--text), .1);
-	justify-content:left;
+
+.article-toc {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #52525b;
 }
-.article-toc .links a{
-	display: flex;
-	gap:5px;
-	flex-direction: column;
-	align-items: center;
-	padding:10px;
-	font-size: 0.9em;
-	text-decoration: none;
-	transition: all .2s ease-in-out;
-	opacity: 0.7;
-	border-radius: 10px;
-	color:rgb(var(--text))
+
+.article-toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-.article-toc .links a:hover{
-	background-color: rgba(var(--text), .08);
-	opacity: 1;
+
+.article-toc li {
+  margin-bottom: 0.25rem;
 }
-.article-toc .links svg{
-	width: 20px;
-	height: 20px;
-	fill:rgb(var(--text));
-	vertical-align: middle;
+
+.article-toc a {
+  display: block;
+  padding: 0.25rem 0;
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.article-toc a:hover {
+  color: var(--aw-color-primary);
+}
+
+.article-toc a.active {
+  color: var(--aw-color-primary);
+  font-weight: 600;
+}
+
+.article-toc ul ul {
+  margin-left: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

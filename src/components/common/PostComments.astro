@@ -1,18 +1,72 @@
-<section class="giscus mx-auto mt-10 w-full"></section>
+---
+export interface Props {
+  repo?: string;
+  repoId?: string;
+  category?: string;
+  categoryId?: string;
+}
 
-<script src="https://giscus.app/client.js"
-        data-repo="hoangatuan/Blog"
-        data-repo-id="R_kgDOLiVu2Q"
-        data-category="Blog Post Comments"
-        data-category-id="DIC_kwDOLiVu2c4Ch5OZ"
-        data-mapping="url"
-        data-strict="0"
-        data-reactions-enabled="1"
-        data-emit-metadata="0"
-        data-input-position="bottom"
-        data-theme="preferred_color_scheme"
-        data-lang="en"
-        data-loading="lazy"
-        crossorigin="anonymous"
-        async>
+const {
+  repo = 'hoangatuan/Blog',
+  repoId = 'R_kgDOLiVu2Q',
+  category = 'Blog Post Comments',
+  categoryId = 'DIC_kwDOLiVu2c4Ch5OZ',
+} = Astro.props;
+---
+
+<section class="giscus mx-auto mt-10 w-full" aria-label="Comments">
+  <noscript>
+    <p class="text-sm text-zinc-600">
+      Comments require JavaScript. Enable it to join the discussion via GitHub.
+    </p>
+  </noscript>
+  <p id="giscus-fallback" class="hidden text-sm text-zinc-600">
+    Comments are temporarily unavailable. If this persists, ensure the
+    <a href="https://github.com/apps/giscus" class="text-primary underline" target="_blank" rel="noopener noreferrer">Giscus GitHub App</a>
+    is installed on
+    <a href={`https://github.com/${repo}`} class="text-primary underline" target="_blank" rel="noopener noreferrer">{repo}</a>
+    and Discussions are enabled.
+  </p>
+</section>
+
+<script
+  is:inline
+  define:vars={{ repo, repoId, category, categoryId }}
+>
+  (function () {
+    const fallback = document.getElementById('giscus-fallback');
+    const container = document.querySelector('.giscus');
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', repo);
+    script.setAttribute('data-repo-id', repoId);
+    script.setAttribute('data-category', category);
+    script.setAttribute('data-category-id', categoryId);
+    script.setAttribute('data-mapping', 'url');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'bottom');
+    script.setAttribute('data-theme', 'preferred_color_scheme');
+    script.setAttribute('data-lang', 'en');
+    script.setAttribute('data-loading', 'lazy');
+    script.crossOrigin = 'anonymous';
+    script.async = true;
+
+    script.onerror = function () {
+      fallback?.classList.remove('hidden');
+    };
+
+    script.onload = function () {
+      window.setTimeout(function () {
+        const iframe = container?.querySelector('iframe.giscus-frame');
+        if (!iframe) {
+          fallback?.classList.remove('hidden');
+        }
+      }, 5000);
+    };
+
+    document.body.appendChild(script);
+  })();
 </script>
