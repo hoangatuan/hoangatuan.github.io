@@ -17,6 +17,7 @@ import SubscriptionCard from '/src/components/weekly/SubscriptionCard.astro';
 import contextwindow from '/src/assets/content/post/context-engineering/contextwindow.png';
 import cursor_contextwindow from '/src/assets/content/post/context-engineering/cursor_contextwindow.png';
 import compact from '/src/assets/content/post/context-engineering/compact.png';
+import system_prompt from '/src/assets/content/post/context-engineering/system_prompt.png';
 
 You have been pairing with an agent for an hour. The first answers were sharp. Then it forgot the goal, reopened files you already ruled out, and replied as if your instructions had never existed. Nothing crashed. The session just got worse.
 
@@ -98,7 +99,9 @@ That reliability is useful, but it also makes them expensive. A bloated system p
 
 Keep system prompts minimal and durable. Capture project-wide conventions and guardrails. Move task-specific details into the conversation, memory files, or just-in-time retrieval — not into a rule file that loads on every session.
 
-### 2. Use a fresh context window
+<img src={system_prompt.src} alt="image" style={{ width: '100%', height: 'auto' }} />
+
+### 2. Start fresh
 
 Do not use one session to solve unrelated intents. I separate refactors from features, exploration from implementation. Each intent gets its own session so the window starts clean instead of carrying irrelevant history.
 
@@ -179,5 +182,5 @@ If you are also experimenting with compaction, subagents, or memory files, I wou
 1. [Effective context engineering for AI agents — Anthropic](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
 2. [Context windows — Claude API Docs](https://platform.claude.com/docs/en/build-with-claude/context-windows)
 3. [Checkpointing — Claude Code Docs](https://code.claude.com/docs/en/checkpointing)
-4. [Claude Code /compact command — MindStudio](https://www.mindstudio.ai/blog/claude-code-compact-command-context-management)
-5: [Your 1M+ Context Window LLM Is Less Powerful Than You Think](https://towardsdatascience.com/your-1m-context-window-llm-is-less-powerful-than-you-think/)
+4. [Claude Code /compact command — MindStudio](https://www.mindstudio.ai/blog/claude-code-compact-command-context-management)  
+5. [Your 1M+ Context Window LLM Is Less Powerful Than You Think](https://towardsdatascience.com/your-1m-context-window-llm-is-less-powerful-than-you-think/)
